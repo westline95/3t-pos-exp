@@ -8,16 +8,17 @@ export default function Categories({data}) {
 
     // const endpoint = "http://192.168.18.11:4000/category/read";
     // const endpoint = `3t-pos-9761.8nk.gcp-asia-southeast1.cockroachlabs.cloud/category/read`;
-    // const endpoint = `https://x8ki-letl-twmt.n7.xano.io/api:jRYnEbFJ/prodcategory`;
-    // const fetchProdCat = async () => {
-    //     const resp = await fetch(endpoint);
-    //     const data = await resp.json();
-    //     prodCategory(data);
-    // }
+    const endpoint = `https://threet-pos-exp.onrender.com/api/category`;
+    const fetchProdCat = async () => {
+        const resp = await fetch(endpoint);
+        const data = await resp.json();
+        prodCategory(data);
+        console.log(data)
+    }
     
-    // useEffect(() => {
-    // fetchProdCat();
-    // },[]);
+    useEffect(() => {
+    fetchProdCat();
+    },[]);
 
   
     return data.map((el, idx) => {
