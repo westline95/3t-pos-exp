@@ -13,7 +13,6 @@ export default function Categories({data}) {
         const resp = await fetch(endpoint);
         const data = await resp.json();
         prodCategory(data);
-        console.log(data)
     }
     
     useEffect(() => {
@@ -21,15 +20,14 @@ export default function Categories({data}) {
     },[]);
 
   
-    return data.map((el, idx) => {
-        console.log(el)
+    return categories.map((el, idx) => {
         return (
             <CategoriesCard 
             key={`category-${idx}`} 
             isActive={idx === 0 ? true : false} 
             title={el.name} 
-            desc={el.desc} 
-            img={el.imgURL === "" ? "" : el.img}
+            desc={""} 
+            img={el.img === "" ? "" : el.img}
             >
                 {idx === 0 ? <box-icon type='solid' size="24px" name='grid-alt' color="#42C0FB"></box-icon> : ""}
             </CategoriesCard>         
