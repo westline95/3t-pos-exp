@@ -25,7 +25,7 @@ import sequelize from "../config/Database.js";
 //     logging: false, 
 //   });
 
-  const ProdCategory = sequelize.define("prodCategories", {
+const ProdCategory = sequelize.define("prodCategories", {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,

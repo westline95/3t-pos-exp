@@ -7,6 +7,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
+  const endpoint = `https://threet-pos-exp.onrender.com/sub-category/write`;
+  const fetchProdCat = async () => {
+    const resp = await fetch(endpoint);
+    const data = await resp.json();
+    console.log(data)
+  }
+
 
   return (
   //  <>

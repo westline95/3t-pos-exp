@@ -1,5 +1,6 @@
 import express from "express";
 import prodCategoryRoutes from "./routes/ProductRoute.js";
+import subCategoryRoutes from "./routes/subCategoryRoute.js";
 import mongoose from "mongoose";
 // import mysql from "mysql2";
 // import dbConnection from "./config/Database.js";
@@ -26,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.get('/', (req, res) => res.send("HelloWorld"));
 app.use("/category", prodCategoryRoutes);
+app.use("/sub-category", subCategoryRoutes);
 
 
 

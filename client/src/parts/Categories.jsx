@@ -5,9 +5,6 @@ export default function Categories({data}) {
     const [ isClicked, setClick ] = useState(false);
     const [categories, prodCategory] = useState([]);
 
-
-    // const endpoint = "http://192.168.18.11:4000/category/read";
-    // const endpoint = `3t-pos-9761.8nk.gcp-asia-southeast1.cockroachlabs.cloud/category/read`;
     const endpoint = `https://threet-pos-exp.onrender.com/category/read`;
     const fetchProdCat = async () => {
         const resp = await fetch(endpoint);
