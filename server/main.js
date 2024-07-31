@@ -8,16 +8,16 @@ import bodyParser from "body-parser";
 // const db = require("./config/Database")
 // import { sequelize } from "sequelize";
 // import sequlize from "./config/Database.js";
-// import dotenv from "dotenv";
+import dotenv from "dotenv";
 
 // import pool  from "./config/Database.js";
 // const db = require("./config/Database");
 import cors from "cors";
 // import { Timestamp } from "mongodb";
-// dotenv.config({path: "./config.env"});
+dotenv.config();
 
 const app = express();
-const PORT = 4000;
+const port = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -32,8 +32,8 @@ app.use("/category", prodCategoryRoutes);
 // mongoose.connect("mongodb+srv://3t-pos:s9Ib9KsV01bmB7WQ@3t.ddktddt.mongodb.net/?retryWrites=true&w=majority&appName=3t")
 // .then(() =>{
 //     console.log("db connected");
-    app.listen(PORT, () => console.log(`
-        Server running at https://localhost:${PORT}..
+    app.listen(port, () => console.log(`
+        Server running at port ${port}..
     `))    
 // })
 // .catch(()=> {
