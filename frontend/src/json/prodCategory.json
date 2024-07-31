@@ -1,0 +1,103 @@
+{
+   "prodCategory": [
+      {
+         "_id": "prodCat123999item1",
+         "title": "All",
+         "desc": "123 items",
+         "imgURL": ""
+      },
+      {
+         "_id": "prodCat123999item2",
+         "title": "Tahu",
+         "desc": "123 items",
+         "imgURL": "/assets/tahu-DGcUSduc.png"
+      },
+      {
+         "_id": "prodCat123999item3",
+         "title": "Tempe",
+         "desc": "123 items",
+         "imgURL": "/assets/tempe-BkxPfdNO.png"
+
+      },
+      {
+         "_id": "prodCat123999item4",
+         "title": "Tauge",
+         "desc": "123 items",
+         "imgURL": "/assets/tauge-M9Z_Nf7E.png"
+
+      }
+
+   ],
+   "products": [
+      {
+         "_id": "item2123999item1",
+         "name": "Tahu Eceran",
+         "parent_id": "prodCat123999item2",
+         "parent_name": "Tahu",
+         "imgURL": "/assets/tahu-DGcUSduc.png",
+         "stock": 77,
+         "price": "1.000",
+         "variant": "N/a"
+      },
+      {
+         "_id": "item2123999item2",
+         "name": "Tahu",
+         "parent_id": "prodCat123999item2",
+         "parent_name": "Tahu",
+         "imgURL": "/assets/tahu-DGcUSduc.png",
+         "price": "50.000",
+         "variant": {
+            "_id": "item22123999var",
+            "name": "Dimension {Tahu)",
+            "value": [
+               {
+                  "item": "8 x 8",
+                  "stock": 3,
+                  "price": "50.000"
+               },
+               {
+                  "item": "10 x 10",
+                  "stock": 7,
+                  "price": "50.000"
+               },
+               {
+                  "item": "11 x 11",
+                  "stock": 7,
+                  "price": "50.000"
+               },
+               {
+                  "item": "11 x 12",
+                  "stock": 10,
+                  "price": "50.000"
+               },
+               {
+                  "item": "12 x 12",
+                  "stock": 21,
+                  "price": "50.000"
+               },
+               {
+                  "item": "12 x 14",
+                  "stock": 26,
+                  "price": "50.000"
+               },
+               {
+                  "item": "14 x 14",
+                  "stock": 50,
+                  "price": "50.000"
+               }
+            ]
+         }
+      },
+      {
+         "_id": "item3123999item1",
+         "name": "Tempe Plastik",
+         "parent_id": "prodCat123999item2",
+         "parent_name": "Tempe",
+         "imgURL": "/assets/tempe-BkxPfdNO.png",
+         "stock": 35,
+         "price": "2.300",
+         "variant": "N/a"
+      }
+   ]
+
+}

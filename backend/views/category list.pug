@@ -1,0 +1,15 @@
+doctype=html
+
+html
+   head
+      title product category
+   body
+    h1 Category List
+    table(style='width:100%', border='1')
+      tr
+         th Name
+         th status
+      each val in prodCategory
+         tr
+            td #{val.name} 
+            td #{val.status}
