@@ -1,4 +1,4 @@
-// import { Sequelize } from "sequelize-cockroachdb";
+import { Sequelize } from "sequelize";
 import sequelize from "../config/Database.js";
 // import mongoose from "mongoose";
 // import { INTEGER } from "sequelize";
