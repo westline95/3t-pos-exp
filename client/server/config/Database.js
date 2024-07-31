@@ -35,30 +35,30 @@ dotenv.config();
 // }
 
 // const db = pgp('postgresql://3t-pos:u38FrD24WEuZ61N77N9KJw@3t-pos-9761.8nk.gcp-asia-southeast1.cockroachlabs.cloud:26257/3t?sslmode=verify-full');
-// let sequelize = new Sequelize({
-//     dialect: "postgres",
-//     username: "3t-pos",
-//     password: "u38FrD24WEuZ61N77N9KJw",
-//     host: "3t-pos-9761.8nk.gcp-asia-southeast1.cockroachlabs.cloud",
-//     port: 26257,
-//     database: "3t",
-//     dialectOptions: {
-//     //   ssl: {
+const sequelize = new Sequelize({
+    dialect: "postgres",
+    username: "3t-pos",
+    password: "u38FrD24WEuZ61N77N9KJw",
+    host: "3t-pos-9761.8nk.gcp-asia-southeast1.cockroachlabs.cloud",
+    port: 26257,
+    database: "3t",
+    dialectOptions: {
+    //   ssl: {
         
-//     //     //For secure connection:
-//     //     ca: fs.readFileSync('$HOME/Library/CockroachCloud/certs/cc-ca.crt')
-//     //            .toString()
-//     //   },
-//         ssl: {
-//             require: true,
-//             rejectUnauthorized: false
-//         }
-//     },
-//     logging: false, 
-//   });
+    //     //For secure connection:
+    //     ca: fs.readFileSync('$HOME/Library/CockroachCloud/certs/cc-ca.crt')
+    //            .toString()
+    //   },
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
+    },
+    logging: false, 
+  });
 
 
 
-// export default sequelize;
+export default sequelize;
 // export default dbConnection;
 // module.exports = dbConnection;
