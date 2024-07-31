@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // app.set('view engine', 'pug');
 app.use(express.json());
 app.get('/', (req, res) => res.send("HelloWorld"));
-app.use("/api", prodCategoryRoutes);
+app.use("/category", prodCategoryRoutes);
 
 
 

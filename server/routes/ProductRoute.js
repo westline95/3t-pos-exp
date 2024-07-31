@@ -3,7 +3,7 @@ import ProdCategory from "../models/ProductModel.js";
 // import db from "../config/Database.js";
 
 const router = express.Router();
-router.get("/category", (req, res) => {
+router.get("/read", (req, res) => {
     ProdCategory.findAll().then(category => {
         console.log("category", category);
         res.json(category);
