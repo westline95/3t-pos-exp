@@ -12,7 +12,6 @@ export default class PosOrder extends Component {
     render() {
         return (
             <>
-            <Sidebar></Sidebar>
             <OrderPos />
             </>
         );

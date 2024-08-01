@@ -5,10 +5,10 @@ import InputWSelect from "./InputWSelect";
 import Button from "../elements/Button";
 
 export default function AddMemberFast({show, onHide}) {
-
+    
     return(
         <Modal 
-        size="md" id="addNewMember" show={show} onHide={onHide} centered>
+        size="md" id="addNewMember" show={show} onHide={onHide}>
             <Modal.Header closeButton>
                 <Modal.Title>Add customer</Modal.Title>
             </Modal.Header>
@@ -41,7 +41,7 @@ export default function AddMemberFast({show, onHide}) {
                 /> 
             </Modal.Body>
             <ModalFooter>
-                <Button type="button" isSecondary={true} isLight={true}>cancel</Button>
+                <Button type="button" isSecondary={true} isLight={true} onClick={onHide}>cancel</Button>
                 <Button type="button" isPrimary={true}>save</Button>
             </ModalFooter>
 

@@ -1,14 +1,16 @@
 import express from "express";
-import subCategory from "../models/subCategoryModel.js";
+import SubCategoryModel from "../models/subCategoryModel.js";
 
-const router = express.Router();
+const subCategoryRouter = express.Router();
 
-router.post("/write", (req, res) => {
-    subCategory.create({
-        name: "Tahu Eceran",
-        category: "Tahu",
-        status: "active"
-    })
+subCategoryRouter.get("/write", (req, res) => {
+    SubCategoryModel.create([
+        {
+            name: "",
+            category: "",
+            status: ""
+        }
+    ])
     .then(() => {
         console.log("sub category success");
         res.json({message: "success"});
@@ -18,4 +20,4 @@ router.post("/write", (req, res) => {
     });
 })
 
-export default router;
+export default subCategoryRouter;

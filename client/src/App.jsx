@@ -31,7 +31,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<PosOrder />} />
-        {/* <Sidebar /> */}
       </Routes>
       </BrowserRouter>
   </div>

@@ -5,7 +5,7 @@ import Button from "../elements/Button";
 import "boxicons";
 
 
-export default function Sidebar(props) {
+export default function Sidebar({show}) {
     const location = useLocation();
     const getNavLinkClass = (path) => {
         return location.pathname === path ? " active" : "";
@@ -17,7 +17,7 @@ export default function Sidebar(props) {
 
     return (
         <>
-        <nav className="pos-sidebar offcanvas-start">
+        <nav className={`pos-sidebar offcanvas-start ${show ? "active show" : ""}`}>
             <div className="logo-wrapper">
                 <Brand />
             </div>
@@ -64,3 +64,4 @@ export default function Sidebar(props) {
         
     )
 }
+

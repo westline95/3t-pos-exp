@@ -3,12 +3,14 @@ import { useState, useRef } from "react";
 import { Form, Modal, Card } from "react-bootstrap";
 import ProductData from "../json/prodCategory.json";
 import Header from "./Header";
+import Sidebar from "./Sidebar";
 import Button from "../elements/Button/index";
 import { CustomSelect } from "../elements/CustomSelect";
 import AddMemberFast from "./AddMemberFast";
 import Categories from "./Categories";
 import OrderListItem from "../elements/OrderListItem";
 import ProdListCard from "./ProdListCard";
+import DiscountModal from "./DiscountModal";
 import Tahu from "../assets/images/tahu.png";
 import Tempe from "../assets/images/tempe.png";
 import Tauge from "../assets/images/tauge.png";
@@ -18,6 +20,7 @@ export default function OrderPos(props){
     const [show, setShowModal] = useState(false);
     const [isActive, setCustType] = useState("member");
     const [payMethod, setPayMethod] = useState("cash");
+    const [ isClose, setClose ] = useState(false)
     const handleMouseEnter = (e) => {
         switch (e.target.id) {
             case "leftControl":
@@ -59,8 +62,15 @@ export default function OrderPos(props){
         }
     }
 
-    const addNewMember = () => {
-        setShowModal(true);
+    const showModal = (e) => {
+        switch(e.target.id){
+            case "addMemberFastModal":
+                setShowModal("addMemberFastModal");
+                break;
+            case "discModal":
+                setShowModal("discModal");
+                break;
+        }
     }
     const handleCloseModal = () => {
         setShowModal(false);
@@ -68,8 +78,9 @@ export default function OrderPos(props){
 
     return (
         <>
-        <main className="pos-content">
-            <Header />
+        <Sidebar show={isClose} />
+        <main className={`pos-content ${isClose ? "active" : ""}`}>
+            <Header onClick={() => isClose ? setClose(false) : setClose(true)} />
             <section>
                 <div className="search-mobile mb-4">
                     <div className="input-group-right">
@@ -156,15 +167,15 @@ export default function OrderPos(props){
                                     <Button 
                                     type="button" 
                                     className={isActive === "member" ? "active" : "" } 
-                                    ariaLabel="member" 
+                                    ariaLabel="member" isRounded={true}
                                     onClick={handleCustType}>member</Button>
                                     <Button 
                                     type="button" 
                                     className={isActive === "nonMember" ? "active" : "" } 
-                                    ariaLabel="non-member" 
+                                    ariaLabel="non-member" isRounded={true}
                                     onClick={handleCustType}>non-member</Button>
                                 </div>
-                                <Button type="button" isPrimary={true} isRounded={true} ariaLabel="add-member" onClick={addNewMember}>
+                                <Button type="button" isPrimary={true} isRounded={true} ariaLabel="add-member" id="addMemberFastModal" onClick={e => showModal(e)}>
                                     <box-icon name='plus' size="18px" color="#FFFFFF" style={{verticalAlign: "middle"}}></box-icon>
                                         add
                                 </Button>
@@ -211,15 +222,13 @@ export default function OrderPos(props){
                                     </p>
                                 </div>
                                 <div className="order-cost-addon">
-                                    <p className="cost-addon-text">discount</p>
+                                    <p className="cost-addon-text">Discount</p>
                                     <span className="d-flex justify-content-center">
                                         <p className="cost-addon-price">
                                             <span className="currency">Rp</span>
                                             0,-
                                         </p>
-                                        <span className="order-sett">
-                                            <box-icon type='solid' name='cog' size="16px" color="#42C0FB"></box-icon>
-                                        </span>
+                                        <box-icon type='solid' name='cog' size="16px" color="#42C0FB" id="discModal" onClick={e => showModal(e)} style={{cursor: "pointer", padding: ".5px 6px"}}></box-icon>
                                     </span>
                                 </div>
                             </div>
@@ -230,11 +239,11 @@ export default function OrderPos(props){
                             <div className="order-cost-feature">
                                 <p className="order-payment-title">payment method</p>
                                 <div className="payment-btn-wrap">
-                                    <Button ariaLabel="cash" type="button" onClick={handlePayMethod} className={payMethod === "cash" ? "active" : ""}> 
+                                    <Button ariaLabel="cash" type="button" isRounded={true} onClick={handlePayMethod} className={payMethod === "cash" ? "active" : ""}> 
                                         <box-icon name='money' size="15px" color={payMethod === "cash" ? "#42C0FB" : "#5b5e60"} style={{verticalAlign: "top", marginRight: ".35rem"}}></box-icon>
                                         cash
                                     </Button>
-                                    <Button ariaLabel="pay-later" type="button" onClick={handlePayMethod} className={payMethod === "payLater" ? "active" : ""}> 
+                                    <Button ariaLabel="pay-later" type="button" isRounded={true} onClick={handlePayMethod} className={payMethod === "payLater" ? "active" : ""}> 
                                         <box-icon name='timer' size="15px" color={payMethod === "payLater" ? "#42C0FB" : "#5b5e60"} style={{verticalAlign: "top", marginRight: ".5rem"}}></box-icon>
                                         pay later
                                     </Button>
@@ -249,7 +258,8 @@ export default function OrderPos(props){
                 </div>
             </section>
         </main>
-        <AddMemberFast show={show} onHide={handleCloseModal} />
+        <AddMemberFast show={show === "addMemberFastModal" ? true : false} onHide={handleCloseModal} />
+        <DiscountModal show={show === "discModal" ? true : false} onHide={handleCloseModal} />
         </>
     )
 }

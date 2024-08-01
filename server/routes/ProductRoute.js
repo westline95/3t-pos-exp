@@ -1,10 +1,10 @@
 import express from "express";
-import ProdCategory from "../models/ProductModel.js";
+import CategoryModel from "../models/ProductModel.js";
 // import db from "../config/Database.js";
 
-const router = express.Router();
-router.get("/read", (req, res) => {
-    ProdCategory.findAll().then(category => {
+const ProductRouter = express.Router();
+ProductRouter.get("/read", (req, res) => {
+    CategoryModel.findAll().then(category => {
         console.log("category", category);
         res.json(category);
     }).catch(err => {
@@ -14,4 +14,4 @@ router.get("/read", (req, res) => {
  })
 
 
- export default router;
+ export default ProductRouter;

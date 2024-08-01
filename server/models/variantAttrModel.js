@@ -1,7 +1,7 @@
 import Sequelize from "sequelize";
 import sequelize from "../config/Database.js";
 
-const subCategoryModel = sequelize.define("subCategory", 
+const productsModel = sequelize.define("products", 
     {
         id:{
             type:  Sequelize.INTEGER,
@@ -15,13 +15,25 @@ const subCategoryModel = sequelize.define("subCategory",
         category: {
             type: Sequelize.STRING,
         },
+        subCategory: {
+            type: Sequelize.STRING,
+        },
+        unit: {
+            type: Sequelize.STRING,
+        },
+        prodCost: {
+            type: Sequelize.STRING,
+        },
+        sellPrice: {
+            type: Sequelize.STRING,
+        },
         status: {
             type: Sequelize.STRING,
         },
     }, 
     {
-        tableName: 'subCategory',
+        tableName: 'products',
     }
 )
 
-export default subCategoryModel;
+export default productsModel;

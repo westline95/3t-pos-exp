@@ -1,6 +1,7 @@
 import React from 'react';
 import FriesMenu from "./MobileNav";
 import { Navbar, Form } from 'react-bootstrap';
+import propTypes from "prop-types";
 import "boxicons";
 
 export default function Header(props) {
@@ -11,7 +12,7 @@ export default function Header(props) {
     return (
         <>
             <Navbar className="navbar mb-3">
-                <div className="fries-menu sidebarCollapseDEfault" data-bs-toggle="offcanvas" data-bs-target=".pos-sidebar" aria-controls="pos-sidebar">
+                <div className="fries-menu sidebarCollapseDefault" onClick={props.onClick}>
                     <FriesMenu />
                 </div>
                 <div className="navbar-icon">
@@ -35,4 +36,8 @@ export default function Header(props) {
             </Navbar>
         </>
     )
+}
+
+Header.propTypes = {
+    onClick: propTypes.func
 }

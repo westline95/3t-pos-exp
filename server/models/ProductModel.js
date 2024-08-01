@@ -25,7 +25,8 @@ import sequelize from "../config/Database.js";
 //     logging: false, 
 //   });
 
-const ProdCategory = sequelize.define("prodCategories", {
+const categoryModel = sequelize.define("prodCategories", 
+  {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
@@ -42,7 +43,11 @@ const ProdCategory = sequelize.define("prodCategories", {
     status: {
       type: Sequelize.STRING,
     }
- });
+  },
+  {
+    tableName: "category"
+  }
+);
 
  sequelize.sync()
  .then(() => {
@@ -53,4 +58,4 @@ const ProdCategory = sequelize.define("prodCategories", {
  })
 
 
- export default ProdCategory;
+ export default categoryModel;

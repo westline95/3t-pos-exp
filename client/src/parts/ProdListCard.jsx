@@ -65,7 +65,7 @@ export default function ProdListCard({ data }){
                 id="productVarModal" 
                 show={isShow} 
                 onHide={() => setShow(false)} 
-                centered>
+                >
                 <Modal.Header closeButton>
                     <Modal.Title>Choose Variant</Modal.Title>
                 </Modal.Header>
@@ -92,7 +92,7 @@ export default function ProdListCard({ data }){
                     </div>
                 </Modal.Body>
                 <ModalFooter>
-                    <Button type="button" isSecondary={true} isRounded={true} isLight={true} onClick={() => setShow(false)}>cancel</Button>
+                    <Button type="button" isSecondary={true} isLight={true} onClick={() => setShow(false)}>cancel</Button>
                 </ModalFooter>
             </Modal>
 
@@ -101,7 +101,7 @@ export default function ProdListCard({ data }){
                 id="productDetailModal" 
                 show={isShowDetail} 
                 onHide={() => setShowDetail(false)} 
-                centered
+                
                 >
                 <Modal.Header closeButton>
                     <Modal.Title>Add product</Modal.Title>
@@ -128,8 +128,8 @@ export default function ProdListCard({ data }){
                     )
                 }
                 <ModalFooter>
-                    <Button type="button" isSecondary={true} isRounded={true} isLight={true} onClick={backToVarModal}>cancel</Button>
-                    <Button type="button" isPrimary={true} isRounded={true} onClick={() => setShowDetail(false)}>add to cart</Button>
+                    <Button type="button" isSecondary={true} isLight={true} onClick={() => setShowDetail(false)}>cancel</Button>
+                    <Button type="button" isPrimary={true} >add to cart</Button>
                 </ModalFooter>
             </Modal>
         </div>

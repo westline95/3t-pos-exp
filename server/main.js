@@ -1,20 +1,11 @@
 import express from "express";
-import prodCategoryRoutes from "./routes/ProductRoute.js";
-import subCategoryRoutes from "./routes/subCategoryRoute.js";
-import mongoose from "mongoose";
-// import mysql from "mysql2";
-// import dbConnection from "./config/Database.js";
-// import { DataTypes, Sequelize } from "sequelize";
-import bodyParser from "body-parser";
-// const db = require("./config/Database")
-// import { sequelize } from "sequelize";
-// import sequlize from "./config/Database.js";
-import dotenv from "dotenv";
+import prodCategoryRoute from "./routes/ProductRoute.js";
+import subCategoryRoute from "./routes/subCategoryRoute.js";
+// import subCategoryRoute from "./routes/subCategoryRoute.js";
 
-// import pool  from "./config/Database.js";
-// const db = require("./config/Database");
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
 import cors from "cors";
-// import { Timestamp } from "mongodb";
 dotenv.config();
 
 const app = express();
@@ -26,8 +17,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // app.set('view engine', 'pug');
 app.use(express.json());
 app.get('/', (req, res) => res.send("HelloWorld"));
-app.use("/category", prodCategoryRoutes);
-app.use("/sub-category", subCategoryRoutes);
+// app.use("/category", prodCategoryRoute);
+// app.use("/sub-category", subCategoryRoute);
+// app.use("/sub-category", subCategoryRoute);
 
 
 
