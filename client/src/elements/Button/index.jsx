@@ -11,6 +11,7 @@ export default function Button(props) {
     if (props.isInfo) className.push("btn-info");
     if (props.isDanger) className.push("btn-danger");
     if (props.isSecondary) className.push("btn-secondary");
+    if (props.isLighter) className.push("btn-light");
     if (props.isLight) className.push("light");
     if (props.isLarge) className.push("btn-lg");
     if (props.isSmall) className.push("btn-sm");
@@ -90,6 +91,7 @@ Button.propTypes = {
     isSuccess: propTypes.bool,
     isDanger: propTypes.bool,
     isLight: propTypes.bool,
+    isLighter: propTypes.bool,
     isDisabled: propTypes.bool,
     isLoading: propTypes.bool,
     isSmall: propTypes.bool,

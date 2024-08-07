@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PosOrder from "./pages/PosOrder";
+import OrderHistory from './pages/OrderHistory';
 import '../src/assets/scss/style.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -31,6 +32,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<PosOrder />} />
+        <Route exact path="/order-history" element={<OrderHistory />} />
       </Routes>
       </BrowserRouter>
   </div>

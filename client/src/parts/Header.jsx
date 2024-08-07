@@ -15,7 +15,7 @@ export default function Header(props) {
                 <div className="fries-menu sidebarCollapseDefault" onClick={props.onClick}>
                     <FriesMenu />
                 </div>
-                <div className="navbar-icon">
+                <div className="navbar-icon" style={props.cart ? {display: "block"} : {display: "none"}}>
                     <div className="features">
                         <div className="feature" onClick={openOrderCard}>
                             <box-icon name='cart-alt' size="26px" color="#252525" style={{ verticalAlign: "middle" }}></box-icon>
@@ -28,7 +28,7 @@ export default function Header(props) {
                 <div className="searchbox">
                     <div className="input-group-right">
                         <span className="input-group-icon">
-                            <box-icon name='search' size="24px" color="#BDC4D1"></box-icon>
+                            <box-icon name='search' size="auto" color="#BDC4D1"></box-icon>
                         </span>
                         <Form.Control type="text" className="input-w-icon-right" placeholder="Search..." />
                     </div>

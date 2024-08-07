@@ -1,6 +1,8 @@
 import express from "express";
 import prodCategoryRoute from "./routes/ProductRoute.js";
 import subCategoryRoute from "./routes/subCategoryRoute.js";
+import ProdCatalogRoute from "./routes/ProductsCatalogRoute.js";
+import FindProductRoute from "./routes/FindProductsRoute.js";
 // import subCategoryRoute from "./routes/subCategoryRoute.js";
 
 import bodyParser from "body-parser";
@@ -19,7 +21,8 @@ app.use(express.json());
 app.get('/', (req, res) => res.send("HelloWorld"));
 // app.use("/category", prodCategoryRoute);
 // app.use("/sub-category", subCategoryRoute);
-// app.use("/sub-category", subCategoryRoute);
+// app.use("/prod-catalog", ProdCatalogRoute);
+app.use("/prod-catalog", FindProductRoute);
 
 
 

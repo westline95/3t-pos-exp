@@ -28,32 +28,26 @@ export default function Sidebar({show}) {
                             <Button className="item-menu" type="link" href="/">
                             {/* <i class="bx bxl-facebook-square"></i> */}
 
-                                <box-icon type='solid' name='cart-alt' size="36px" color={activeIcon("/")} style={{ padding: "0 18px 7px 18px" }}></box-icon>
+                                <box-icon type='solid' name='cart-alt' size="auto" color={activeIcon("/")} style={{ padding: "0 18px 7px 18px" }}></box-icon>
                                 <span className="menu-label">Order</span>
                             </Button>
                         </li>
-                        <li className={`menu ${getNavLinkClass("/order-list")}`}>
-                            <Button className="item-menu" type="link" href="/order-list">
-                                <box-icon name='receipt' type='solid' size="36px" color={activeIcon("/order-list")} style={{ padding: "0 18px 7px 18px" }}></box-icon>
-                                <span className="menu-label">Order List</span>
+                        <li className={`menu ${getNavLinkClass("/order-history")}`}>
+                            <Button className="item-menu" type="link" href="/order-history">
+                                <box-icon name='receipt' type='solid' size="auto" color={activeIcon("/order-history")} style={{ padding: "0 18px 7px 18px" }}></box-icon>
+                                <span className="menu-label">History</span>
                             </Button>
                         </li>
                         <li className={`menu ${getNavLinkClass("/table")}`}>
                             <Button className="item-menu" type="link" href="/table">
-                                <box-icon name='bowl-hot' type='solid' size="36px" color={activeIcon("/table")} style={{ padding: "0 18px 7px 18px" }}></box-icon>
+                                <box-icon name='bowl-hot' type='solid' size="auto" color={activeIcon("/table")} style={{ padding: "0 18px 7px 18px" }}></box-icon>
                                 <span className="menu-label">Table</span>
                             </Button>
                         </li> 
                         <li className={`menu ${getNavLinkClass("/kitchen")}`}>
                             <Button className="item-menu" type="link" href="/kitchen">
-                                <box-icon name='dish' type='solid' size="36px" color={activeIcon("/kitchen")} style={{ padding: "0 18px 7px 18px" }}></box-icon>
+                                <box-icon name='dish' type='solid' size="auto" color={activeIcon("/kitchen")} style={{ padding: "0 18px 7px 18px" }}></box-icon>
                                 <span className="menu-label">Kitchen</span>
-                            </Button>
-                        </li>
-                        <li className={`menu ${getNavLinkClass("/inventory")}`}>
-                            <Button className="item-menu" type="link" href="/inventory">
-                                <box-icon name='cube-alt' type='solid' size="36px" color={activeIcon("/inventory")} style={{ padding: "0 18px 7px 18px" }}></box-icon>
-                                <span className="menu-label">Inventory</span>
                             </Button>
                         </li>
                     </ul>
