@@ -18,6 +18,9 @@ const SubCategoryModel = sequelize.define("subCategory",
         status: {
             type: Sequelize.STRING,
         },
+        displayPrice: {
+            type: Sequelize.STRING,
+        },
     }, 
     {
         tableName: 'subCategory',
