@@ -25,7 +25,7 @@ import sequelize from "../config/Database.js";
 //     logging: false, 
 //   });
 
-const categoryModel = sequelize.define("prodCategories", 
+const CategoryModel = sequelize.define("category", 
   {
     id: {
       type: Sequelize.INTEGER,
@@ -58,4 +58,4 @@ const categoryModel = sequelize.define("prodCategories",
  })
 
 
- export default categoryModel;
+ export default CategoryModel;

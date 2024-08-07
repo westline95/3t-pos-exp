@@ -1,19 +1,19 @@
 import express from "express";
 import ProductsCatalogModel from "../models/ProductsCatalogModel.js";
 
-const ProdCatalogRouter = express.Router();
+const WriteProductsCatalogRoute = express.Router();
 
-ProdCatalogRouter.get("/write", (req, res) => {
+WriteProductsCatalogRoute.get("/write", (req, res) => {
     ProductsCatalogModel.create([
         {
-            name: "Tahu",
-            category: "Tahu",
+            name: "",
+            category: "",
             subCategory: "",
-            variant: "8 x 8",      
-            unit: "papan",
-            prodCost: "50000",
-            sellPrice: "50000",
-            status: "in-stock",
+            variant: "",      
+            unit: "",
+            prodCost: "",
+            sellPrice: "",
+            status: "",
         }
     ])
     .then(() => {
@@ -25,4 +25,4 @@ ProdCatalogRouter.get("/write", (req, res) => {
     });
 })
 
-export default ProdCatalogRouter;
+export default WriteProductsCatalogRoute;

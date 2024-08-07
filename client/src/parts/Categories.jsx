@@ -10,6 +10,7 @@ export default function Categories({data}) {
         const resp = await fetch(endpoint);
         const data = await resp.json();
         prodCategory(data);
+        console.log(data)
     }
     
     useEffect(() => {

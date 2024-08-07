@@ -1,8 +1,9 @@
 import express from "express";
-import prodCategoryRoute from "./routes/ProductRoute.js";
-import subCategoryRoute from "./routes/subCategoryRoute.js";
-import ProdCatalogRoute from "./routes/ProductsCatalogRoute.js";
-import FindProductRoute from "./routes/FindProductsRoute.js";
+import ReadCategoryRoute from "./routes/ReadCategory.js";
+import ReadProductsRoute from "./routes/ReadProductsRoute.js";
+import ReadSubCategory from "./routes/ReadSubCategory.js";
+import WriteProductsCatalogRoute from "./routes/WriteProductsCatalogRoute.js";
+import WriteSubCategoryRoute from "./routes/WriteSubCategoryRoute.js";
 // import subCategoryRoute from "./routes/subCategoryRoute.js";
 
 import bodyParser from "body-parser";
@@ -19,12 +20,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // app.set('view engine', 'pug');
 app.use(express.json());
 app.get('/', (req, res) => res.send("HelloWorld"));
-app.use("/category", prodCategoryRoute);
-app.use("/sub-category", subCategoryRoute);
-app.use("/prod-catalog", ProdCatalogRoute);
-app.use("/prod-catalog", FindProductRoute);
-
-
+app.use("/category", ReadCategoryRoute);
+app.use("/sub-category", ReadSubCategory);
+app.use("/products", ReadProductsRoute);
+app.use("/prod-catalog", WriteProductsCatalogRoute);
+app.use("/sub-category", WriteSubCategoryRoute);
 
 // mongoose.connect("mongodb+srv://3t-pos:s9Ib9KsV01bmB7WQ@3t.ddktddt.mongodb.net/?retryWrites=true&w=majority&appName=3t")
 // .then(() =>{

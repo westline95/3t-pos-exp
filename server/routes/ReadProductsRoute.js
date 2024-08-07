@@ -1,8 +1,8 @@
 import express from "express";
 import ProductsCatalogModel from "../models/ProductsCatalogModel.js";
 
-const FindProductRoute = express.Router();
-FindProductRoute.get("/read", (req, res) => {
+const ReadProductRoute = express.Router();
+ReadProductRoute.get("/read", (req, res) => {
     ProductsCatalogModel.findAll().then(product => {
         console.log("product", product);
         res.json(product);
@@ -13,4 +13,4 @@ FindProductRoute.get("/read", (req, res) => {
  })
 
 
- export default FindProductRoute;
+ export default ReadProductRoute;

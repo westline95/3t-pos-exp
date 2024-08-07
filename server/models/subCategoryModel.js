@@ -1,7 +1,7 @@
 import Sequelize from "sequelize";
 import sequelize from "../config/Database.js";
 
-const subCategoryModel = sequelize.define("subCategory", 
+const SubCategoryModel = sequelize.define("subCategory", 
     {
         id:{
             type:  Sequelize.INTEGER,
@@ -24,4 +24,4 @@ const subCategoryModel = sequelize.define("subCategory",
     }
 )
 
-export default subCategoryModel;
+export default SubCategoryModel;

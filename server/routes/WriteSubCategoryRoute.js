@@ -1,16 +1,16 @@
 import express from "express";
 import SubCategoryModel from "../models/subCategoryModel.js";
 
-const subCategoryRouter = express.Router();
+const SubCategoryRoute = express.Router();
 
-subCategoryRouter.get("/write", (req, res) => {
-    SubCategoryModel.create([
+SubCategoryRoute.get("/write", (req, res) => {
+    SubCategoryModel.create(
         {
             name: "",
             category: "",
             status: ""
         }
-    ])
+    )
     .then(() => {
         console.log("sub category success");
         res.json({message: "success"});
@@ -20,4 +20,4 @@ subCategoryRouter.get("/write", (req, res) => {
     });
 })
 
-export default subCategoryRouter;
+export default SubCategoryRoute;
