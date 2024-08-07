@@ -19,9 +19,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // app.set('view engine', 'pug');
 app.use(express.json());
 app.get('/', (req, res) => res.send("HelloWorld"));
-// app.use("/category", prodCategoryRoute);
-// app.use("/sub-category", subCategoryRoute);
-// app.use("/prod-catalog", ProdCatalogRoute);
+app.use("/category", prodCategoryRoute);
+app.use("/sub-category", subCategoryRoute);
+app.use("/prod-catalog", ProdCatalogRoute);
 app.use("/prod-catalog", FindProductRoute);
 
 
