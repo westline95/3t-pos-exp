@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Form, Modal, Card } from "react-bootstrap";
 import ProductData from "../json/prodCategory.json";
 import Header from "./Header";
@@ -15,6 +15,7 @@ import Tauge from "../assets/images/tauge.png";
 export default function OrderPos(props){
     const [isHover, setIsHover] = useState(null);
     const [ isClose, setClose ] = useState(false);
+    const [ subCategoryData , subCategory ] = useState([]);
 
     const handleMouseEnter = (e) => {
         switch (e.target.id) {
@@ -26,6 +27,18 @@ export default function OrderPos(props){
                 break;
         }         
     };
+
+    const endpoint = `https://threet-pos-exp.onrender.com/sub-category/read`;
+    const fetchSubCategory = async () => {
+        const resp = await fetch(endpoint);
+        const data = await resp.json();
+        subCategory(data);
+        console.log(data);
+    }
+    
+    useEffect(() => {
+        fetchSubCategory();
+    },[]);
 
     return (
         <>
@@ -75,7 +88,7 @@ export default function OrderPos(props){
                     </div>
                 </div>
 
-                <ProdListCard data={ProductData.products} />
+                <ProdListCard data={subCategoryData} />
                 <OrderCard />
             </section>
         </main>

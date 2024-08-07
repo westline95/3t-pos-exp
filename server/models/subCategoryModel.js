@@ -20,6 +20,9 @@ const SubCategoryModel = sequelize.define("subCategory",
         },
         displayPrice: {
             type: Sequelize.STRING,
+        }, 
+        img: {
+            type: Sequelize.STRING,
         },
     }, 
     {
