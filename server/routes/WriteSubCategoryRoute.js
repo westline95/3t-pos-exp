@@ -6,9 +6,11 @@ const SubCategoryRoute = express.Router();
 SubCategoryRoute.get("/write", (req, res) => {
     SubCategoryModel.create(
         {
-            name: "",
-            category: "",
-            status: ""
+            name: "Tauge",
+            category: "Tauge",
+            status: "active",
+            displayPrice: "10000",
+            img: "src/assets/images/tauge.png"
         }
     )
     .then(() => {

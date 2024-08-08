@@ -33,7 +33,7 @@ export default function OrderPos(props){
         const resp = await fetch(endpoint);
         const data = await resp.json();
         subCategory(data);
-        console.log(data);
+        // console.log(data);
     }
     
     useEffect(() => {
@@ -49,7 +49,7 @@ export default function OrderPos(props){
                 <div className="search-mobile mb-4">
                     <div className="input-group-right">
                         <span className="input-group-icon">
-                            <box-icon name='search' size="auto" color="#8f9399"></box-icon>
+                            <box-icon name='search' size="18px" color="#BDC4D1"></box-icon>
                         </span>
                         <Form.Control type="text" className="input-w-icon-right" placeholder="Search..." />
                     </div>

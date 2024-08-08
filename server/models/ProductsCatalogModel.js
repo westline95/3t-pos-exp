@@ -15,9 +15,6 @@ const ProductsCatalogModel = sequelize.define("products",
         category: {
             type: Sequelize.STRING,
         },
-        subCategory: {
-            type: Sequelize.STRING,
-        },
         variant: {
             type: Sequelize.STRING,
         },        

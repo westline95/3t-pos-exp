@@ -22,7 +22,7 @@ app.use(express.json());
 app.get('/', (req, res) => res.send("HelloWorld"));
 app.use("/category", ReadCategoryRoute);
 app.use("/sub-category", ReadSubCategory);
-app.use("/products", ReadProductsRoute);
+app.use("/prod-catalog", ReadProductsRoute);
 app.use("/prod-catalog", WriteProductsCatalogRoute);
 app.use("/sub-category", WriteSubCategoryRoute);
 

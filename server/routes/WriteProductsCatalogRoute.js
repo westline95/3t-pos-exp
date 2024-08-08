@@ -4,11 +4,10 @@ import ProductsCatalogModel from "../models/ProductsCatalogModel.js";
 const WriteProductsCatalogRoute = express.Router();
 
 WriteProductsCatalogRoute.get("/write", (req, res) => {
-    ProductsCatalogModel.create([
+    ProductsCatalogModel.bulkCreate([
         {
             name: "",
             category: "",
-            subCategory: "",
             variant: "",      
             unit: "",
             prodCost: "",

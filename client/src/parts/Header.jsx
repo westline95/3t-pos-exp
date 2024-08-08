@@ -15,7 +15,7 @@ export default function Header(props) {
                 <div className="fries-menu sidebarCollapseDefault" onClick={props.onClick}>
                     <FriesMenu />
                 </div>
-                <div className="navbar-icon" style={props.cart ? {display: "block"} : {display: "none"}}>
+                <div className="navbar-icon">
                     <div className="features">
                         <div className="feature" onClick={openOrderCard}>
                             <box-icon name='cart-alt' size="26px" color="#252525" style={{ verticalAlign: "middle" }}></box-icon>

@@ -2836,6 +2836,13 @@ td .btn-group button i {
   padding: 1rem 0;
 }
 
+.add-cart-price {
+  position: absolute;
+  right: 2rem;
+  font-size: 18px;
+  font-weight: 600;
+}
+
 
 /* responsive */
 @media (min-width: 320px) and (max-width: 480px) {
@@ -2949,7 +2956,7 @@ td .btn-group button i {
   }
 
   .card-img-container {
-    padding: 26px 18px 6px 18px;
+    padding: 0;
     height: 135px;
   }
 
