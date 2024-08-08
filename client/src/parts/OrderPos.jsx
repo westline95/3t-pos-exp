@@ -11,6 +11,8 @@ import OrderCard from "./OrderCard";
 import Tahu from "../assets/images/tahu.png";
 import Tempe from "../assets/images/tempe.png";
 import Tauge from "../assets/images/tauge.png";
+import TempeDaun from "../assets/images/tempe daun.png";
+import TempeBalok from "../assets/images/tempe balok.png";
 
 export default function OrderPos(props){
     const [isHover, setIsHover] = useState(null);
