@@ -2843,6 +2843,10 @@ td .btn-group button i {
   font-weight: 600;
 }
 
+.order-item .order-detail .product-name {
+  text-transform: capitalize;
+}
+
 
 /* responsive */
 @media (min-width: 320px) and (max-width: 480px) {

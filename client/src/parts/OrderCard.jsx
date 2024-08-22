@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux'; 
 import { Card, Form } from "react-bootstrap";
 import { CustomSelect } from '../elements/CustomSelect';
+import cartSlice from '../store/reducers/cart';
 import Button from '../elements/Button';
 import OrderListItem from '../elements/OrderListItem';
 import AddMemberFast from './AddMemberFast';
 import DiscountModal from './DiscountModal';
 import HoldOrderModal from './HoldOrderModal';
-import Tahu from "../assets/images/tahu.png"
+import Tahu from "../assets/images/tahu.png";
 
 export default function OrderCard(props) {
     const [isActive, setCustType] = useState("member");
@@ -55,13 +57,26 @@ export default function OrderCard(props) {
     }
 
     const closeOrderCard = () => {
-
         document.querySelector(".order-card-wrap").style.display ="none";
     }
 
     const handleCloseModal = () => {
         setShowModal(false);
     }
+
+    const dispatch = useDispatch();
+    const list = useSelector((state) => state.cart.cartData); 
+    const [ cartItem, setCart ] = useState(list ? list : null);
+    // const handleLocalStorage = () => {
+    //     // dispatch(cartSlice.actions.loadData());
+    //     console.log(list)
+    // }
+    
+    useEffect(() => {
+        
+            setCart(list)
+       
+    },[list])        
 
 
     return (
@@ -140,17 +155,24 @@ export default function OrderCard(props) {
                 </div>
                 <hr className="order-border" />
                 <div className="order-list-items">
-                    {/* <OrderListItem 
-                    prodName={"Tahu"} 
-                    prodImg={`${Tahu}`} 
-                    prodVar={"8 x 8"}
-                    orderQty={7}
-                    prodPrice={"50,000,-"}
-                    inputName={"order-qty"}
-                    min={1}
-                    max={999}
-                    currency={"Rp"}
-                    /> */}
+                    {
+                    cartItem ? 
+                        (
+                            cartItem.map((item, idx) => {
+                                return(
+                                    <OrderListItem 
+                                    key={item.id}
+                                    data={item}
+                                    inputName={"order-qty"}
+                                    min={1}
+                                    max={999}
+                                    currency={"Rp"}
+                                    />
+                               )
+                            })
+                        )
+                        : ""
+                    }
                 </div>
                 <div className="order-cost-wrap">
                     <div className="order-cost-detail">
@@ -204,3 +226,4 @@ export default function OrderCard(props) {
         
     )
 }
+

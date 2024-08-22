@@ -11,7 +11,6 @@ import FemaleAvatar from "../assets/images/Avatar 1.jpg";
 export default function OrderHistoryList (props) {
     const [ isClose, setClose ] = useState(false);
     const [ isModal, showModal ] = useState("");
-    
 
     const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
         <a
@@ -37,7 +36,6 @@ export default function OrderHistoryList (props) {
     const handleCloseModal = () => {
         showModal(false);
     }
-      
 
     return(
         <>

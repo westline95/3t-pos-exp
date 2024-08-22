@@ -30,7 +30,7 @@ export default function VariantModal({show, onHide, data}) {
                     data.map((e, idx) => {
 
                         const handleVariantModal = () => {                            
-                            showClickVariant({img: e.img, name: e.name, variant: e.variant, price: e.price});
+                            showClickVariant({id: e.id, img: e.img, product: e.product, variant: e.variant, price: e.price});
                             showAddCartModal(true);
                         }
                         return (

@@ -1,46 +1,93 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import propTypes from "prop-types";
 import { ButtonGroup, Form } from "react-bootstrap";
 import Button from "../Button";
+import cartSlice from "../../store/reducers/cart";
 
 export default function QtyButton(props) {
-    const { value, placeholder, name, min, max } = props;
-    const [ inputValue, setInputValue ] = useState(value);
+    const { data, value, placeholder, name, min, max } = props;
+    const [ inputValue, setInputValue ] = useState(value ? value : 0);
+    const dispatch = useDispatch();
+    const qtyVal = useSelector(state => state.cart);
+
+
+    const minus = () => {
+        if(inputValue > min) {
+            const newValue = inputValue - 1;
+            onChangeInput({ 
+                target: {
+                    name: name,
+                    value: newValue,
+                },
+            });
+        }
+
+        if(data) {
+            dispatch(cartSlice.actions.decrement({
+                data: data,
+                stateValue: inputValue
+            }));
+        } 
+    };
+
+    const plus = () => {
+        if(inputValue < max) {
+            const newValue = inputValue + 1;
+            onChangeInput({ 
+                target: {
+                    name: name,
+                    value: newValue,
+                }
+            })
+        }    
+
+        if(data) {
+            dispatch(cartSlice.actions.increment({
+                data: data,
+                stateValue: inputValue
+            }));
+        } 
+    };
 
     const onChangeInput = (e) => {
         let val = e.target.value;
         const patternNumeric = new RegExp("[0-9]*");
         const isNumeric = patternNumeric.test(val);
+        let newVal;
+        // const isNumeric = parseInt(val);
 
         if(isNumeric && +val <= max && +val >= min) {
             e.target.name = name;
-            e.target.value = +val;
-            setInputValue(val);
+            e.target.value += val;
+            // e.target.value = +isNumeric;
+            setInputValue(parseInt(val));
+            newVal = parseInt(val);
+            // console.log(inputValue)
+            // setInputValue(isNumeric);
         } else if(isNumeric && +val<min){
             setInputValue(min);
+            newVal = min;
         }
+
+        if(data) {
+            dispatch(cartSlice.actions.write({
+                data: data,
+                stateValue: newVal
+            }));
+        } 
     };
 
-    const minus = () => {
-        if(inputValue > min) {
-            onChangeInput({ 
-                target: {
-                    name: name,
-                    value:  setInputValue(count =>  count - 1 ),
-                },
-            });
-        }
-    };
 
-    const plus = () => {
-        inputValue < max &&
+    useEffect(() => {
+        const newValue = value;
         onChangeInput({ 
             target: {
                 name: name,
-                value: setInputValue(count =>  count + 1 ),
+                value: newValue,
             },
         });
-    };
+    },[value])
 
     return(
         <div className="order-qty-btn">
@@ -55,6 +102,7 @@ export default function QtyButton(props) {
                   value={inputValue}
                   onChange={onChangeInput}
                   name={name}
+                  id={props.id}
                 />
                 <Button type="button" onClick={plus}>
                     <box-icon name='plus' size="14px" color="#212529"></box-icon>
@@ -72,4 +120,6 @@ QtyButton.propTypes = {
     name: propTypes.string,
     min: propTypes.number,
     max: propTypes.number,
+    id: propTypes.string,
+    data: propTypes.object
 }

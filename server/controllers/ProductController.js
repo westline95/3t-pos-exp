@@ -1,6 +1,103 @@
-const getData = async (req, res) => {
-    const data = await ProdCategory.findAll().catch(err => res.status(500).json({message: err.message}))
-    res.status(200).json({list: data})
+import ProductsCatalogModel from "../models/ProductsCatalogModel.js";
+import { Sequelize } from "sequelize";
+const getProducts = async (req, res) => {
+    try{
+        const allProduct = await ProductsCatalogModel.findAll();
+        if(allProduct){
+            res.json(allProduct);
+        } else {
+            res.status(404).json({error: `get all product not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
 }
 
-export default getData;
+
+const insertProducts = async (req, res) => {
+    const { name, category, variant, unit, prodCost, sellPrice, status } = req.body;
+    try{
+        const newProduct = await ProductsCatalogModel.create({
+            name,
+            category,
+            variant,      
+            unit,
+            prodCost,
+            sellPrice,
+            status
+        });
+        
+        res.status(201).json(newProduct);
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+const insertMultipleProducts = async (req, res) => {
+    try{
+        const newProducts = await ProductsCatalogModel.bulkCreate(req.body);
+        res.status(201).json(newProducts);
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+const updateProduct = async (req, res) => {
+    try{
+        const product = await ProductsCatalogModel.update(req.body, {where:{id: req.query.id}});
+        
+        res.status(201).json(product);
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+const deleteProduct = async (req, res) => {
+    try{
+        const delProduct = await ProductsCatalogModel.destroy({where:{id: req.query.id}});
+        
+        res.status(201).json(delProduct);
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+const countProductByName = async (req, res) => {
+    // const name = req.query.name;
+    try{
+        const countProduct = await ProductsCatalogModel.findAll(
+            
+            {
+                group: `category`,
+                attributes: [
+                  [Sequelize.literal(`category`), `category`],
+                  [Sequelize.fn(`COUNT`, `name`), `count`]
+                ]
+            }
+        );
+        if(countProduct){
+            res.json(countProduct);
+        } else {
+            res.status(404).json({error: `product with ? not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+
+
+export default {
+    getProducts, 
+    insertProducts, 
+    insertMultipleProducts, 
+    updateProduct,  
+    deleteProduct,
+    countProductByName
+};

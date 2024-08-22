@@ -6,18 +6,18 @@ import VariantModal from './VariantModal';
 // import QtyButton from '../elements/QtyButton';
 import AddToCart from './AddToCartModal';
 
-export default function ProdListCard({ data }){
+export default function ProdListCard({ data, addToCart }){
     const [isModal, showModal] = useState("");
     const [showDataNonVar, setDataNonVar] = useState([]);
     const [showDataVar, setDataVar] = useState([]);
-    const [prodCatalogData, prodCatalog] = useState([]);
+    const [prodCatalogData, prodCatalog] = useState("");
     
     const handleCloseModal = () => {
         showModal(false);
     }
 
-    const endpoint = `https://threet-pos-exp.onrender.com/prod-catalog/read`;
-    // const endpoint = `http://localhost:5050/prod-catalog/read`;
+    // const endpoint = `https://threet-pos-exp.onrender.com/prod-catalog/read`;
+    const endpoint = `http://localhost:5050/products`;
     const fetchProdCatalog = async() => {
         const resp = await fetch(endpoint);
         const data = await resp.json();
@@ -48,13 +48,14 @@ export default function ProdListCard({ data }){
                     prodCatalogData.map((prod, idx) => {
                         if(el.name.toLowerCase() === prod.name.toLowerCase()){
                             if(prod.variant === ""){
-                                setDataNonVar({img: el.img, name: el.name, variant: "", price: el.displayPrice})
+                                setDataNonVar({id: prod.id, img: el.img, product: el.name, variant: "", price: el.displayPrice})
                                 showModal("addToCartModal");
 
                             } else {
                                 const data = {
+                                    id: prod.id,
                                     img: el.img,
-                                    name: el.name,
+                                    product: el.name,
                                     category: prod.category,
                                     variant: prod.variant,
                                     price: prod.sellPrice,
@@ -92,7 +93,7 @@ export default function ProdListCard({ data }){
           </div>
 
             <VariantModal show={isModal === "variantModal" ? true : false} onHide={handleCloseModal} data={showDataVar} />
-            <AddToCart show={isModal === "addToCartModal" ? true : false} onHide={handleCloseModal} data={showDataNonVar} />
+            <AddToCart show={isModal === "addToCartModal" ? true : false} onHide={handleCloseModal} data={showDataNonVar}  />
 
         </div>
         </>

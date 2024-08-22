@@ -18,6 +18,7 @@ export default function OrderPos(props){
     const [isHover, setIsHover] = useState(null);
     const [ isClose, setClose ] = useState(false);
     const [ subCategoryData , subCategory ] = useState([]);
+    const [ categoryData , setCategory ] = useState([]);
 
     const handleMouseEnter = (e) => {
         switch (e.target.id) {
@@ -30,16 +31,25 @@ export default function OrderPos(props){
         }         
     };
 
-    const endpoint = `https://threet-pos-exp.onrender.com/sub-category/read`;
+    // const subCategoryEndpoint = `https://threet-pos-exp.onrender.com/sub-category/read`;
+    const subCategoryEndpoint = `http://localhost:5050/sub-category`;
     const fetchSubCategory = async () => {
-        const resp = await fetch(endpoint);
+        const resp = await fetch(subCategoryEndpoint);
         const data = await resp.json();
         subCategory(data);
-        // console.log(data);
+    }
+    
+    // const categoryEndpoint = `https://threet-pos-exp.onrender.com/categories`;
+    const categoryEndpoint = `http://localhost:5050/categories`;
+    const fetchCategory = async () => {
+        const resp = await fetch(categoryEndpoint);
+        const data = await resp.json();
+        setCategory(data);
     }
     
     useEffect(() => {
         fetchSubCategory();
+        fetchCategory();
     },[]);
 
     return (
@@ -59,7 +69,7 @@ export default function OrderPos(props){
                 <div className="content-wrapper mt-4">
                     <h6 className="section-title">Categories</h6>
                     <div className="categories-list">
-                        <Categories data={ProductData.prodCategory} />                      
+                        <Categories data={categoryData} />                      
                         {/* get data from database */}
                     </div>
                     <div className="categories-btn-control">
