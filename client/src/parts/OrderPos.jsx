@@ -31,7 +31,7 @@ export default function OrderPos(props){
         }         
     };
 
-    const subCategoryEndpoint = `https://threet-pos-exp.onrender.com/sub-category/read`;
+    const subCategoryEndpoint = `https://threet-pos-exp.onrender.com/sub-category`;
     // const subCategoryEndpoint = `http://localhost:5050/sub-category`;
     const fetchSubCategory = async () => {
         const resp = await fetch(subCategoryEndpoint);
