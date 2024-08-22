@@ -6,8 +6,8 @@ export default function Categories({data}) {
     const [ prodData, products] = useState([]);
     const [ nameValue, setNameParam] = useState("");
 
-    // const endpoint = `https://threet-pos-exp.onrender.com/category/read`;
-    let endpoint = `http://localhost:5050/products/group` ;
+    const endpoint = `https://threet-pos-exp.onrender.com/category/read`;
+    // let endpoint = `http://localhost:5050/products/group` ;
     const fetchProdCat = async () => {
         const resp = await fetch(endpoint);
         const data = await resp.json();

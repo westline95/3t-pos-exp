@@ -31,16 +31,16 @@ export default function OrderPos(props){
         }         
     };
 
-    // const subCategoryEndpoint = `https://threet-pos-exp.onrender.com/sub-category/read`;
-    const subCategoryEndpoint = `http://localhost:5050/sub-category`;
+    const subCategoryEndpoint = `https://threet-pos-exp.onrender.com/sub-category/read`;
+    // const subCategoryEndpoint = `http://localhost:5050/sub-category`;
     const fetchSubCategory = async () => {
         const resp = await fetch(subCategoryEndpoint);
         const data = await resp.json();
         subCategory(data);
     }
     
-    // const categoryEndpoint = `https://threet-pos-exp.onrender.com/categories`;
-    const categoryEndpoint = `http://localhost:5050/categories`;
+    const categoryEndpoint = `https://threet-pos-exp.onrender.com/categories`;
+    // const categoryEndpoint = `http://localhost:5050/categories`;
     const fetchCategory = async () => {
         const resp = await fetch(categoryEndpoint);
         const data = await resp.json();
