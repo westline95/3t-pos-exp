@@ -43,7 +43,7 @@ const AddToLocalStorage = product => {
         ];
         updateProduct.map(item => {
             if(parseInt(item.id) === parseInt(product.id)){
-                return item.qty = product.qty;
+                return item.qty += product.qty;
             }
             return item;
         })
@@ -62,7 +62,8 @@ const Increment = plusData => {
     ];
     updateProduct.map(item => {
         if(parseInt(item.id) === parseInt(plusData.data.id)){
-            return item.qty = plusData.stateValue + 1;
+            item.qty = plusData.stateValue + 1;
+            item.totalPrice = item.price * (plusData.stateValue + 1);
         }
         return item;
     })
@@ -75,13 +76,13 @@ const Decrement = minusData => {
     const cart = localStorage.getItem("cart") 
     ? JSON.parse(localStorage.getItem("cart")) 
     : [];
-
     const updateProduct = [
         ...cart
     ];
     updateProduct.map(item => {
         if(parseInt(item.id) === parseInt(minusData.data.id)){
-            return item.qty = minusData.stateValue - 1;
+            item.qty = minusData.stateValue - 1;
+            item.totalPrice = item.price * (minusData.stateValue - 1);
         }
         return item;
     })
@@ -98,17 +99,42 @@ const WriteInput = writeData => {
     const updateProduct = [
         ...cart
     ];
+
     updateProduct.map(item => {
         if(parseInt(item.id) === parseInt(writeData.data.id)){
-            return item.qty = writeData.stateValue;
+            item.qty = writeData.stateValue;
+            item.totalPrice = item.price * writeData.stateValue;
         }
         return item;
     })
     localStorage.setItem("cart", JSON.stringify(updateProduct));
     return updateProduct;
+}
+
+const DeleteCartItem = itemID => {
+    const cart = localStorage.getItem("cart") 
+    ? JSON.parse(localStorage.getItem("cart")) 
+    : [];
+
+    const updateProduct = [
+        ...cart
+    ];
+
+    const filteredData = updateProduct.filter(e => e.id != itemID);
+    localStorage.setItem("cart", JSON.stringify(filteredData));
+
+    return filteredData;
 
 }
 
+const ApplyVoucher = value => {
+    const activeDiscVal = {...value};
+    // activeDiscVal.push(value);
+    localStorage.setItem("activeDiscount", JSON.stringify(activeDiscVal));
+    const data = localStorage.getItem("activeDiscount");
+
+    return activeDiscVal;
+}
 
 // cart Slice
 const cartSlice = createSlice({
@@ -122,14 +148,20 @@ const cartSlice = createSlice({
            state.cartData = AddToLocalStorage(action.payload);
         },
         increment: (state, action) => {
-           state.value = Increment(action.payload);
+           state.cartData = Increment(action.payload);
         },
         decrement: (state, action) => {
-            state.value = Decrement(action.payload);   
+            state.cartData = Decrement(action.payload);   
         },
         write: (state, action) => {
-            state.value = WriteInput(action.payload);   
-        }
+            state.cartData = WriteInput(action.payload);   
+        },
+        deleteItem: (state, action) => {
+            state.cartData = DeleteCartItem(action.payload);
+        },
+        applyVoucher: (state, action) => {
+            state.discount = ApplyVoucher(action.payload);
+        },
    }
 })
 

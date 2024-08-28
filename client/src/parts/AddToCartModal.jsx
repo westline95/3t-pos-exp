@@ -73,9 +73,9 @@ export default function AddToCart({show, onHide, data}) {
     }
     const handleClick = () => {
         const getQty = parseInt(document.getElementById("qtyItem").value);
-       
         const addProduct = {...data};
         addProduct.qty = getQty;
+        addProduct.totalPrice = data.price;
         addProduct.update = false;
         dispatch(cartSlice.actions.addData(addProduct));
         onHide();

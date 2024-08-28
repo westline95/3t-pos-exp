@@ -1,22 +1,82 @@
 import React, {useState} from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Modal, Form } from "react-bootstrap";
 import Button from "../elements/Button";
+import cartSlice from "../store/reducers/cart";
 
 export default function DiscountModal({show, onHide}) {
-    // const [ isOpen, setOpen ] = useState(show);
+    const [ inputDiscount, setDiscount ] = useState(0);
+    const [ discType, setDiscType ] = useState("percent");
     const [ isShow, setShow ] = useState("discPercent");
+    const dispatch = useDispatch();
 
     const openTab = (e) => {
+        setDiscount("");
         switch(e.currentTarget.id){
             case "discPercent":
                 setShow("discPercent");
+                setDiscType("percent");
                 break;
             case "discNominal":
                 setShow("discNominal");
+                setDiscType("nominal");
                 break;
             case "discVoucher":
                 setShow("discVoucher");
+                setDiscType("voucher");
                 break;
+        }
+    }
+
+    const list = useSelector(state => state.cart.cartData);
+
+
+    const handleVoucher = (e) => {
+        const disc = e.currentTarget.value;
+        let pattern, matchPattern;
+        switch(isShow){
+            case "discPercent":
+                pattern = new RegExp("[0-9]*");
+                matchPattern = pattern.test(disc);
+
+                if(matchPattern && +disc >= 0){
+                    setDiscount(parseFloat(+disc));
+                } else if(matchPattern && +disc < 0) {
+                    setDiscount(0);
+                } else {
+                    setDiscount(0);
+                }
+                break;
+            case "discNominal":
+                pattern = new RegExp("[0-9]*");
+                matchPattern = pattern.test(disc);
+
+                if(matchPattern && +disc >= 0){
+                    setDiscount(parseInt(+disc));
+                } else if(matchPattern && +disc < 0) {
+                    setDiscount(0);
+                } else {
+                    setDiscount(0);
+                }
+                break;
+            case "discVoucher":
+                pattern = new RegExp("^[A-Za-z]+$");
+                matchPattern = pattern.test(disc);
+                const newVal = disc.toUpperCase();
+                matchPattern ? setDiscount(newVal) :  "";
+                break;
+        }
+    }
+
+    const applyVoucher = () => {
+        if(list.length > 0) {
+            const voucher = {
+                value: inputDiscount,
+                type: discType
+            }
+            dispatch(cartSlice.actions.applyVoucher(voucher));
+        } else {
+            console.log("add product first!");
         }
     }
 
@@ -70,26 +130,51 @@ export default function DiscountModal({show, onHide}) {
                             </span>
                         </div>
                     </div>
-                    <div className="tabs-content" 
-                    style={isShow === "discPercent" ? {display: "block"} : {display: "none"}}>
-                        <Form.Control type="text" placeholder="0%" style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}} />
-                    </div>
-                    <div className="tabs-content" 
-                    style={isShow === "discNominal" ? {display: "block"} : {display: "none"}}>
-                        <div className="input-group-left">
-                            <span className="input-group-w-text fw-semibold currency">Rp </span>
-                            <Form.Control type="text" className="input-w-text-left" placeholder="0" style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}} />
-                        </div>
-                    </div>
-                    <div className="tabs-content" 
-                    style={isShow === "discVoucher" ? {display: "block"} : {display: "none"}}>
-                        <Form.Control type="text" placeholder="DISCOUNTTIME" onInput={(e) => {let p=e.selectionStart;e.value=e.value.toUpperCase();e.selectionRange(p,p);}} style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}} />
+                    <div className="tabs-content"  >
+                        {
+                            isShow === "discPercent" 
+                            ? <Form.Control 
+                                type="text" 
+                                placeholder="0" 
+                                inputMode="numeric"
+                                pattern="[0-9]*"                                 
+                                value={inputDiscount || 0} 
+                                maxLength={2}
+                                onChange={handleVoucher} 
+                                style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}}  
+                              /> 
+                            : isShow === "discNominal"
+                            ? <> <div className="input-group-left">
+                                    <span className="input-group-w-text fw-semibold currency">Rp </span>
+                                    <Form.Control 
+                                        type="text" 
+                                        className="input-w-text-left" 
+                                        placeholder="0"   
+                                        pattern="[0-9]*"                        
+                                        value={inputDiscount || 0}
+                                        onChange={handleVoucher} 
+                                        style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}} 
+                                    />
+                                </div>
+                              </>
+                            : isShow === "discVoucher"
+                            ? <Form.Control 
+                                type="text" 
+                                placeholder="DISCOUNTTIME" 
+                                inputMode="text"
+                                pattern="[^[A-Za-z]+$]"
+                                value={inputDiscount || ""}
+                                onChange={handleVoucher} 
+                                style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}} 
+                              />
+                            : "" 
+                        }
                     </div>
                 </div>
             </Modal.Body>
             <Modal.Footer>
                 <Button type="button" isSecondary={true} isLight={true} onHide={true} onClick={onHide}>cancel</Button>
-                <Button type="button" isPrimary={true}>apply</Button>
+                <Button type="button" isPrimary={true} onClick={applyVoucher}>apply</Button>
             </Modal.Footer>
         </Modal>
     )

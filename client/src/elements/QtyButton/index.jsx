@@ -8,9 +8,8 @@ import cartSlice from "../../store/reducers/cart";
 export default function QtyButton(props) {
     const { data, value, placeholder, name, min, max } = props;
     const [ inputValue, setInputValue ] = useState(value ? value : 0);
+    const [ delBtn, setDelBtn ] = useState(false);
     const dispatch = useDispatch();
-    const qtyVal = useSelector(state => state.cart);
-
 
     const minus = () => {
         if(inputValue > min) {
@@ -21,14 +20,16 @@ export default function QtyButton(props) {
                     value: newValue,
                 },
             });
-        }
 
-        if(data) {
-            dispatch(cartSlice.actions.decrement({
-                data: data,
-                stateValue: inputValue
-            }));
-        } 
+            if(data) {
+                dispatch(cartSlice.actions.decrement({
+                    data: data,
+                    stateValue: inputValue
+                }));
+            }
+        } else if (data && inputValue === min){
+            handleDeleteOrder(data.id);
+        }
     };
 
     const plus = () => {
@@ -40,14 +41,14 @@ export default function QtyButton(props) {
                     value: newValue,
                 }
             })
-        }    
 
-        if(data) {
-            dispatch(cartSlice.actions.increment({
-                data: data,
-                stateValue: inputValue
-            }));
-        } 
+            if(data) {
+                dispatch(cartSlice.actions.increment({
+                    data: data,
+                    stateValue: inputValue
+                }));
+            } 
+        }    
     };
 
     const onChangeInput = (e) => {
@@ -55,19 +56,18 @@ export default function QtyButton(props) {
         const patternNumeric = new RegExp("[0-9]*");
         const isNumeric = patternNumeric.test(val);
         let newVal;
-        // const isNumeric = parseInt(val);
-
+        
         if(isNumeric && +val <= max && +val >= min) {
             e.target.name = name;
-            e.target.value += val;
-            // e.target.value = +isNumeric;
-            setInputValue(parseInt(val));
-            newVal = parseInt(val);
-            // console.log(inputValue)
-            // setInputValue(isNumeric);
-        } else if(isNumeric && +val<min){
-            setInputValue(min);
+            e.target.value = +val;
+            setInputValue(parseInt(+val));
+            newVal = parseInt(+val);
+        } else if (isNumeric && +val < min) {
             newVal = min;
+            setInputValue(min);
+        } else {
+            newVal = min;
+            setInputValue(min);
         }
 
         if(data) {
@@ -75,9 +75,18 @@ export default function QtyButton(props) {
                 data: data,
                 stateValue: newVal
             }));
+
+            if(newVal === 1) {
+                setDelBtn(true);
+            } else {
+                setDelBtn(false);
+            }
         } 
     };
 
+    const handleDeleteOrder = (itemID) => {
+        dispatch(cartSlice.actions.deleteItem(itemID));
+    }
 
     useEffect(() => {
         const newValue = value;
@@ -93,7 +102,11 @@ export default function QtyButton(props) {
         <div className="order-qty-btn">
             <ButtonGroup>
                 <Button type="button" onClick={minus}>
-                    <box-icon name='minus' size="14px" color="#212529"></box-icon>
+                    {
+                        delBtn ? <box-icon name='trash' size="14px" color="#212529"></box-icon> 
+                        :<box-icon name='minus' size="14px" color="#212529"></box-icon>
+
+                    }
                 </Button>
                 <Form.Control 
                   type="text"

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { Card, Form } from "react-bootstrap";
 import { CustomSelect } from '../elements/CustomSelect';
+import NumberFormat from '../elements/NumberFormat';
 import cartSlice from '../store/reducers/cart';
 import Button from '../elements/Button';
 import OrderListItem from '../elements/OrderListItem';
@@ -11,20 +12,53 @@ import HoldOrderModal from './HoldOrderModal';
 import Tahu from "../assets/images/tahu.png";
 
 export default function OrderCard(props) {
+    const dispatch = useDispatch();
     const [isActive, setCustType] = useState("member");
     const [payMethod, setPayMethod] = useState("cash");
     const [isHover, setIsHover] = useState(null);
     const [show, setShowModal] = useState(false);
     const [isClose, setClose] = useState(true);
+    const list = useSelector((state) => state.cart.cartData); 
+    const checkDisc = useSelector((state) => state.cart.discount); 
+    const [cartItem, setCart ] = useState(list ? list : null);
+    const [totalCart, setTotalCart] = useState(() => {
+        let totalPrice = 0;
+        if(list) {
+            list.map(e => totalPrice += e.totalPrice);
+            return totalPrice;
+        } else {
+            return 0;
+        }
+    });
 
+    const [discVal, setDisc ] = useState(() => {
+        if(localStorage.getItem("activeDiscount")) {
+            const getDisc = JSON.parse(localStorage.getItem("activeDiscount"));
+
+            if(getDisc.type === "percent"){
+                const cutValue = totalCart * (getDisc.value / 100);
+                return cutValue;
+            } else if(getDisc.type === "nominal"){
+                
+            } else if(getDisc.type === "voucher"){
+                
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+    });
+    const [itemTotal, setItem] = useState(list ? list.length : 0);
+    
     const handleMouseEnter = (e) => {
         switch (e.target.id) {
             case "holdOrderBtn":
                 setIsHover("holdOrderBtn");
                 break;
-        }         
-    };
-
+            }         
+        };
+        
     const handleCustPay = (e) => {
         switch(e.target.getAttribute("aria-label")){
             case "member":
@@ -55,30 +89,53 @@ export default function OrderCard(props) {
                 break;
         }
     }
-
+    
     const closeOrderCard = () => {
         document.querySelector(".order-card-wrap").style.display ="none";
     }
-
+    
     const handleCloseModal = () => {
         setShowModal(false);
     }
 
-    const dispatch = useDispatch();
-    const list = useSelector((state) => state.cart.cartData); 
-    const [ cartItem, setCart ] = useState(list ? list : null);
-    // const handleLocalStorage = () => {
-    //     // dispatch(cartSlice.actions.loadData());
-    //     console.log(list)
-    // }
+    const handleDisc = (data, totalPrice) => {
+        if(data.type === "percent") {
+            const cutValue = totalPrice ? totalPrice * (data.value / 100) : totalCart * (data.value / 100);
+            setDisc(cutValue);
+        } else if(data.type === "nominal"){
+            
+        } else if(data.type === "voucher"){
+            
+        }
+    }
+
+    useEffect(() => {
+        setCart(list);
+        
+        if(list){
+            let totalPrice = 0;
+            list.map(e => totalPrice += e.totalPrice);
+            setTotalCart(totalPrice);
+            setItem(list.length);
+
+            const checkDisc = localStorage.getItem("activeDiscount");
+            if(checkDisc && list.length > 0){
+                const parseData = JSON.parse(localStorage.getItem("activeDiscount"));
+                handleDisc(parseData, totalPrice);
+            }else if(list.length === 0){
+                dispatch(cartSlice.actions.applyVoucher({value:0}));
+                setDisc(0);
+            }
+        }
+    },[list])      
     
     useEffect(() => {
-        
-            setCart(list)
-       
-    },[list])        
-
-
+        if(checkDisc){
+            handleDisc(checkDisc);
+        } 
+    },[checkDisc]);
+    
+    
     return (
         <>
         <div className="order-card-wrap" >
@@ -177,18 +234,28 @@ export default function OrderCard(props) {
                 <div className="order-cost-wrap">
                     <div className="order-cost-detail">
                         <div className="order-cost-items">
-                            <p className="cost text">items (4 items)</p>
+                            <p className="cost text">item ({itemTotal > 1 ? itemTotal+" items" : itemTotal + " item"})</p>
                             <p className="cost-price">
-                                <span className="currency">Rp</span>
-                                200,000,-
+                                <NumberFormat intlConfig={{
+                                    value: totalCart, 
+                                    locale: "id-ID",
+                                    style: "currency", 
+                                    currency: "IDR",
+                                }} 
+                                />
                             </p>
                         </div>
                         <div className="order-cost-addon">
                             <p className="cost-addon-text">Discount</p>
                             <span className="d-flex justify-content-center">
                                 <p className="cost-addon-price align-items-end">
-                                    <span className="currency">Rp</span>
-                                    0,-
+                                <NumberFormat intlConfig={{
+                                    value: discVal, 
+                                    locale: "id-ID",
+                                    style: "currency", 
+                                    currency: "IDR",
+                                }} 
+                                />
                                 </p>
                                 <box-icon type='solid' name='cog' size="16px" color="#42C0FB" id="discModal" onClick={e => showModal(e)} style={{padding: ".5px 6px"}}></box-icon>
                             </span>
@@ -196,7 +263,15 @@ export default function OrderCard(props) {
                     </div>
                     <div className="order-cost-total">
                         <p className="order-cost-total-text">total</p>
-                        <p className="order-cost-total-price"><span className="currency">Rp</span> 200,000,-</p>
+                        <p className="order-cost-total-price">
+                            <NumberFormat intlConfig={{
+                                value: totalCart && discVal ? totalCart - discVal : totalCart, 
+                                locale: "id-ID",
+                                style: "currency", 
+                                currency: "IDR",
+                            }} 
+                            />
+                        </p>
                     </div>
                     <div className="order-cost-feature">
                         <p className="order-payment-title">payment method</p>

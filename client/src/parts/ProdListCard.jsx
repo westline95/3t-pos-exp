@@ -48,7 +48,7 @@ export default function ProdListCard({ data, addToCart }){
                     prodCatalogData.map((prod, idx) => {
                         if(el.name.toLowerCase() === prod.name.toLowerCase()){
                             if(prod.variant === ""){
-                                setDataNonVar({id: prod.id, img: el.img, product: el.name, variant: "", price: el.displayPrice})
+                                setDataNonVar({id: prod.id, img: el.img, product: el.name, variant: "", price: Number(el.displayPrice)})
                                 showModal("addToCartModal");
 
                             } else {
@@ -58,7 +58,7 @@ export default function ProdListCard({ data, addToCart }){
                                     product: el.name,
                                     category: prod.category,
                                     variant: prod.variant,
-                                    price: prod.sellPrice,
+                                    price: Number(prod.sellPrice),
                                     status: prod.status
                                 } 
                                 dataArr.push(data);
