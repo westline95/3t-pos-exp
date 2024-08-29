@@ -1112,7 +1112,7 @@ body {
 }
 
 .order-list-items {
-  height: calc(100% - 500px);
+  height: calc(100% - 420px);
   padding-bottom: 2.5rem;
   overflow-y: scroll;
 
@@ -1334,7 +1334,7 @@ body {
 .order-cost-wrap .order-cost-detail .order-cost-addon .cost-addon-text {
   color: #909ba5;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .order-cost-total {
@@ -1362,7 +1362,7 @@ body {
     margin-bottom: 2rem;
 
     button {
-      font-size: 14px;
+      font-size: 13px;
       margin-right: 0.5rem;
 
       i {
@@ -1380,7 +1380,7 @@ body {
 
   button {
     width: 100%;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
   }
 }
@@ -1522,8 +1522,8 @@ table tbody tr td table td {
 
   .same-as-select {
     width: auto;
-    height: 38px;
-    font-size: 14px;
+    $height: 38px;
+    font-size: calc($height / 2.5);
     padding: 6px 36px 6px 12px;
     border-radius: 7.5px !important;
     border: var(--bs-border-width) solid var(--bs-border-color);
@@ -1542,6 +1542,7 @@ table tbody tr td table td {
 
     p {
       margin-bottom: 0;
+      text-transform: capitalize;
     }
   }
 
@@ -1563,6 +1564,7 @@ table tbody tr td table td {
     max-height: 150px;
     overflow-y: auto;
     text-align: left;
+    text-transform: capitalize;
 
     & > *:first-child {
       background-color: #f3f3f3;
@@ -3078,14 +3080,14 @@ td .btn-group button i {
   }
 
   .order-list-items {
-    height: calc(100% - 470px);
+    height: calc(100% - 430px);
   }
 
   .order-item .order-detail .product-name,
     // .order-cost-wrap .order-cost-total p,
     .order-cost-wrap .order-cost-detail .order-cost-items p,
     .order-cost-feature p {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .order-cost-wrap .order-cost-total p {
@@ -3096,8 +3098,15 @@ td .btn-group button i {
     padding: 1rem 1.5rem;
   }
 
-  .order-cost-feature .payment-btn-wrap {
+  .order-cost-feature {
     margin-bottom: 1.25rem;
+
+    // .payment-btn-wrap {
+    //   button {
+    //     font-size: 13px;
+    //   }
+    // }
+    
   }
 
   .input-group-w-text,
@@ -3166,6 +3175,13 @@ td .btn-group button i {
       box-icon {
         vertical-align: sub;
       }
+  }
+
+  .custom-select-opt {
+    .same-as-select {
+      $height: 35px;
+      font-size: calc($height / 2.5);
+    }
   }
 
   

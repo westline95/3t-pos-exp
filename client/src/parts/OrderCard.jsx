@@ -9,6 +9,7 @@ import OrderListItem from '../elements/OrderListItem';
 import AddMemberFast from './AddMemberFast';
 import DiscountModal from './DiscountModal';
 import HoldOrderModal from './HoldOrderModal';
+import OrderPaymentModal from './OrderPaymentModal';
 import Tahu from "../assets/images/tahu.png";
 
 export default function OrderCard(props) {
@@ -50,6 +51,30 @@ export default function OrderCard(props) {
         }
     });
     const [itemTotal, setItem] = useState(list ? list.length : 0);
+
+    const getDate = () => {
+        const dayString = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+        const monthString = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+        const today = new Date();
+        const day = today.getDay();
+        const date = today.getDate();
+        const month = today.getMonth();
+        const year = today.getFullYear();
+        const todayDate = dayString[day]+", "+ date + " " + monthString[month] + " " + year;
+        return todayDate;
+    }
+
+    const getTime = () => {
+        const today = new Date();
+        const getHours = today.getHours();
+        const getMin = today.getMinutes();
+        const getSec = today.getSeconds();
+        const currTime = getHours+":"+getMin+":"+getSec;
+        return currTime;
+    }
+
+    const [todayDate, setTodayDate] = useState(getDate());
+    const [time, setTime] = useState(getTime());
     
     const handleMouseEnter = (e) => {
         switch (e.target.id) {
@@ -86,6 +111,9 @@ export default function OrderCard(props) {
                 break;
             case "holdOrder":
                 setShowModal("holdOrder");
+                break; 
+            case "submitOrder":
+                setShowModal("submitOrder");
                 break;
         }
     }
@@ -107,6 +135,17 @@ export default function OrderCard(props) {
         } else if(data.type === "voucher"){
             
         }
+    }
+
+    const submitOrder = () => {
+        if(payMethod === "cash"){
+
+        }
+    }
+
+    const searchMembCust = (e) => {
+        const custName = e.target.value;
+        console.log(custName)
     }
 
     useEffect(() => {
@@ -134,6 +173,16 @@ export default function OrderCard(props) {
             handleDisc(checkDisc);
         } 
     },[checkDisc]);
+
+    useEffect(() => {
+        const dateTime = setInterval(() => {
+            setTodayDate(getDate());
+            setTime(getTime());
+        }, 1000);
+        return function cleanup() {
+            clearInterval(dateTime);
+        }
+    })
     
     
     return (
@@ -163,8 +212,8 @@ export default function OrderCard(props) {
                         <p className="order-number">#260</p>
                     </div>
                     <div className="order-date-detail">
-                        <p className="order-date">Wed, 24 Apr 24</p>
-                        <p className="order-time">02:49 PM</p>
+                        <p className="order-date">{todayDate ? todayDate : "error date"}</p>
+                        <p className="order-time">{time ? time : "error time"}</p>
                     </div>
                     <div className="order-type">
                         <p className="order-type-label">order type</p>
@@ -187,7 +236,7 @@ export default function OrderCard(props) {
                             ariaLabel="non-member" isRounded={true}
                             onClick={handleCustPay}>non-member</Button>
                         </div>
-                        <Button type="button" isPrimary={true} isRounded={true} ariaLabel="add-member" id="addMemberFastModal" onClick={e => showModal(e)}>
+                        <Button type="button" isPrimary={true} isRounded={true} ariaLabel="add-member" id="addMemberFastModal" onClick={showModal}>
                             <box-icon name='plus' size="18px" color="#FFFFFF" style={{verticalAlign: "middle"}}></box-icon>
                                 add
                         </Button>
@@ -200,7 +249,7 @@ export default function OrderCard(props) {
                                 <span className="input-group-icon">
                                     <box-icon name='search' size="14px" color="#BDC4D1" style={{marginTop: "-3px"}}></box-icon>
                                 </span>
-                                <Form.Control type="text" className="input-w-icon-right" placeholder="Search..." id="searchCustMem"></Form.Control>
+                                <Form.Control type="text" className="input-w-icon-right" placeholder="Search..." id="searchCustMem" onChange={searchMembCust} />
                             </div>
                         </div>
                         <div className={`input-label d-flex flex-row justify-content-between horizontal-form-control ${isActive === "nonMember" ? "active" : "" }`}
@@ -257,7 +306,7 @@ export default function OrderCard(props) {
                                 }} 
                                 />
                                 </p>
-                                <box-icon type='solid' name='cog' size="16px" color="#42C0FB" id="discModal" onClick={e => showModal(e)} style={{padding: ".5px 6px"}}></box-icon>
+                                <box-icon type='solid' name='cog' size="16px" color="#42C0FB" id="discModal" onClick={showModal} style={{padding: ".5px 6px"}}></box-icon>
                             </span>
                         </div>
                     </div>
@@ -274,7 +323,7 @@ export default function OrderCard(props) {
                         </p>
                     </div>
                     <div className="order-cost-feature">
-                        <p className="order-payment-title">payment method</p>
+                        {/* <p className="order-payment-title">payment method</p>
                         <div className="payment-btn-wrap">
                             <Button ariaLabel="cash" type="button" isRounded={true} onClick={handleCustPay} className={payMethod === "cash" ? "active" : ""}> 
                                 <box-icon name='money' size="15px" color={payMethod === "cash" ? "#42C0FB" : "#5b5e60"} style={{verticalAlign: "top", marginRight: ".35rem"}}></box-icon>
@@ -284,10 +333,10 @@ export default function OrderCard(props) {
                                 <box-icon name='timer' size="15px" color={payMethod === "payLater" ? "#42C0FB" : "#5b5e60"} style={{verticalAlign: "top", marginRight: ".5rem"}}></box-icon>
                                 pay later
                             </Button>
-                        </div>
+                        </div> */}
                         <div className="submit-order">
-                            <Button type="button" isWarning={true} isRounded={true} id="holdOrder" onClick={(e) => showModal(e)}>Hold order</Button>
-                            <Button type="button" isPrimary={true} isRounded={true}>Submit order</Button>
+                            <Button type="button" isWarning={true} isRounded={true} id="holdOrder" onClick={showModal}>Hold order</Button>
+                            <Button type="button" isPrimary={true} isRounded={true} id="submitOrder" onClick={showModal}>Submit order</Button>
                         </div>
                     </div>
                 </div>
@@ -297,6 +346,7 @@ export default function OrderCard(props) {
         <AddMemberFast show={show === "addMemberFastModal" ? true : false} onHide={handleCloseModal} />
         <DiscountModal show={show === "discModal" ? true : false} onHide={handleCloseModal} />
         <HoldOrderModal show={show === "holdOrder" ? true : false} onHide={handleCloseModal} />
+        <OrderPaymentModal show={show === "submitOrder" ? true : false} onHide={handleCloseModal} data={show ? {total: (totalCart - discVal), custName: "", custType: ""} : 0} />
         </>
         
     )

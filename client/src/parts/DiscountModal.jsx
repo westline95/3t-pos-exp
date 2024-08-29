@@ -78,6 +78,7 @@ export default function DiscountModal({show, onHide}) {
         } else {
             console.log("add product first!");
         }
+        onHide();
     }
 
     return ( 

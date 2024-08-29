@@ -5,6 +5,7 @@ import cors from "cors";
 import ProductsRoute from "./routes/ProductsRoute.js";
 import CategoryRoute from "./routes/CategoryRoute.js";
 import SubCategoryRoute from "./routes/SubCategoryRoute.js";
+import CustomersRoute from "./routes/CustomerRoute.js";
 
 dotenv.config();
 
@@ -24,6 +25,8 @@ app.use(ProductsRoute);
 app.use(CategoryRoute);
 // sub category CRUD
 app.use(SubCategoryRoute);
+// customers CRUD
+app.use(CustomersRoute);
 
 
 app.listen(port, () => console.log(`
