@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { Card, Form } from "react-bootstrap";
 import { CustomSelect } from '../elements/CustomSelect';
@@ -19,6 +19,19 @@ export default function OrderCard(props) {
     const [isHover, setIsHover] = useState(null);
     const [show, setShowModal] = useState(false);
     const [isClose, setClose] = useState(true);
+    const [openPopup, setOpenPopup] = useState(false);
+    const [custData, setCustData] = useState("");
+    const [filterCust, setFilteredCust] = useState([]);
+    const [chooseCust, setCust] = useState(null);
+    const refToThis = useRef(null);
+
+
+    const endpoint = `https://threet-pos-exp.onrender.com/customers`;
+    const fetchCustomer = async() => {
+        const resp = await fetch(endpoint);
+        const data = await resp.json();
+        setCustData(data);
+    }
     const list = useSelector((state) => state.cart.cartData); 
     const checkDisc = useSelector((state) => state.cart.discount); 
     const [cartItem, setCart ] = useState(list ? list : null);
@@ -75,7 +88,7 @@ export default function OrderCard(props) {
 
     const [todayDate, setTodayDate] = useState(getDate());
     const [time, setTime] = useState(getTime());
-    
+
     const handleMouseEnter = (e) => {
         switch (e.target.id) {
             case "holdOrderBtn":
@@ -143,9 +156,52 @@ export default function OrderCard(props) {
         }
     }
 
+    const handleAutoComplete = (custName) => {
+        if(custData !== "" && custName !== ""){
+            let filteredCust = custData.filter(item => item.name.includes(custName.toLowerCase()));
+            if(filteredCust.length === 0){
+                setOpenPopup(false);
+            } else {
+                setOpenPopup(true);
+                setFilteredCust(filteredCust);
+            }
+        } else {
+            setOpenPopup(true);
+            setFilteredCust(custData);
+        }
+        setCust({id: "", name: custName});
+    }
+
     const searchMembCust = (e) => {
         const custName = e.target.value;
-        console.log(custName)
+        handleAutoComplete(custName)
+    }
+
+    const handleClickSelect = (ref) => {
+        useEffect(() => {
+            const handleClickOutside = (evt) => {
+                if(refToThis.current 
+                    && !ref.current.contains(evt.target) 
+                    && evt.target.className !== "res-item" 
+                    && evt.target.className !== "popup-element") {
+                    setOpenPopup(false);
+                } else {
+                    handleAutoComplete(ref.current.value);
+                }
+            }
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, [custData, ref]);
+    };
+    handleClickSelect(refToThis);
+
+    const handleChooseCust = (e) => {
+        const custID = e.target.id;
+        const custName = e.target.innerText;
+        setCust({id: custID, name: custName});
+        setOpenPopup(false);
     }
 
     useEffect(() => {
@@ -175,6 +231,7 @@ export default function OrderCard(props) {
     },[checkDisc]);
 
     useEffect(() => {
+        fetchCustomer();
         const dateTime = setInterval(() => {
             setTodayDate(getDate());
             setTime(getTime());
@@ -247,9 +304,28 @@ export default function OrderCard(props) {
                             <label htmlFor="search-cust-name" className="align-self-center">Customer:</label>
                             <div className="input-group-right">
                                 <span className="input-group-icon">
-                                    <box-icon name='search' size="14px" color="#BDC4D1" style={{marginTop: "-3px"}}></box-icon>
+                                    <box-icon name='search' size="14px" color="#BDC4D1item" style={{marginTop: "-3px"}}></box-icon>
                                 </span>
-                                <Form.Control type="text" className="input-w-icon-right" placeholder="Search..." id="searchCustMem" onChange={searchMembCust} />
+                                <Form.Control 
+                                type="text" 
+                                autoComplete='off' 
+                                className="input-w-icon-right" 
+                                placeholder="Search..." 
+                                value={chooseCust ? chooseCust.name : ""} 
+                                id="searchCustMem" 
+                                onChange={searchMembCust} 
+                                ref={refToThis}
+                                onFocus={(e) => e.currentTarget.value === "" ? setFilteredCust(custData) : ""}  
+                                />
+                                <div className="popup-element" aria-expanded={openPopup}>
+                                {filterCust === "" ? "" :
+                                    filterCust.map((e,idx) => {
+                                        return (
+                                            <div key={`cust-${idx}`} className="res-item" onClick={handleChooseCust}>{e.name}</div>
+                                        )
+                                    })
+                                }
+                                </div>   
                             </div>
                         </div>
                         <div className={`input-label d-flex flex-row justify-content-between horizontal-form-control ${isActive === "nonMember" ? "active" : "" }`}

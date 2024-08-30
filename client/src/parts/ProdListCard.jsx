@@ -28,7 +28,6 @@ export default function ProdListCard({ data, addToCart }){
         fetchProdCatalog();
     }, [])
 
-
     
     return(
         <>

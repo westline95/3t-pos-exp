@@ -1,7 +1,7 @@
 import Sequelize from "sequelize";
 import sequelize from "../config/Database.js";
 
-const CustomerModel = sequelize.define("customers", 
+const CustomerModel = sequelize.define("customer", 
     {
         id:{
             type:  Sequelize.INTEGER,
@@ -52,7 +52,7 @@ const CustomerModel = sequelize.define("customers",
             type: Sequelize.STRING,
         },
         address: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT,
         },
     }, 
     {

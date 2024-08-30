@@ -41,6 +41,8 @@ const insertCustomers = async (req, res) => {
         res.status(201).json(newCust);
     } 
     catch(err) {
+        console.log(err)
+
         res.status(500).json({err: "internal server error"});
     }
 }
