@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import propTypes from "prop-types";
 
-export const CustomSelect = ({ options}) => {
+export const CustomSelect = ({ options, selectedOption }) => {
     const [openSelect, setOpen] = useState(false);
     const [isValue, setValue] = useState("");
     const refToThis = useRef(null);
@@ -34,8 +34,9 @@ export const CustomSelect = ({ options}) => {
                 <div className={`select-items ${openSelect ? "" : "select-hide"}`}>
                     {options.map((item, idx) => {
                         const handleClickOpt = () => {
-                            setValue(item);
                             setOpen((p) => !p);
+                            setValue(item);
+                            selectedOption(item);
                         }
                     
                         return(
@@ -50,5 +51,7 @@ export const CustomSelect = ({ options}) => {
 }
 
 CustomSelect.propTypes = {
-    options: propTypes.array.isRequired
+    options: propTypes.array.isRequired,
+    selectedOption: propTypes.func
+
 }
