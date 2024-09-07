@@ -16,7 +16,7 @@ const getProducts = async (req, res) => {
 
 const getProductsByCategory = async (req, res) => {
     try{
-        const allProduct = await ProductsCatalogModel.findAll({where:{id: req.query.id}});
+        const allProduct = await ProductsCatalogModel.findAll({where:{category: req.query.category}});
         if(allProduct){
             res.json(allProduct);
         } else {
