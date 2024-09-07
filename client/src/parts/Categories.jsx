@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import CategoriesCard from "../elements/CaegoriesCard";
 
 export default function Categories({data}) {
-    const [ isClicked, setClick ] = useState(false);
+    const [ isActive, setActive ] = useState(0);
     const [ prodData, products] = useState([]);
     const [ nameValue, setNameParam] = useState("");
 
@@ -41,22 +41,24 @@ export default function Categories({data}) {
             mergeDataArr.push(mergeData);
         }
     })
-    
+
+    const handleCategory = (id) => {
+        setActive(id);
+    }
     
     return mergeDataArr.map((el, idx) => {
-        // setNameParam(el.name);
-        // prodData.map(prodCategory => {
-        //     console.log(prodCategory)
-        // })
         return (
             <CategoriesCard 
             key={`category-${idx}`} 
-            isActive={idx === 0 ? true : false} 
+            isActive={idx === isActive ? true : false} 
             title={el.category} 
             desc={el.count + ' items'}
             img={el.img === "" ? "" : el.img}
+            onClick={()=>handleCategory(idx)}
             >
-                {idx === 0 ? <box-icon type='solid' size="24px" name='grid-alt' color="#42C0FB" style={{verticalAlign: "sub"}}></box-icon> : ""}
+                {idx === 0 ? 
+                <box-icon type='solid' size="24px" name='grid-alt' color={isActive === idx ? "#42C0FB" : "#344050" } style={{verticalAlign: "sub"}}></box-icon> 
+                : ""}
             </CategoriesCard>         
         );
         // })

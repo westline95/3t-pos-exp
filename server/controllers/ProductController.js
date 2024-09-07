@@ -14,6 +14,20 @@ const getProducts = async (req, res) => {
     }
 }
 
+const getProductsByCategory = async (req, res) => {
+    try{
+        const allProduct = await ProductsCatalogModel.findAll({where:{id: req.query.id}});
+        if(allProduct){
+            res.json(allProduct);
+        } else {
+            res.status(404).json({error: `get product by category not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 
 const insertProducts = async (req, res) => {
     const { name, category, variant, unit, prodCost, sellPrice, status } = req.body;
@@ -99,5 +113,6 @@ export default {
     insertMultipleProducts, 
     updateProduct,  
     deleteProduct,
-    countProductByName
+    countProductByName,
+    getProductsByCategory
 };

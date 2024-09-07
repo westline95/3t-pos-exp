@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import { useSelector, useDispatch } from 'react-redux'; 
 import { Modal, Form, ModalFooter } from "react-bootstrap";
 import InputWLabel from "./InputWLabel";
 import InputWSelect from "./InputWSelect";
@@ -23,6 +24,7 @@ export default function AddMemberFast({show, onHide}) {
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
+        console.log(value)
         if(name === "phone"){
             const patternNumeric = /^[0-9\b]+$/;
             const isNumeric = patternNumeric.test(value);
@@ -40,50 +42,50 @@ export default function AddMemberFast({show, onHide}) {
         }
     }
 
-    const formValidation = () => {
-        if(newCust.name !== "" && newCust.phone !== "" && newCust.type !== ""){
-            setValidation({
-                message: true
-            });
+        // const formValidation = () => {
+        //     if(newCust.name !== "" && newCust.phone !== "" && newCust.type !== ""){
+        //         setValidation({
+        //             message: true
+        //         });
 
-        } else {
-            // console.log(newCust)
-            // setValidation({
-            //     ...newCust,
-            //     message: false
-            // });
-            if(newCust.name === ""){
-                setValidation({
-                    message: false,
-                    field: "name"
-                });
-            } else if(newCust.phone === ""){
-                setValidation({
-                    message: false,
-                    field: "phone"
-                });
-            } else if(newCust.type === ""){
-                setValidation({
-                    message: false,
-                    field: "type"
-                });
-            } 
-            // newCust.name === "" ? setValidation(false) : setValidation(true);
-            // newCust.phone === "" ? setValidation(false) : setValidation(true);
-            // newCust.type === "" ? setValidation(false) : setValidation(true);
-            // if(newCust.name === ""){
-            //     setValidation(false);
-            // } else if(newCust.phone === ""){
-            //     setValidation(false);
-            // } else if(newCust.type === ""){
-            //     setValidation(false);
-            // }
-            // console.log(newCust)
-        }
-        // console.log(inValid)
-        // console.log(newCust.name)
+        //     } else {
+        //         // console.log(newCust)
+        //         // setValidation({
+        //         //     ...newCust,
+        //         //     message: false
+        //         // });
+        //         if(newCust.name === ""){
+        //             setValidation({
+        //                 message: false,
+        //                 field: "name"
+        //             });
+        //         } else if(newCust.phone === ""){
+        //             setValidation({
+        //                 message: false,
+        //                 field: "phone"
+        //             });
+        //         } else if(newCust.type === ""){
+        //             setValidation({
+        //                 message: false,
+        //                 field: "type"
+        //             });
+        //         } 
+        //         // newCust.name === "" ? setValidation(false) : setValidation(true);
+        //         // newCust.phone === "" ? setValidation(false) : setValidation(true);
+        //         // newCust.type === "" ? setValidation(false) : setValidation(true);
+        //         // if(newCust.name === ""){
+        //         //     setValidation(false);
+        //         // } else if(newCust.phone === ""){
+        //         //     setValidation(false);
+        //         // } else if(newCust.type === ""){
+        //         //     setValidation(false);
+        //         // }
+        //         // console.log(newCust)
+        //     }
+        //     // console.log(inValid)
+        //     // console.log(newCust.name)
 
-    }
+        // }
     
     useEffect(() => {
         console.log(inValid)
@@ -116,7 +118,7 @@ export default function AddMemberFast({show, onHide}) {
                     labelValue="customer type" 
                     options={["customer type", "delivery order", "walk-in"]}
                     value={optionValue}
-                    onChange={handleInputChange}
+                    // onChange={handleInputChange}
                     validation={inValid}
                     require={true}
                 />
@@ -146,7 +148,7 @@ export default function AddMemberFast({show, onHide}) {
             </Modal.Body>
             <ModalFooter>
                 <Button type="button" isSecondary={true} isLight={true} onClick={onHide}>cancel</Button>
-                <Button type="button" isPrimary={true} onClick={formValidation}>save</Button>
+                <Button type="button" isPrimary={true}>save</Button>
             </ModalFooter>
 
         </Modal>

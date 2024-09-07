@@ -732,39 +732,44 @@ body {
 .btn-primary,
 .badge-primary,
 .bg-primary,
-.alert-primary {
-  color: #ffffff;
+.alert-primary,
+.toast-primary {
+  color: #ffffff !important;
   background-color: var(--sa-color-primary) !important;
 }
 
 .btn-secondary,
 .badge-secondary,
 .bg-secondary,
-.alert-secondary {
-  color: #ffffff;
+.alert-secondary,
+.toast-secondary {
+  color: #ffffff !important;
   background-color: var(--sa-color-secondary) !important;
 }
 
 .btn-success,
 .badge-success,
 .bg-success,
-.alert-success {
-  color: #ffffff;
+.alert-success,
+.toast-success {
+  color: #ffffff !important;
   background-color: var(--sa-color-success) !important;
 }
 
 .btn-danger,
 .badge-danger,
 .bg-danger,
-.alert-danger {
-  color: #ffffff;
+.alert-danger,
+.toast-danger {
+  color: #ffffff !important;
   background-color: var(--sa-color-danger) !important;
 }
 
 .btn-warning,
 .badge-warning,
 .bg-warning,
-.alert-warning {
+.alert-warning,
+.toast-warning {
   color: #ffffff !important;
   background-color: var(--sa-color-warning) !important;
 }
@@ -772,7 +777,8 @@ body {
 .btn-info,
 .badge-info,
 .bg-info,
-.alert-info {
+.alert-info,
+.toast-info {
   color: #ffffff !important;
   background-color: var(--sa-color-info) !important;
 }
@@ -780,7 +786,8 @@ body {
 .btn-light,
 .badge-light,
 .bg-light,
-.alert-light {
+.alert-light,
+.toast-light {
   color: var(--sa-color-black) !important;
   background-color: var(--sa-color-outline-light) !important;
 }
@@ -788,7 +795,8 @@ body {
 .btn-dark,
 .badge-dark,
 .bg-dark,
-.alert-dark {
+.alert-dark,
+.toast-dark {
   color: #ffffff;
   background-color: var(--sa-color-black) !important;
 }
@@ -3067,6 +3075,14 @@ td .btn-group button i {
 
   .product-qty-wrap .btn-group button {
     padding: 1.5px 7px !important;
+  }
+
+  .modal-header {
+    padding: 1rem 1.5rem !important;
+  }
+
+  .modal-body {
+    padding: 1.5rem !important;
   }
 
   .modal-body .lists .list-item {

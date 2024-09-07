@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Modal, ModalBody, ModalFooter } from 'react-bootstrap';
+import NumberFormat from '../elements/NumberFormat';
 // import QtyButton from '../elements/QtyButton';
 // import Button from '../elements/Button';
 import VariantModal from './VariantModal';
@@ -81,8 +82,14 @@ export default function ProdListCard({ data, addToCart }){
                             <Card.Body>
                                 <Card.Title>{el.name}</Card.Title>
                                 <Card.Text>
-                                    <span className="currency">Rp</span>
-                                    {el.displayPrice}
+                                    {/* <span className="currency">Rp</span> */}
+                                    <NumberFormat intlConfig={{
+                                    value: el.displayPrice, 
+                                    locale: "id-ID",
+                                    style: "currency", 
+                                    currency: "IDR",
+                                    }}
+                                    /> 
                                 </Card.Text>
                             </Card.Body>
                         </Card>

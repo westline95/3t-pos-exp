@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
-import { Card, Form } from "react-bootstrap";
+import { Card, Form, Toast, ToastContainer } from "react-bootstrap";
 import { CustomSelect } from '../elements/CustomSelect';
 import NumberFormat from '../elements/NumberFormat';
 import cartSlice from '../store/reducers/cart';
@@ -10,6 +10,7 @@ import AddMemberFast from './AddMemberFast';
 import DiscountModal from './DiscountModal';
 import HoldOrderModal from './HoldOrderModal';
 import OrderPaymentModal from './OrderPaymentModal';
+import getDateTime from "../elements/GetDateTime.js";
 import Tahu from "../assets/images/tahu.png";
 
 export default function OrderCard(props) {
@@ -18,11 +19,14 @@ export default function OrderCard(props) {
     const [payMethod, setPayMethod] = useState("cash");
     const [isHover, setIsHover] = useState(null);
     const [show, setShowModal] = useState(false);
-    const [isClose, setClose] = useState(true);
+    const [showToast, setToastStatus] = useState(false);
+    const [toastMessage, setToastMsg] = useState("");
     const [openPopup, setOpenPopup] = useState(false);
     const [custData, setCustData] = useState("");
     const [filterCust, setFilteredCust] = useState([]);
-    const [chooseCust, setCust] = useState(null);
+    const [chooseCust, setCust] = useState("");
+    const [orderData, setOrderData] = useState(null);
+    const [orderStatus, setOrderStatus] = useState(false);
     const refToThis = useRef(null);
 
 
@@ -53,7 +57,8 @@ export default function OrderCard(props) {
                 const cutValue = totalCart * (getDisc.value / 100);
                 return cutValue;
             } else if(getDisc.type === "nominal"){
-                
+                const cutValue = getDisc.value;
+                return cutValue;
             } else if(getDisc.type === "voucher"){
                 
             } else {
@@ -64,46 +69,32 @@ export default function OrderCard(props) {
         }
     });
     const [itemTotal, setItem] = useState(list ? list.length : 0);
-
-    const getDate = () => {
-        const dayString = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
-        const monthString = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
-        const today = new Date();
-        const day = today.getDay();
-        const date = today.getDate();
-        const month = today.getMonth();
-        const year = today.getFullYear();
-        const todayDate = dayString[day]+", "+ date + " " + monthString[month] + " " + year;
-        return todayDate;
-    }
-
-    const getTime = () => {
-        const today = new Date();
-        const getHours = today.getHours();
-        const getMin = today.getMinutes();
-        const getSec = today.getSeconds();
-        const currTime = getHours+":"+getMin+":"+getSec;
-        return currTime;
-    }
-
-    const [todayDate, setTodayDate] = useState(getDate());
-    const [time, setTime] = useState(getTime());
+    const [todayDate, setTodayDate] = useState(getDateTime.getDate);
+    const [time, setTime] = useState(getDateTime.getTime);
 
     const handleMouseEnter = (e) => {
         switch (e.target.id) {
             case "holdOrderBtn":
                 setIsHover("holdOrderBtn");
                 break;
-            }         
-        };
+        }         
+    };
         
     const handleCustPay = (e) => {
         switch(e.target.getAttribute("aria-label")){
             case "member":
+                setCust({
+                    name: ""
+                })
+                setToastMsg("");
                 setCustType("member");
                 break;
-            case "non-member":
-                setCustType("nonMember");
+                case "non-member":
+                setCust({
+                    name: ""
+                })
+                setToastMsg("");
+                setCustType("guest");
                 break; 
             case "cash":
                 setPayMethod("cash");
@@ -120,13 +111,18 @@ export default function OrderCard(props) {
                 setShowModal("addMemberFastModal");
                 break;
             case "discModal":
-                setShowModal("discModal");
+                if(cartItem.length > 0) {
+                    setShowModal("discModal");
+                } else {
+                    setToastMsg("Add product first!");
+                    setToastStatus(true);
+                }
                 break;
             case "holdOrder":
                 setShowModal("holdOrder");
                 break; 
             case "submitOrder":
-                setShowModal("submitOrder");
+                submitOrder();
                 break;
         }
     }
@@ -144,37 +140,78 @@ export default function OrderCard(props) {
             const cutValue = totalPrice ? totalPrice * (data.value / 100) : totalCart * (data.value / 100);
             setDisc(cutValue);
         } else if(data.type === "nominal"){
-            
+            const cutValue = data.value;
+            setDisc(cutValue);
         } else if(data.type === "voucher"){
             
         }
     }
 
     const submitOrder = () => {
-        if(payMethod === "cash"){
+        if(!orderStatus){
+            if(!orderData && chooseCust.name === "" || !chooseCust){
+                setToastMsg("Customer name can't be empty!");
+            } else if(!orderData && chooseCust.name !== ""){
+                setToastMsg("Member not found");
+            } else {
+                setToastMsg("Transaction can't be proceed");
+            }
+            setToastStatus(true);
 
+        } else  {
+            setOrderData({
+                total: (totalCart - discVal),
+                cust: chooseCust,       
+                cart: cartItem
+            });            
+            setShowModal("submitOrder");
         }
     }
 
     const handleAutoComplete = (custName) => {
-        if(custData !== "" && custName !== ""){
+        if(custData && custName !== ""){
             let filteredCust = custData.filter(item => item.name.includes(custName.toLowerCase()));
+            console.log(filteredCust)
             if(filteredCust.length === 0){
                 setOpenPopup(false);
+                setFilteredCust(filteredCust);
+                setOrderStatus(false);
             } else {
                 setOpenPopup(true);
                 setFilteredCust(filteredCust);
+                setOrderStatus(true);
             }
-        } else {
+        } else if(custName || custName === ""){
             setOpenPopup(true);
             setFilteredCust(custData);
+            setOrderStatus(false);
+        } else {
+            setOpenPopup(false);
+            setFilteredCust("error db");
+            setOrderStatus(false);
+            setToastMsg("Database failed");
         }
-        setCust({id: "", name: custName});
     }
-
+    
     const searchMembCust = (e) => {
         const custName = e.target.value;
-        handleAutoComplete(custName)
+        if(isActive === "member"){
+            setCust({
+                name: custName
+            });
+            handleAutoComplete(custName);
+           
+        } else if(isActive === "guest"){
+            setCust({
+                name: custName
+            });
+            if(custName && custName !== ""){
+                setOrderStatus(true);
+            } else  {
+                setOrderStatus(false);
+                setToastMsg("Something went wrong");
+            }
+        }
     }
 
     const handleClickSelect = (ref) => {
@@ -198,15 +235,14 @@ export default function OrderCard(props) {
     handleClickSelect(refToThis);
 
     const handleChooseCust = (e) => {
-        const custID = e.target.id;
-        const custName = e.target.innerText;
-        setCust({id: custID, name: custName});
+        setCust(e);
+        setOrderStatus(true);
         setOpenPopup(false);
     }
 
     useEffect(() => {
         setCart(list);
-        
+
         if(list){
             let totalPrice = 0;
             list.map(e => totalPrice += e.totalPrice);
@@ -233,8 +269,8 @@ export default function OrderCard(props) {
     useEffect(() => {
         fetchCustomer();
         const dateTime = setInterval(() => {
-            setTodayDate(getDate());
-            setTime(getTime());
+            setTodayDate(getDateTime.getDate);
+            setTime(getDateTime.getTime);
         }, 1000);
         return function cleanup() {
             clearInterval(dateTime);
@@ -289,7 +325,7 @@ export default function OrderCard(props) {
                             onClick={handleCustPay}>member</Button>
                             <Button 
                             type="button" 
-                            className={isActive === "nonMember" ? "active" : "" } 
+                            className={isActive === "guest" ? "active" : "" } 
                             ariaLabel="non-member" isRounded={true}
                             onClick={handleCustPay}>non-member</Button>
                         </div>
@@ -306,7 +342,7 @@ export default function OrderCard(props) {
                                 <span className="input-group-icon">
                                     <box-icon name='search' size="14px" color="#BDC4D1item" style={{marginTop: "-3px"}}></box-icon>
                                 </span>
-                                <Form.Control 
+                                <Form.Control style={{textTransform: "capitalize"}}
                                 type="text" 
                                 autoComplete='off' 
                                 className="input-w-icon-right" 
@@ -318,20 +354,27 @@ export default function OrderCard(props) {
                                 onFocus={(e) => e.currentTarget.value === "" ? setFilteredCust(custData) : ""}  
                                 />
                                 <div className="popup-element" aria-expanded={openPopup}>
-                                {filterCust === "" ? "" :
+                                {filterCust.length > 0 ? 
                                     filterCust.map((e,idx) => {
                                         return (
-                                            <div key={`cust-${idx}`} className="res-item" onClick={handleChooseCust}>{e.name}</div>
+                                            <div key={`cust-${idx}`} className="res-item" onClick={() => handleChooseCust({id: e.id, name: e.name, category: isActive, type: e.custType})}>{e.name}</div>
                                         )
-                                    })
+                                    }) : ""
                                 }
                                 </div>   
                             </div>
                         </div>
-                        <div className={`input-label d-flex flex-row justify-content-between horizontal-form-control ${isActive === "nonMember" ? "active" : "" }`}
+                        <div className={`input-label d-flex flex-row justify-content-between horizontal-form-control ${isActive === "guest" ? "active" : "" }`}
                         aria-labelledby="non-member">
                             <label htmlFor="search-cust-name" className="align-self-center">Customer:</label>
-                            <Form.Control type="text" className="input-w-icon-right" placeholder="Type a customer name..." id="custNonMem"></Form.Control>
+                            <Form.Control style={{textTransform: "capitalize"}}
+                            type="text" 
+                            className="input-w-icon-right"
+                            placeholder="Type a customer name..." 
+                            id="custNonMem"       
+                            value={chooseCust ? chooseCust.name : ""}                           
+                            onChange={searchMembCust} 
+                            />
                         </div>
                     </div>
                 </div>
@@ -422,9 +465,22 @@ export default function OrderCard(props) {
         <AddMemberFast show={show === "addMemberFastModal" ? true : false} onHide={handleCloseModal} />
         <DiscountModal show={show === "discModal" ? true : false} onHide={handleCloseModal} />
         <HoldOrderModal show={show === "holdOrder" ? true : false} onHide={handleCloseModal} />
-        <OrderPaymentModal show={show === "submitOrder" ? true : false} onHide={handleCloseModal} data={show ? {total: (totalCart - discVal), custName: "", custType: ""} : 0} />
+        <OrderPaymentModal show={show === "submitOrder" ? true : false} onHide={handleCloseModal} data={orderStatus ? orderData : null} />
+        <ToastContainer style={{top: "4rem", right: "2rem"}}>
+            <Toast 
+            className='align-items-center border-0 toast-danger'
+            aria-live='assertive' 
+            aria-atomic="true" 
+            show={showToast} 
+            onClose={() => setToastStatus(false)}
+            delay={2500} 
+            autohide>
+                {/* <Toast.Header></Toast.Header> */}
+                <Toast.Body>{toastMessage}</Toast.Body>
+            </Toast>
+        </ToastContainer>
         </>
-        
+
     )
 }
 

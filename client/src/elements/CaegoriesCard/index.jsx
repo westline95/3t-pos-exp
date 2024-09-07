@@ -10,7 +10,7 @@ export default function CategoriesCard(props) {
     }
 
     return (
-        <div className={`category ${isActive ? "active" : ""}`}>
+        <div className={`category ${isActive ? "active" : ""}`} onClick={onClick}>
             <div className="category-img-wrap">
                 <div className="category-img" style={imgStyle}>
                     {props.children}

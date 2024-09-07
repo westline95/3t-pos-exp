@@ -36,7 +36,7 @@ export const CustomSelect = ({ options, selectedOption }) => {
                         const handleClickOpt = () => {
                             setOpen((p) => !p);
                             setValue(item);
-                            selectedOption(item);
+                            // selectedOption(item);
                         }
                     
                         return(

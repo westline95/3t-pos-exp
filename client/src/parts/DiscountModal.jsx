@@ -1,11 +1,14 @@
 import React, {useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Modal, Form } from "react-bootstrap";
+import { Modal, Form, Toast, ToastContainer } from "react-bootstrap";
+import NumberFormat from "../elements/NumberFormat";
 import Button from "../elements/Button";
 import cartSlice from "../store/reducers/cart";
 
 export default function DiscountModal({show, onHide}) {
     const [ inputDiscount, setDiscount ] = useState(0);
+    const [ toastStatus, setToastStatus ] = useState(false);
+    const [ toastMessage, setToastMsg ] = useState("");
     const [ discType, setDiscType ] = useState("percent");
     const [ isShow, setShow ] = useState("discPercent");
     const dispatch = useDispatch();
@@ -40,7 +43,7 @@ export default function DiscountModal({show, onHide}) {
                 matchPattern = pattern.test(disc);
 
                 if(matchPattern && +disc >= 0){
-                    setDiscount(parseFloat(+disc));
+                    setDiscount(parseInt(+disc));
                 } else if(matchPattern && +disc < 0) {
                     setDiscount(0);
                 } else {
@@ -50,11 +53,13 @@ export default function DiscountModal({show, onHide}) {
             case "discNominal":
                 pattern = new RegExp("[0-9]*");
                 matchPattern = pattern.test(disc);
-
-                if(matchPattern && +disc >= 0){
-                    setDiscount(parseInt(+disc));
-                } else if(matchPattern && +disc < 0) {
-                    setDiscount(0);
+              
+                if(matchPattern){
+                    if(+disc >= 0){
+                        setDiscount(parseFloat(+disc));
+                    } else {
+                        setDiscount(0);
+                    }
                 } else {
                     setDiscount(0);
                 }
@@ -76,12 +81,18 @@ export default function DiscountModal({show, onHide}) {
             }
             dispatch(cartSlice.actions.applyVoucher(voucher));
         } else {
-            console.log("add product first!");
+            setToastMsg("Add product first!");
+            setToastStatus(true);
         }
         onHide();
     }
 
+    let locale = "id-ID";
+    const formatedNumber = new Intl.NumberFormat(locale, {minimumFractionDigits: 0});
+
     return ( 
+        <>
+        
         <Modal size="md" show={show} onHide={onHide}>
             <Modal.Header closeButton>
                 <Modal.Title>add discount</Modal.Title>
@@ -151,10 +162,10 @@ export default function DiscountModal({show, onHide}) {
                                         type="text" 
                                         className="input-w-text-left" 
                                         placeholder="0"   
-                                        pattern="[0-9]*"                        
-                                        value={inputDiscount || 0}
+                                        pattern="[0-9].*"                        
+                                        value={inputDiscount ? formatedNumber.format(inputDiscount) : 0}
                                         onChange={handleVoucher} 
-                                        style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}} 
+                                        style={{borderTopLeftRadius: "0 !important", borderTopRightRadius: "0 !important"}} 
                                     />
                                 </div>
                               </>
@@ -178,6 +189,22 @@ export default function DiscountModal({show, onHide}) {
                 <Button type="button" isPrimary={true} onClick={applyVoucher}>apply</Button>
             </Modal.Footer>
         </Modal>
+
+
+        <ToastContainer style={{top: "4rem", right: "2rem"}}>
+            <Toast 
+            className='align-items-center border-0 toast-danger'
+            aria-live='assertive' 
+            aria-atomic="true" 
+            show={toastStatus} 
+            onClose={() => setToastStatus(false)}
+            delay={2500} 
+            autohide>
+                {/* <Toast.Header></Toast.Header> */}
+                <Toast.Body>{toastMessage}</Toast.Body>
+            </Toast>
+        </ToastContainer>
+        </>
     )
 }
 
