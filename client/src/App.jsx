@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
-  const endpoint = `https://threet-pos-exp.onrender.com/sub-category/write`;
+  const endpoint = `https://threet-pos-exp.onrender.com/subcategory/write`;
   const fetchProdCat = async () => {
     const resp = await fetch(endpoint);
     const data = await resp.json();
