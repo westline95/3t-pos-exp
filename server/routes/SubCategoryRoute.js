@@ -4,7 +4,7 @@ import SubCategoryController from "../controllers/SubCategoryController.js";
 const SubCategoryRoute = express.Router();
 
 SubCategoryRoute.get("/sub-category", SubCategoryController.getSubCategory);
-SubCategoryRoute.get("/subcategory/category", SubCategoryController.getSubCategorybyCategory);
+SubCategoryRoute.get("/sub-category", SubCategoryController.getSubCategorybyCategory);
 SubCategoryRoute.post("/sub-category/write", SubCategoryController.insertSubCategory);
 SubCategoryRoute.post("/sub-categories", SubCategoryController.insertMultipleSubCategory);
 SubCategoryRoute.put("/sub-category", SubCategoryController.updateSubCategory);
