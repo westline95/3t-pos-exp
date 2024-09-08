@@ -16,7 +16,7 @@ const getSubCategory = async (req, res) => {
 
 const getSubCategorybyCategory = async (req, res) => {
     try{
-        const allSubCategory = await SubCategoryModel.findAll({where: {category: req.query.category}});
+        const allSubCategory = await SubCategoryModel.findAll({where:{category: req.query.category}});
         if(allSubCategory){
             res.json(allSubCategory);
         } else {
