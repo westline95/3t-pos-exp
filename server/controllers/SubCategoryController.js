@@ -14,6 +14,20 @@ const getSubCategory = async (req, res) => {
     }
 }
 
+const getSubCategorybyCategory = async (req, res) => {
+    try{
+        const allSubCategory = await SubCategoryModel.findAll({where: {category: req.query.category}});
+        if(allSubCategory){
+            res.json(allSubCategory);
+        } else {
+            res.status(404).json({error: `get all sub category by category not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 
 const insertSubCategory = async (req, res) => {
     const { name, category, displayPrice, img, status } = req.body;
@@ -69,6 +83,7 @@ const deleteSubCategory = async (req, res) => {
 
 export default {
     getSubCategory, 
+    getSubCategorybyCategory,
     insertSubCategory, 
     insertMultipleSubCategory, 
     updateSubCategory,  

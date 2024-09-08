@@ -17,10 +17,11 @@ export default function ProdListCard({ data, addToCart }){
         showModal(false);
     }
 
-    const endpoint = `https://threet-pos-exp.onrender.com/products`;
+    const productsEndpoint = `https://threet-pos-exp.onrender.com/products`;
+    const byCategoryEndpoint = `https://threet-pos-exp.onrender.com/products?category=`;
     // const endpoint = `http://localhost:5050/products`;
     const fetchProdCatalog = async() => {
-        const resp = await fetch(endpoint);
+        const resp = await fetch(productsEndpoint);
         const data = await resp.json();
         prodCatalog(data);
     }

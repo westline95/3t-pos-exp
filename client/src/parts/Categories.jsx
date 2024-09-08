@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from "react";
+import propTypes from "prop-types";
 import CategoriesCard from "../elements/CaegoriesCard";
 
-export default function Categories({data}) {
+export default function Categories({data, onClick}) {
     const [ isActive, setActive ] = useState(0);
     const [ prodData, products] = useState([]);
     const [ nameValue, setNameParam] = useState("");
@@ -42,8 +43,9 @@ export default function Categories({data}) {
         }
     })
 
-    const handleCategory = (id) => {
+    const handleCategory = (category, id) => {
         setActive(id);
+        return onClick(category);
     }
     
     return mergeDataArr.map((el, idx) => {
@@ -54,7 +56,8 @@ export default function Categories({data}) {
             title={el.category} 
             desc={el.count + ' items'}
             img={el.img === "" ? "" : el.img}
-            onClick={()=>handleCategory(idx)}
+            onClick={()=>handleCategory(el, idx)}
+            // onClick={() => onClick(el, idx)}
             >
                 {idx === 0 ? 
                 <box-icon type='solid' size="24px" name='grid-alt' color={isActive === idx ? "#42C0FB" : "#344050" } style={{verticalAlign: "sub"}}></box-icon> 
@@ -65,4 +68,8 @@ export default function Categories({data}) {
 
     });
 
+}
+
+Categories.propTypes = {
+    onClick: propTypes.func
 }

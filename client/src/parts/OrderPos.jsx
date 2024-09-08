@@ -46,6 +46,10 @@ export default function OrderPos(props){
         const data = await resp.json();
         setCategory(data);
     }
+
+    const handleCategory = (name) => {
+        console.log(name)
+    }
     
     useEffect(() => {
         fetchSubCategory();
@@ -69,7 +73,7 @@ export default function OrderPos(props){
                 <div className="content-wrapper mt-4">
                     <h6 className="section-title">Categories</h6>
                     <div className="categories-list">
-                        <Categories data={categoryData} />                      
+                        <Categories data={categoryData} onClick={handleCategory} />                      
                         {/* get data from database */}
                     </div>
                     <div className="categories-btn-control">
