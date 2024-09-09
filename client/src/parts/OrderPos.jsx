@@ -18,6 +18,7 @@ export default function OrderPos(props){
     const [isHover, setIsHover] = useState(null);
     const [ isClose, setClose ] = useState(false);
     const [ subCategoryData , subCategory ] = useState([]);
+    const [ subCategoryFiltered , subCategoryBy ] = useState([]);
     const [ categoryData , setCategory ] = useState([]);
 
     const handleMouseEnter = (e) => {
@@ -47,8 +48,13 @@ export default function OrderPos(props){
         setCategory(data);
     }
 
-    const handleCategory = (name) => {
-        console.log(name)
+    const handleCategory = (categoryItem) => {
+        const filteredSubCategory = subCategoryData.filter(item => item.category === categoryItem.category);
+        if(categoryItem.category.toLowerCase() !== "all"){
+            subCategoryBy(filteredSubCategory)
+        } else {
+            subCategoryBy(subCategoryData);
+        }
     }
     
     useEffect(() => {
@@ -104,7 +110,7 @@ export default function OrderPos(props){
                     </div>
                 </div>
 
-                <ProdListCard data={subCategoryData} />
+                <ProdListCard data={subCategoryFiltered.length > 0 ? subCategoryFiltered : subCategoryData} />
                 <OrderCard />
             </section>
         </main>

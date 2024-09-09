@@ -10,7 +10,7 @@ import AddMemberFast from './AddMemberFast';
 import DiscountModal from './DiscountModal';
 import HoldOrderModal from './HoldOrderModal';
 import OrderPaymentModal from './OrderPaymentModal';
-import getDateTime from "../elements/GetDateTime.js";
+import GetDateTime from '../elements/GetDateTime';
 import Tahu from "../assets/images/tahu.png";
 
 export default function OrderCard(props) {
@@ -36,6 +36,7 @@ export default function OrderCard(props) {
         const data = await resp.json();
         setCustData(data);
     }
+    
     const list = useSelector((state) => state.cart.cartData); 
     const checkDisc = useSelector((state) => state.cart.discount); 
     const [cartItem, setCart ] = useState(list ? list : null);
@@ -69,8 +70,8 @@ export default function OrderCard(props) {
         }
     });
     const [itemTotal, setItem] = useState(list ? list.length : 0);
-    const [todayDate, setTodayDate] = useState(getDateTime.getDate);
-    const [time, setTime] = useState(getDateTime.getTime);
+    const [todayDate, setTodayDate] = useState(GetDateTime.getDate);
+    const [time, setTime] = useState(GetDateTime.getTime);
 
     const handleMouseEnter = (e) => {
         switch (e.target.id) {
@@ -268,14 +269,16 @@ export default function OrderCard(props) {
 
     useEffect(() => {
         fetchCustomer();
+
         const dateTime = setInterval(() => {
-            setTodayDate(getDateTime.getDate);
-            setTime(getDateTime.getTime);
+            setTodayDate(GetDateTime.getDate);
+            setTime(GetDateTime.getTime);
         }, 1000);
-        return function cleanup() {
+
+        return () => {
             clearInterval(dateTime);
         }
-    })
+    },[])
     
     
     return (

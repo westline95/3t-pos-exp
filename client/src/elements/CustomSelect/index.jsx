@@ -14,6 +14,7 @@ export const CustomSelect = ({ options, selectedOption }) => {
                     setOpen(false);
                 } else {
                     setOpen(true);
+                    console.log(register)
                 }
             }
             document.addEventListener("mousedown", handleClickOutside);
@@ -29,14 +30,15 @@ export const CustomSelect = ({ options, selectedOption }) => {
             <div 
                 className="same-as-select" 
                 value={isValue === "" ? options[0] : isValue} 
-                ref={refToThis}>
+                ref={refToThis}
+                >
                 <p>{isValue === "" ? options[0] : isValue}</p>
                 <div className={`select-items ${openSelect ? "" : "select-hide"}`}>
                     {options.map((item, idx) => {
                         const handleClickOpt = () => {
                             setOpen((p) => !p);
                             setValue(item);
-                            // selectedOption(item);
+                            selectedOption(item);
                         }
                     
                         return(
@@ -52,6 +54,8 @@ export const CustomSelect = ({ options, selectedOption }) => {
 
 CustomSelect.propTypes = {
     options: propTypes.array.isRequired,
-    selectedOption: propTypes.func
+    selectedOption: propTypes.func,
+    require: propTypes.bool,
+    label: propTypes.string
 
 }

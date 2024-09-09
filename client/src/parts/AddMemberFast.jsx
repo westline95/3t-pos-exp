@@ -1,99 +1,32 @@
 import React, {useEffect, useState} from "react";
 import { useSelector, useDispatch } from 'react-redux'; 
+import { useController, useForm } from "react-hook-form";
 import { Modal, Form, ModalFooter } from "react-bootstrap";
 import InputWLabel from "./InputWLabel";
 import InputWSelect from "./InputWSelect";
 import Button from "../elements/Button";
 
 export default function AddMemberFast({show, onHide}) {
-    const [inValid, setValidation] = useState({field: "" , message:true});
-    const [err, setErr] = useState(false);
-    const [newCust, setNewCust] = useState({
-        name: "",
-        phone: "",
-        type: "",
-        address: "",
-    });
+    const [inValid, setValidation] = useState(true);
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm();
+    // const {
+    //     field,
+    //     fieldState: { invalid, isTouched, isDirty },
+    //     formState: { touchedFields, dirtyFiellds },
+    // } = useController({
+    //     name,
+    //     value
+    // });
 
-    const optionValue = (val) => {
-        setNewCust((prevFormData) => ({
-            ...prevFormData,
-            type: val,
-        }));
-    }
+    const onSubmit = (data) => console.log(errors)
+    // console.log(watch("example")) // watch input value by passing the name of it
 
-    const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        console.log(value)
-        if(name === "phone"){
-            const patternNumeric = /^[0-9\b]+$/;
-            const isNumeric = patternNumeric.test(value);
-            if(isNumeric) {
-                setNewCust((prevFormData) => ({
-                    ...prevFormData,
-                    [name]:value
-                }));
-            }
-        } else {
-            setNewCust((prevFormData) => ({
-                ...prevFormData,
-                [name]: value
-            }));
-        }
-    }
-
-        // const formValidation = () => {
-        //     if(newCust.name !== "" && newCust.phone !== "" && newCust.type !== ""){
-        //         setValidation({
-        //             message: true
-        //         });
-
-        //     } else {
-        //         // console.log(newCust)
-        //         // setValidation({
-        //         //     ...newCust,
-        //         //     message: false
-        //         // });
-        //         if(newCust.name === ""){
-        //             setValidation({
-        //                 message: false,
-        //                 field: "name"
-        //             });
-        //         } else if(newCust.phone === ""){
-        //             setValidation({
-        //                 message: false,
-        //                 field: "phone"
-        //             });
-        //         } else if(newCust.type === ""){
-        //             setValidation({
-        //                 message: false,
-        //                 field: "type"
-        //             });
-        //         } 
-        //         // newCust.name === "" ? setValidation(false) : setValidation(true);
-        //         // newCust.phone === "" ? setValidation(false) : setValidation(true);
-        //         // newCust.type === "" ? setValidation(false) : setValidation(true);
-        //         // if(newCust.name === ""){
-        //         //     setValidation(false);
-        //         // } else if(newCust.phone === ""){
-        //         //     setValidation(false);
-        //         // } else if(newCust.type === ""){
-        //         //     setValidation(false);
-        //         // }
-        //         // console.log(newCust)
-        //     }
-        //     // console.log(inValid)
-        //     // console.log(newCust.name)
-
-        // }
-    
-    useEffect(() => {
-        console.log(inValid)
-        // console.log(isValid == true);
-        
-    },[inValid])
-
-
+   
     return(
         <Modal 
         size="md" id="addNewMember" show={show} onHide={onHide}>
@@ -101,23 +34,65 @@ export default function AddMemberFast({show, onHide}) {
                 <Modal.Title>Add customer</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                <form>
                 <InputWLabel 
+                    label="customer name" 
+                    type="text" 
+                    name="name" 
+                    placeholder="Customer name..."
+                    register={register}
+                    require={true}
+                    errors={errors}
+                /> 
+                <InputWLabel 
+                    label="phone" 
+                    type="text" 
+                    name="phone" 
+                    placeholder="08..." 
+                    register={register}
+                    require={true}
+                    errors={errors}
+                /> 
+                 <InputWSelect
+                    label="customer type" 
+                    options={["customer type", "delivery order", "walk-in"]}
+                    // value={custType.type}
+                    // onChange={handleInputChange}
+                    // validation={inValid}
+                    register={register}
+                    require={true}
+                    errors={errors}
+                />
+                <InputWLabel 
+                    label="address (optional)" 
+                    as="textarea" 
+                    name="address" 
+                    placeholder="address" 
+                    register={register}
+                    require={false}
+                    errors={errors}
+
+                /> 
+                </form>
+                    {/* <input defaultValue="" {...register("example")} /> */}
+                   
+                    
+                {/* <InputWLabel 
                     labelFor="new-cust-name" 
                     labelValue="customer name" 
                     type="text" 
                     name="name" 
                     placeholder="Customer name..." 
-                    value={newCust.name}
+                    value={custName.name}
                     onChange={handleInputChange}
-                    validation={inValid.ty}
+                    validation={inValid}
                     require={true}
-                    // {...inputFieldOpt({field: "name", required: true})}
 
                 /> 
                 <InputWSelect
                     labelValue="customer type" 
                     options={["customer type", "delivery order", "walk-in"]}
-                    value={optionValue}
+                    value={custType.type}
                     // onChange={handleInputChange}
                     validation={inValid}
                     require={true}
@@ -128,7 +103,7 @@ export default function AddMemberFast({show, onHide}) {
                     type="phonenumber" 
                     name="phone" 
                     placeholder="08XXXXXXXXXX" 
-                    value={newCust.phone ?? ""}
+                    value={custPhone.phone}
                     onChange={handleInputChange}
                     validation={inValid}
                     require={true}
@@ -140,15 +115,18 @@ export default function AddMemberFast({show, onHide}) {
                     as="textarea"
                     name="address" 
                     placeholder="08XXXXXXXXXX" 
-                    value={newCust.address ?? ""}
+                    value={custAddr.address}
                     onChange={handleInputChange}
-                    validation={inValid}
+                    // validation={inValid}
                     require={false}
-                /> 
+                />  */}
             </Modal.Body>
             <ModalFooter>
+            {/* <input type="submit" /> */}
+
+            {/* </form> */}
                 <Button type="button" isSecondary={true} isLight={true} onClick={onHide}>cancel</Button>
-                <Button type="button" isPrimary={true}>save</Button>
+                <Button type="button" isPrimary={true} onClick={handleSubmit(onSubmit)}>save</Button>
             </ModalFooter>
 
         </Modal>

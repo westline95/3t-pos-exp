@@ -5,20 +5,24 @@ import propTypes from "prop-types";
 
 export default function InputWSelect(props) {
     const returnValue = (data) => {
-        props.value(data);
+        return props.value(data);
     }
         
     return(
         <div className="input-label d-flex flex-column flex-wrap">
-            <Form.Label className="mb-1">{props.labelValue}</Form.Label>
-            <CustomSelect options={props.options} selectedOption={returnValue} /> 
+            <Form.Label className="mb-1">{props.label}</Form.Label>
+            <CustomSelect 
+            options={props.options}
+            label={props.label}
+            selectedOption={returnValue} 
+            /> 
         </div>
     )
 }
 
 InputWSelect.propTypes = {
-    labelValue: propTypes.string,
-    value: propTypes.func,
+    label: propTypes.string,
+    value: propTypes.string,
     options: propTypes.array,
-    onChange: propTypes.func
+    onChange: propTypes.func,
 }
