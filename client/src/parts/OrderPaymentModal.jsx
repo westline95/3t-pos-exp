@@ -7,6 +7,11 @@ import NumberFormat from '../elements/NumberFormat';
 
 export default function OrderPaymentModal({show, onHide, data }) {
     // console.log(data)
+
+    const handleSelect = (label, value) => {
+
+    }
+
     return(
         <Modal 
         size="md" show={show} onHide={onHide}>
@@ -27,10 +32,8 @@ export default function OrderPaymentModal({show, onHide, data }) {
                     />
                     </h3>
                     <InputWLabel 
-                        labelFor="submit-order-cust" 
-                        labelValue="customer name" 
+                        label="customer name" 
                         type="text" 
-                        inputID="orderCustName" 
                         placeholder="customerName" 
                         value={data.cust.name}
                         disabled={true}
@@ -38,8 +41,10 @@ export default function OrderPaymentModal({show, onHide, data }) {
                     />  
                     <InputWSelect
                         label="payment method" 
-                        options={["select payment method", "Cash", "Hutang"]}
+                        options={["Select payment method", "Cash", "Hutang"]}
                         defaultValue={0}
+                        value={handleSelect}
+
                     />
                 </Modal.Body>
                 ) : ""

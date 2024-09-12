@@ -382,7 +382,7 @@ export default function OrderCard(props) {
                         <p className="order-type-label">order type</p>
                         {/* get option from database */}
                         <CustomSelect 
-                            options={["Order type", "walk-in", "delivery order"]}
+                            options={["Order type", "Walk-in", "Delivery Order"]}
                             defaultValue={0}
                             selectedOption={returnSelectVal} 
                         /> 

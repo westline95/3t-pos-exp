@@ -580,9 +580,9 @@ body {
   }
 
   .custom-select-opt {
+    font-size: 13px !important;
     .same-as-select {
       height: 32px;
-      font-size: 13px;
     }
   }
 }
@@ -1554,6 +1554,9 @@ table tbody tr td table td {
 
 .custom-select-opt {
   position: relative;
+  $height-select: 38px;
+  $select-fs: calc($height-select / 2.5);
+  font-size: $select-fs !important;
 
   select {
     display: none;
@@ -1561,8 +1564,7 @@ table tbody tr td table td {
 
   .same-as-select {
     width: auto;
-    $height: 38px;
-    --select-font-size: calc($height / 2.5px);
+    height: $height-select;
     padding: 6px 36px 6px 12px;
     border-radius: 7.5px !important;
     border: var(--bs-border-width) solid var(--bs-border-color);
@@ -1597,12 +1599,12 @@ table tbody tr td table td {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     z-index: 9;
-    font-size: --select-font-size;
+    font-size: $select-fs !important;
     line-height: 1.5;
     max-height: 150px;
     overflow-y: unset;
     text-align: left;
-    text-transform: capitalize;
+    // text-transform: capitalize;
 
 
     // & > *:first-child {
@@ -3238,9 +3240,16 @@ td .btn-group button i {
   }
 
   .custom-select-opt {
+    $height-select-mbl: 35px;
+    $select-fs-mbl: calc($height-select-mbl / 2.5);
+    font-size: $select-fs-mbl !important;
+
     .same-as-select {
-      $height: 35px;
-      font-size: calc($height / 2.5px);
+      height: $height-select-mbl;
+    }
+
+    .select-items {
+      font-size: $select-fs-mbl !important;
     }
   }
 }
