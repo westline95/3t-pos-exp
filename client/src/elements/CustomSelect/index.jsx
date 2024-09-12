@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import propTypes from "prop-types";
 
-export const CustomSelect = ({ options, selectedOption }) => {
+export const CustomSelect = (props) => {
+    const { options, selectedOption, defaultValue } = props;
     const [openSelect, setOpen] = useState(false);
     const [isValue, setValue] = useState("");
     const refToThis = useRef(null);
@@ -14,7 +15,6 @@ export const CustomSelect = ({ options, selectedOption }) => {
                     setOpen(false);
                 } else {
                     setOpen(true);
-                    console.log(register)
                 }
             }
             document.addEventListener("mousedown", handleClickOutside);
@@ -25,30 +25,36 @@ export const CustomSelect = ({ options, selectedOption }) => {
     };
     handleClickSelect(refToThis);
 
+
     return(
+        <>
         <div className="custom-select-opt">
             <div 
                 className="same-as-select" 
-                value={isValue === "" ? options[0] : isValue} 
+                value={isValue === "" ? options[defaultValue] : isValue} 
                 ref={refToThis}
                 >
-                <p>{isValue === "" ? options[0] : isValue}</p>
+                <p>{isValue === "" ? options[defaultValue] : isValue}</p>
                 <div className={`select-items ${openSelect ? "" : "select-hide"}`}>
                     {options.map((item, idx) => {
                         const handleClickOpt = () => {
                             setOpen((p) => !p);
                             setValue(item);
-                            selectedOption(item);
+                            idx === defaultValue ? 
+                            selectedOption("")
+                            : selectedOption(item);
                         }
-                    
                         return(
-                            <div key={idx} value={item} onClick={handleClickOpt}>{item}</div>
+                            idx === defaultValue ? 
+                            <div key={idx} className="custom-select-opt" value="" onClick={handleClickOpt}>{item}</div>
+                            : <div key={idx} className="custom-select-opt" value={item} onClick={handleClickOpt}>{item}</div>
                         )
                     })}
                 </div>
             </div>
-
         </div>
+        </>
+        
     )
 }
 
@@ -56,6 +62,9 @@ CustomSelect.propTypes = {
     options: propTypes.array.isRequired,
     selectedOption: propTypes.func,
     require: propTypes.bool,
-    label: propTypes.string
-
+    label: propTypes.string,
+    // register: propTypes.func,
+    elementRef: propTypes.func,
+    defaultValue: propTypes.number
+    
 }

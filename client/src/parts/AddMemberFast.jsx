@@ -1,32 +1,56 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import { useSelector, useDispatch } from 'react-redux'; 
-import { useController, useForm } from "react-hook-form";
-import { Modal, Form, ModalFooter } from "react-bootstrap";
+import { useController, useForm,  } from "react-hook-form";
+import { Modal, Form, ModalFooter, Toast, ToastContainer } from "react-bootstrap";
 import InputWLabel from "./InputWLabel";
 import InputWSelect from "./InputWSelect";
 import Button from "../elements/Button";
 
-export default function AddMemberFast({show, onHide}) {
-    const [inValid, setValidation] = useState(true);
+export default function AddMemberFast({show, onHide, updatedData}) {
     const {
         register,
         handleSubmit,
         watch,
+        control,
         formState: { errors },
     } = useForm();
-    // const {
-    //     field,
-    //     fieldState: { invalid, isTouched, isDirty },
-    //     formState: { touchedFields, dirtyFiellds },
-    // } = useController({
-    //     name,
-    //     value
-    // });
 
-    const onSubmit = (data) => console.log(errors)
+    const customerEndpoint = `https://threet-pos-exp.onrender.com/customer/write`;
+    const fetchCustomerFast = async(orderData) => {
+        await fetch(customerEndpoint, {
+            method: 'POST',
+            body: JSON.stringify(orderData),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            // Handle data
+            updatedData(true);
+        })
+        .catch((err) => {
+            console.log(err.message);
+            updatedData(false);
+        });
+    }
+    
+    const handleSelect = (label, selectedVal) => {
+    } 
+    
+    const onSubmit = (data) => {
+        fetchCustomerFast(data);
+        onHide();
+    }
+    
+    const onError = (err) => {
+        updatedData(false);
+
+    }
     // console.log(watch("example")) // watch input value by passing the name of it
-
-   
+    
+    
     return(
         <Modal 
         size="md" id="addNewMember" show={show} onHide={onHide}>
@@ -47,7 +71,7 @@ export default function AddMemberFast({show, onHide}) {
                 <InputWLabel 
                     label="phone" 
                     type="text" 
-                    name="phone" 
+                    name="phonenumber" 
                     placeholder="08..." 
                     register={register}
                     require={true}
@@ -55,14 +79,16 @@ export default function AddMemberFast({show, onHide}) {
                 /> 
                  <InputWSelect
                     label="customer type" 
-                    options={["customer type", "delivery order", "walk-in"]}
-                    // value={custType.type}
-                    // onChange={handleInputChange}
-                    // validation={inValid}
+                    name="custType"
+                    options={["Select customer type", "Delivery order", "Walk-in"]}
+                    value={handleSelect}
                     register={register}
                     require={true}
                     errors={errors}
+                    defaultValue={0}
+                    controller={useController({ name: 'custType', control })}
                 />
+
                 <InputWLabel 
                     label="address (optional)" 
                     as="textarea" 
@@ -71,62 +97,12 @@ export default function AddMemberFast({show, onHide}) {
                     register={register}
                     require={false}
                     errors={errors}
-
                 /> 
                 </form>
-                    {/* <input defaultValue="" {...register("example")} /> */}
-                   
-                    
-                {/* <InputWLabel 
-                    labelFor="new-cust-name" 
-                    labelValue="customer name" 
-                    type="text" 
-                    name="name" 
-                    placeholder="Customer name..." 
-                    value={custName.name}
-                    onChange={handleInputChange}
-                    validation={inValid}
-                    require={true}
-
-                /> 
-                <InputWSelect
-                    labelValue="customer type" 
-                    options={["customer type", "delivery order", "walk-in"]}
-                    value={custType.type}
-                    // onChange={handleInputChange}
-                    validation={inValid}
-                    require={true}
-                />
-                <InputWLabel 
-                    labelFor="new-cust-phone" 
-                    labelValue="phonenumber" 
-                    type="phonenumber" 
-                    name="phone" 
-                    placeholder="08XXXXXXXXXX" 
-                    value={custPhone.phone}
-                    onChange={handleInputChange}
-                    validation={inValid}
-                    require={true}
-
-                /> 
-                <InputWLabel 
-                    labelFor="new-cust-address" 
-                    labelValue="address (optional)" 
-                    as="textarea"
-                    name="address" 
-                    placeholder="08XXXXXXXXXX" 
-                    value={custAddr.address}
-                    onChange={handleInputChange}
-                    // validation={inValid}
-                    require={false}
-                />  */}
             </Modal.Body>
             <ModalFooter>
-            {/* <input type="submit" /> */}
-
-            {/* </form> */}
                 <Button type="button" isSecondary={true} isLight={true} onClick={onHide}>cancel</Button>
-                <Button type="button" isPrimary={true} onClick={handleSubmit(onSubmit)}>save</Button>
+                <Button type="button" isPrimary={true} onClick={handleSubmit(onSubmit, onError)}>save</Button>
             </ModalFooter>
 
         </Modal>

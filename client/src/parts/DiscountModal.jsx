@@ -5,10 +5,12 @@ import NumberFormat from "../elements/NumberFormat";
 import Button from "../elements/Button";
 import cartSlice from "../store/reducers/cart";
 
-export default function DiscountModal({show, onHide}) {
+export default function DiscountModal({ show, onHide }) {
     const [ inputDiscount, setDiscount ] = useState(0);
+    const [ discDisplay, setDiscountDisplay ] = useState(0);
     const [ toastStatus, setToastStatus ] = useState(false);
     const [ toastMessage, setToastMsg ] = useState("");
+    const [ discTmp, setDiscTmp ] = useState("");
     const [ discType, setDiscType ] = useState("percent");
     const [ isShow, setShow ] = useState("discPercent");
     const dispatch = useDispatch();
@@ -32,10 +34,13 @@ export default function DiscountModal({show, onHide}) {
     }
 
     const list = useSelector(state => state.cart.cartData);
+    let locale = "id-ID";
+    const formatedNumber = new Intl.NumberFormat(locale);
 
 
     const handleVoucher = (e) => {
-        const disc = e.currentTarget.value;
+        const disc = e.target.value.replace(/[.,]/g,"");
+        
         let pattern, matchPattern;
         switch(isShow){
             case "discPercent":
@@ -43,7 +48,7 @@ export default function DiscountModal({show, onHide}) {
                 matchPattern = pattern.test(disc);
 
                 if(matchPattern && +disc >= 0){
-                    setDiscount(parseInt(+disc));
+                    setDiscount(Number(+disc));
                 } else if(matchPattern && +disc < 0) {
                     setDiscount(0);
                 } else {
@@ -51,12 +56,14 @@ export default function DiscountModal({show, onHide}) {
                 }
                 break;
             case "discNominal":
-                pattern = new RegExp("[0-9]*");
-                matchPattern = pattern.test(disc);
-              
+                pattern = new RegExp("[0-9]");
+                matchPattern = pattern.test(+disc);
+                
                 if(matchPattern){
                     if(+disc >= 0){
-                        setDiscount(parseFloat(+disc));
+                        const formatCurrency = +disc;
+                        setDiscount(formatedNumber.format(formatCurrency));
+
                     } else {
                         setDiscount(0);
                     }
@@ -71,12 +78,14 @@ export default function DiscountModal({show, onHide}) {
                 matchPattern ? setDiscount(newVal) :  "";
                 break;
         }
+        
     }
 
     const applyVoucher = () => {
         if(list.length > 0) {
+            let discVal = inputDiscount.replace(/[.,]/g,"");
             const voucher = {
-                value: inputDiscount,
+                value: Number(discVal),
                 type: discType
             }
             dispatch(cartSlice.actions.applyVoucher(voucher));
@@ -87,9 +96,7 @@ export default function DiscountModal({show, onHide}) {
         onHide();
     }
 
-    let locale = "id-ID";
-    const formatedNumber = new Intl.NumberFormat(locale, {minimumFractionDigits: 0});
-
+    
     return ( 
         <>
         
@@ -150,20 +157,20 @@ export default function DiscountModal({show, onHide}) {
                                 placeholder="0" 
                                 inputMode="numeric"
                                 pattern="[0-9]*"                                 
-                                value={inputDiscount || 0} 
+                                value={inputDiscount ? inputDiscount : 0} 
                                 maxLength={2}
                                 onChange={handleVoucher} 
                                 style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}}  
                               /> 
                             : isShow === "discNominal"
                             ? <> <div className="input-group-left">
-                                    <span className="input-group-w-text fw-semibold currency">Rp </span>
+                                    <span className="input-group-w-text fw-semibold currency">Rp</span>
                                     <Form.Control 
                                         type="text" 
                                         className="input-w-text-left" 
                                         placeholder="0"   
-                                        pattern="[0-9].*"                        
-                                        value={inputDiscount ? formatedNumber.format(inputDiscount) : 0}
+                                        pattern="[0-9].*"              
+                                        value={inputDiscount ? inputDiscount : 0}
                                         onChange={handleVoucher} 
                                         style={{borderTopLeftRadius: "0 !important", borderTopRightRadius: "0 !important"}} 
                                     />

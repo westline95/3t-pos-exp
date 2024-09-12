@@ -129,7 +129,6 @@ const DeleteCartItem = itemID => {
 
 const ApplyVoucher = value => {
     const activeDiscVal = {...value};
-    // activeDiscVal.push(value);
     localStorage.setItem("activeDiscount", JSON.stringify(activeDiscVal));
     const data = localStorage.getItem("activeDiscount");
 

@@ -1123,6 +1123,7 @@ body {
     min-height: 50px;
     $height: auto;
     max-height: 150px;
+    overflow-y: scroll;
     background-color: #ffffff;
     border-radius: 7px;
     border: .5px solid #dee2e6;
@@ -1561,7 +1562,7 @@ table tbody tr td table td {
   .same-as-select {
     width: auto;
     $height: 38px;
-    font-size: calc($height / 2.5);
+    --select-font-size: calc($height / 2.5px);
     padding: 6px 36px 6px 12px;
     border-radius: 7.5px !important;
     border: var(--bs-border-width) solid var(--bs-border-color);
@@ -1580,7 +1581,6 @@ table tbody tr td table td {
 
     p {
       margin-bottom: 0;
-      text-transform: capitalize;
     }
   }
 
@@ -1597,16 +1597,17 @@ table tbody tr td table td {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     z-index: 9;
-    font-size: 12px;
+    font-size: --select-font-size;
     line-height: 1.5;
     max-height: 150px;
-    overflow-y: auto;
+    overflow-y: unset;
     text-align: left;
     text-transform: capitalize;
 
-    & > *:first-child {
-      background-color: #f3f3f3;
-    }
+
+    // & > *:first-child {
+    //   background-color: #f3f3f3;
+    // }
 
     & > * {
       padding: 0.425rem 0.75rem;
@@ -2253,7 +2254,7 @@ button i {
 }
 
 label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   text-transform: capitalize;
   color: #344050 !important;
@@ -2910,10 +2911,15 @@ td .btn-group button i {
   }
 }
 
+.input-label {
+  margin-bottom: .7rem;
+}
+
 .field-msg-invalid {
   font-size: 13.5px;
   color: var(--sa-color-danger);
   margin-top: .3rem;
+  margin-bottom: .7rem;
 }
 
 /* responsive */
@@ -3234,7 +3240,7 @@ td .btn-group button i {
   .custom-select-opt {
     .same-as-select {
       $height: 35px;
-      font-size: calc($height / 2.5);
+      font-size: calc($height / 2.5px);
     }
   }
 }

@@ -12,11 +12,11 @@ export default function InputWLabel(props){
         placeholder, 
         onChange, 
         value, 
-        validation, 
         register,
         errors,
         disabled,
-        require
+        require,
+        errCallback
     } = props;
 
     let styleInput;
@@ -35,13 +35,16 @@ export default function InputWLabel(props){
                 pattern={pattern} 
                 name={name} 
                 placeholder={placeholder} 
-                onChange={onChange} 
                 value={value} 
                 disabled={disabled} 
                 style={styleInput} 
-                {...register(label, { required: require })}
+                {...register != null ? {...register(name, { required: require })} : ""}
+                // {...register(name, { required: require })}
             />
-             {errors[label]?.type === "required" && <span className="field-msg-invalid">This field is required</span>}
+             {errors
+             ? errors[name]?.type === "required" && <span className="field-msg-invalid">This field is required</span>
+             : ""}
+             {/* {errors[name]?.type === "required" && <span className="field-msg-invalid">This field is required</span>} */}
         </div>
     )
 }
@@ -60,5 +63,6 @@ InputWLabel.propTypes = {
     validation: propTypes.bool,
     require: propTypes.bool,
     disabled: propTypes.bool,
-    inputRef: propTypes.element
+    inputRef: propTypes.element,
+    errCallback: propTypes.func
 }

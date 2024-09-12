@@ -37,9 +37,9 @@ export default function OrderPaymentModal({show, onHide, data }) {
                         textStyle={"capitalize"}
                     />  
                     <InputWSelect
-                        labelFor="submit-order-pay" 
-                        labelValue="payment method" 
-                        options={["select payment method", "cash", "hutang"]}
+                        label="payment method" 
+                        options={["select payment method", "Cash", "Hutang"]}
+                        defaultValue={0}
                     />
                 </Modal.Body>
                 ) : ""
