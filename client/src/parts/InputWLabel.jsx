@@ -5,6 +5,7 @@ import propTypes  from "prop-types";
 export default function InputWLabel(props){
     const {
         label, 
+        className,
         as, 
         type, 
         pattern, 
@@ -16,7 +17,7 @@ export default function InputWLabel(props){
         errors,
         disabled,
         require,
-        errCallback
+        inputMode
     } = props;
 
     let styleInput;
@@ -26,25 +27,26 @@ export default function InputWLabel(props){
         }
     }
 
+
     return (
         <div className="input-label d-flex flex-column flex-wrap">
             <Form.Label className="mb-1">{label}</Form.Label>
             <Form.Control 
                 as={as} 
                 type={type} 
-                pattern={pattern} 
+                className={className}
+                onChange={onChange} 
                 name={name} 
                 placeholder={placeholder} 
                 value={value} 
                 disabled={disabled} 
                 style={styleInput} 
+                inputMode={inputMode}
                 {...register != null ? {...register(name, { required: require })} : ""}
-                // {...register(name, { required: require })}
             />
              {errors
              ? errors[name]?.type === "required" && <span className="field-msg-invalid">This field is required</span>
              : ""}
-             {/* {errors[name]?.type === "required" && <span className="field-msg-invalid">This field is required</span>} */}
         </div>
     )
 }
@@ -52,6 +54,7 @@ export default function InputWLabel(props){
 InputWLabel.propTypes = {
     require: propTypes.bool,
     as: propTypes.string,
+    className: propTypes.string,
     type: propTypes.string,
     name: propTypes.string,
     placeholder: propTypes.string,
@@ -59,10 +62,9 @@ InputWLabel.propTypes = {
     textStyle: propTypes.oneOf(["capitalize","lowercase"]),
     onChange: propTypes.func,
     value: propTypes.string,
-    pattern: propTypes.string,
+    pattern: propTypes.oneOf(["currency", "number"]),
     validation: propTypes.bool,
-    require: propTypes.bool,
     disabled: propTypes.bool,
     inputRef: propTypes.element,
-    errCallback: propTypes.func
+    inputMode: propTypes.string
 }

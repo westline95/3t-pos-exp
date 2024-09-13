@@ -5,6 +5,7 @@ import { CustomSelect } from '../elements/CustomSelect';
 import NumberFormat from '../elements/NumberFormat';
 import cartSlice from '../store/reducers/cart';
 import Button from '../elements/Button';
+import Toaster from '../elements/Toast';
 import OrderListItem from '../elements/OrderListItem';
 import AddMemberFast from './AddMemberFast';
 import DiscountModal from './DiscountModal';
@@ -161,45 +162,44 @@ export default function OrderCard(props) {
     }
 
     const submitOrder = () => {
-        if(!orderStatus){
+        // if(!orderStatus){
             if(cartItem.length === 0) {
+                setToastStatus(true);
                 setToastDetail({
                     message: "Please add product first!",
                     theme: "toast-danger"
                 });
             } else if(chooseCust.name === "" || !chooseCust){
+                setToastStatus(true);
                 setToastDetail({
                     message: "Customer name can't be empty!",
                     theme: "toast-danger"
                 });
             } else if(isActive === "member" && !chooseCust.id){
+                setToastStatus(true);
                 setToastDetail({
                     message: "Member not found",
                     theme: "toast-danger"
                 });
             } else if(!orderType || orderType === "") {
+                setToastStatus(true);
                 setToastDetail({
                     message: "Please set order type!",
                     theme: "toast-danger"
                 });
-                setOrderStatus(false);
 
             } else {
                 setOrderStatus(true);
+                setOrderData({
+                    cust: chooseCust,
+                    custType: isActive,
+                    orderType: orderType,       
+                    cart: cartItem,
+                    disc: discVal,
+                    total: (totalCart - discVal),
+                });            
+                setShowModal("submitOrder");
             }
-            setToastStatus(true);
-
-        } else  {
-            setOrderData({
-                cust: chooseCust,
-                custType: isActive,
-                orderType: orderType,       
-                cart: cartItem,
-                disc: discVal,
-                total: (totalCart - discVal),
-            });            
-            setShowModal("submitOrder");
-        }
     }
 
     const handleAutoComplete = (custName) => {
@@ -239,7 +239,7 @@ export default function OrderCard(props) {
                 name: custName
             });
             if(custName && custName !== ""){
-                setOrderStatus(true);
+                // setOrderStatus(true);
             } else  {
                 setOrderStatus(false);
                 setToastDetail({
@@ -272,7 +272,7 @@ export default function OrderCard(props) {
 
     const handleChooseCust = (e) => {
         setCust(e);
-        setOrderStatus(true);
+        // setOrderStatus(true);
         setOpenPopup(false);
     }
 
@@ -341,9 +341,10 @@ export default function OrderCard(props) {
     },[updateDB])
 
     useEffect(() => {
-        if(orderTypeTmp === ""){
-            setOrderStatus(false);
-        }
+        // console.log(orderTypeTmp)
+        // if(orderTypeTmp === ""){
+            // setOrderStatus(false);
+        // }
         setOrderType(orderTypeTmp);
     },[returnSelectVal])
     
@@ -380,7 +381,6 @@ export default function OrderCard(props) {
                     </div>
                     <div className="order-type">
                         <p className="order-type-label">order type</p>
-                        {/* get option from database */}
                         <CustomSelect 
                             options={["Order type", "Walk-in", "Delivery Order"]}
                             defaultValue={0}
@@ -526,7 +526,7 @@ export default function OrderCard(props) {
         </div>
         {/* modal */}
         <AddMemberFast show={show === "addMemberFastModal" ? true : false} onHide={handleCloseModal} updatedData={returnUpdateStat} />
-        <DiscountModal show={show === "discModal" ? true : false} onHide={handleCloseModal} />
+        <DiscountModal show={show === "discModal" ? true : false} onHide={handleCloseModal} totalCart={show === "discModal" ? totalCart : 0} />
         <HoldOrderModal show={show === "holdOrder" ? true : false} onHide={handleCloseModal} />
         <OrderPaymentModal show={show === "submitOrder" ? true : false} onHide={handleCloseModal} data={orderStatus ? orderData : null} />
         <ToastContainer style={{top: "4rem", right: "2rem"}}>
@@ -534,9 +534,10 @@ export default function OrderCard(props) {
             className={`align-items-center border-0 ${showToast ? toastDetail.theme: ""}`}
             aria-live='assertive' 
             aria-atomic="true" 
+            animation={true}
             show={showToast} 
             onClose={() => setToastStatus(false)}
-            delay={3000} 
+            delay={2000} 
             autohide>
                 <Toast.Body style={{fontWeight: "700"}}>{showToast ? toastDetail.message : ""}</Toast.Body>
             </Toast>

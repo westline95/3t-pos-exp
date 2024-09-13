@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from "react-bootstrap";
 import InputWLabel from './InputWLabel';
 import Button from '../elements/Button';
 import InputWSelect from './InputWSelect';
 import NumberFormat from '../elements/NumberFormat';
+import InputGroup from '../elements/InputGroup';
 
 export default function OrderPaymentModal({show, onHide, data }) {
-    // console.log(data)
+    const [ tmp, setTmp ] = useState(null);
+    const [ payMethod, setPayMethod ] = useState(null);
 
-    const handleSelect = (label, value) => {
-
+    const handleSelect = (label, data) => {
+        setTmp(data);
     }
+
+    useEffect(() => {
+        setPayMethod(tmp);
+    }, [handleSelect])
+    
 
     return(
         <Modal 
@@ -22,7 +29,7 @@ export default function OrderPaymentModal({show, onHide, data }) {
                 data ?     
                 (
                 <Modal.Body>    
-                    <h3 style={{textAlign: "center", padding: "1rem 0"}}>
+                    <h3 style={{textAlign: "center", padding: ".75rem 0"}}>
                     <NumberFormat intlConfig={{
                         value: data.total, 
                         locale: "id-ID",
@@ -44,8 +51,22 @@ export default function OrderPaymentModal({show, onHide, data }) {
                         options={["Select payment method", "Cash", "Hutang"]}
                         defaultValue={0}
                         value={handleSelect}
-
                     />
+                    {
+                        payMethod && payMethod.toLowerCase() === "cash" ? 
+                        (
+                            <InputGroup 
+                                position={"left"}
+                                label={"Received cash"} 
+                                groupLabel={"Rp"}
+                                name={"received-cash"}
+                                placeholder={"0"}
+                                inputMode={"numeric"}
+                                mask={"currency"}
+                                type={"text"}
+                            />
+                        ):""
+                    }
                 </Modal.Body>
                 ) : ""
             }

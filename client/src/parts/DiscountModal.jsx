@@ -5,7 +5,7 @@ import NumberFormat from "../elements/NumberFormat";
 import Button from "../elements/Button";
 import cartSlice from "../store/reducers/cart";
 
-export default function DiscountModal({ show, onHide }) {
+export default function DiscountModal({ show, onHide, totalCart }) {
     const [ inputDiscount, setDiscount ] = useState(0);
     const [ discDisplay, setDiscountDisplay ] = useState(0);
     const [ toastStatus, setToastStatus ] = useState(false);
@@ -39,7 +39,7 @@ export default function DiscountModal({ show, onHide }) {
 
 
     const handleVoucher = (e) => {
-        const disc = e.target.value.replace(/[.,]/g,"");
+        const disc = e.target.value.replace(/[.,]/g,"") || e.target.value;
         
         let pattern, matchPattern;
         switch(isShow){
@@ -56,14 +56,13 @@ export default function DiscountModal({ show, onHide }) {
                 }
                 break;
             case "discNominal":
-                pattern = new RegExp("[0-9]");
+                pattern = new RegExp("[0-9]*");
                 matchPattern = pattern.test(+disc);
                 
                 if(matchPattern){
-                    if(+disc >= 0){
+                    if(+disc >= 0 ){
                         const formatCurrency = +disc;
                         setDiscount(formatedNumber.format(formatCurrency));
-
                     } else {
                         setDiscount(0);
                     }
@@ -83,10 +82,25 @@ export default function DiscountModal({ show, onHide }) {
 
     const applyVoucher = () => {
         if(list.length > 0) {
-            let discVal = inputDiscount.replace(/[.,]/g,"");
-            const voucher = {
-                value: Number(discVal),
-                type: discType
+            let voucher;
+            if(discType === "nominal"){
+                let discVal = inputDiscount.replace(/[.,]/g,"");
+                discVal <= totalCart ? 
+                voucher = {
+                    value: Number(discVal),
+                    type: discType
+                }
+                : voucher = {
+                    value: 0,
+                    type: discType
+                };
+               
+            } else {
+                let discVal = inputDiscount;
+                voucher = {
+                    value: Number(discVal),
+                    type: discType
+                }
             }
             dispatch(cartSlice.actions.applyVoucher(voucher));
         } else {
@@ -152,24 +166,30 @@ export default function DiscountModal({ show, onHide }) {
                     <div className="tabs-content"  >
                         {
                             isShow === "discPercent" 
-                            ? <Form.Control 
-                                type="text" 
-                                placeholder="0" 
-                                inputMode="numeric"
-                                pattern="[0-9]*"                                 
-                                value={inputDiscount ? inputDiscount : 0} 
-                                maxLength={2}
-                                onChange={handleVoucher} 
-                                style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}}  
-                              /> 
+                            ? <> 
+                                <div className="input-group-left">
+                                    <span className="input-group-w-text fw-semibold">%</span>
+                                    <Form.Control 
+                                    type="text" 
+                                    className="input-w-text-left" 
+                                    placeholder="0" 
+                                    inputMode="numeric"                                
+                                    value={inputDiscount ? inputDiscount : 0} 
+                                    maxLength={2}
+                                    onChange={handleVoucher} 
+                                    style={{borderTopLeftRadius: "0", borderTopRightRadius: "0"}}  
+                                    /> 
+                                </div>
+                            </>
                             : isShow === "discNominal"
-                            ? <> <div className="input-group-left">
-                                    <span className="input-group-w-text fw-semibold currency">Rp</span>
+                            ? <> 
+                                <div className="input-group-left">
+                                    <span className="input-group-w-text fw-semibold">Rp</span>
                                     <Form.Control 
                                         type="text" 
                                         className="input-w-text-left" 
-                                        placeholder="0"   
-                                        pattern="[0-9].*"              
+                                        placeholder="0" 
+                                        inputMode="numeric"               
                                         value={inputDiscount ? inputDiscount : 0}
                                         onChange={handleVoucher} 
                                         style={{borderTopLeftRadius: "0 !important", borderTopRightRadius: "0 !important"}} 

@@ -17,7 +17,9 @@ export default function InputWSelect(props) {
 
     useEffect(() => {
         selectedVal(selected2);
-        field !== "" ?? field.onChange(selected2);
+        if(field){
+            field.onChange(selected2);
+        }
     },[returnValue]);
     
     return(
@@ -33,7 +35,7 @@ export default function InputWSelect(props) {
             id={props.label} 
             name={props.name} 
             value={selected}
-            {...props.register != null ? {...props.register(props.name, { required: props.require })} : ""}
+            {...props.register ? {...props.register(props.name, { required: props.require })} : ""}
             style={{display: "none"}}
             >
                 {props.options.map((item, idx) => {
