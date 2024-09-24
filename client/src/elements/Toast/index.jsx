@@ -1,6 +1,7 @@
+import React from 'react';
 import { Toast, ToastContainer } from "react-bootstrap";
 
-const Toaster = ({ ToastDetail, }) => {
+const Toaster = (toastDetail, showToast) => {
 
     return(
         <ToastContainer style={{top: "4rem", right: "2rem"}}>
@@ -10,7 +11,7 @@ const Toaster = ({ ToastDetail, }) => {
             aria-atomic="true" 
             animation={true}
             show={showToast} 
-            onClose={() => setToastStatus(false)}
+            // onClose={}
             delay={2000} 
             autohide
             >

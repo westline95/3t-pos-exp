@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PosOrder from "./pages/PosOrder";
 import OrderHistory from './pages/OrderHistory';
@@ -7,15 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {
-
-  const endpoint = `https://threet-pos-exp.onrender.com/subcategory/write`;
-  const fetchProdCat = async () => {
-    const resp = await fetch(endpoint);
-    const data = await resp.json();
-    console.log(data)
-  }
-
-
   return (
   //  <>
   //   <h1>TESTING</h1>

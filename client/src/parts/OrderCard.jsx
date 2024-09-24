@@ -5,7 +5,6 @@ import { CustomSelect } from '../elements/CustomSelect';
 import NumberFormat from '../elements/NumberFormat';
 import cartSlice from '../store/reducers/cart';
 import Button from '../elements/Button';
-import Toaster from '../elements/Toast';
 import OrderListItem from '../elements/OrderListItem';
 import AddMemberFast from './AddMemberFast';
 import DiscountModal from './DiscountModal';
@@ -196,7 +195,8 @@ export default function OrderCard(props) {
                     orderType: orderType,       
                     cart: cartItem,
                     disc: discVal,
-                    total: (totalCart - discVal),
+                    total: (totalCart),
+                    grandTotal: (totalCart - discVal)
                 });            
                 setShowModal("submitOrder");
             }

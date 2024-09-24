@@ -1,5 +1,5 @@
 import CustomerModel from "../models/CustomerModel.js";
-import { Sequelize } from "sequelize";
+import { Sequelize, where } from "sequelize";
 
 const getCustomers = async (req, res) => {
     try{
@@ -92,6 +92,27 @@ const countCustByName = async (req, res) => {
     }
 }
 
+const getDebtData = async(req, res) => {
+    try{
+        const getData = await CustomerModel.findAll({
+            attributes: [
+                'debtLimit',
+                'totalDebt'
+            ],
+            where: {id: req.query.id}
+        })
+
+        if(getData){
+            res.json(getData);
+        } else {
+            res.status(404).json({error: `get customer debt data not found!`});
+        }
+    }
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 
 
 export default {
@@ -100,5 +121,6 @@ export default {
     insertMultipleCustomer, 
     updateCust,  
     deleteCust,
-    countCustByName
+    countCustByName,
+    getDebtData
 };

@@ -9,5 +9,6 @@ CustomersRoute.post("/customer/write", CustomerController.insertCustomers);
 CustomersRoute.post("/customers", CustomerController.insertMultipleCustomer);
 CustomersRoute.put("/customers", CustomerController.updateCust);
 CustomersRoute.delete("/customers", CustomerController.deleteCust);
+CustomersRoute.get("/customer/debt", CustomerController.getDebtData);
 
 export default CustomersRoute;
