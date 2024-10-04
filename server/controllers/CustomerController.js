@@ -113,10 +113,28 @@ const getDebtData = async(req, res) => {
     }
 }
 
+const getCustomerByID = async(req, res) => {
+    try{
+        const getData = await CustomerModel.findAll({
+            where: {id: req.query.id}
+        })
+
+        if(getData){
+            res.json(getData);
+        } else {
+            res.status(404).json({error: `get customer data with ID not found!`});
+        }
+    }
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 
 
 export default {
     getCustomers, 
+    getCustomerByID,
     insertCustomers, 
     insertMultipleCustomer, 
     updateCust,  
