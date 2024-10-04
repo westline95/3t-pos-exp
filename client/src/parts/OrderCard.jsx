@@ -236,7 +236,9 @@ export default function OrderCard(props) {
            
         } else if(isActive === "guest"){
             setCust({
-                name: custName
+                id: null,
+                name: custName,
+                category: "guest"
             });
             if(custName && custName !== ""){
                 // setOrderStatus(true);

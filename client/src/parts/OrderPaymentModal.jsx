@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Tab, Tabs, Form, Container, Toast, ToastContainer } from "react-bootstrap";
+import React, { useState, useEffect, useRef } from 'react';
+import { Modal, Tab, Tabs, Form, Container, ToastContainer } from "react-bootstrap";
+import { Toast } from 'primereact/toast'
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import "primereact/resources/themes/lara-light-blue/theme.css";
+import "primereact/resources/primereact.min.css"; //core css
+// import successGif from "../assets/images/Frame 5 (4).gif";
 import Toaster from '../elements/Toast';
 import InputWLabel from './InputWLabel';
 import Button from '../elements/Button';
@@ -14,8 +19,12 @@ export default function OrderPaymentModal({show, onHide, data }) {
     const [ payMethod, setPayMethod ] = useState(null);
     const [ isHover, setIsHover ] = useState(null);
     const [ keypadValue, setKeypadVal ] = useState({formated: "0", origin: 0});
-    const [showToast, setToastStatus] = useState(false);
-    const [toastDetail, setToastDetail] = useState({});
+    const [ payLater, callPayLater ] = useState(false);
+    const [ toastDetail, setToastDetail ] = useState({});
+    const [ custDebtData, setCustDebtData ] = useState(null);
+    const [visible, setVisible] = useState(false);
+    const toastTR = useRef(null);
+    // const orderPaymentContent = useRef(null);
     const handleSelect = (label, data) => {
         setTmp(data);
     }
@@ -55,30 +64,164 @@ export default function OrderPaymentModal({show, onHide, data }) {
     };
 
     const confirmPayment = () => {
+        callPayLater(false);
         if(keypadValue.origin < data.grandTotal){
-            setToastStatus(true);
-            setToastDetail({
-                message: "Not enough credit!",
-                theme: "toast-danger"
+            toastTR.current.show({
+                severity: 'error', 
+                summary: 'Error!', 
+                detail: 'Not enough credit!', 
+                life: 3000
+            });
+        } else {
+            successOrder();
+        }
+    }
+
+    let endpoint;
+
+    if(show){
+        if(data.cust.id !== undefined  || data.cust.id !== null){
+            endpoint = `https://threet-pos-exp.onrender.com/customer/debt?id=${data.cust.id}`;
+        }
+    }
+    
+    const fetchDebt = async() => {
+        if(endpoint){
+            const resp = await fetch(endpoint);
+            const data = await resp.json();
+            setCustDebtData(data);
+        }
+    }
+    
+    const completeTransaction = () => {
+
+    }
+
+    const continueShopping = () => {
+        setVisible(false);
+        onHide();
+    }
+
+    const successOrder = () => {
+        setVisible(true)
+    };
+
+    const reject = () => {
+        toastTR.current.show({
+            severity: 'error', 
+            summary: 'Error!', 
+            detail: 'Transaction has exceeded the limit for this member', 
+            life: 3000
+        });
+    };
+
+    const checkingDebt = () => {
+        callPayLater(true);
+        if(custDebtData && custDebtData.length > 0){
+            custDebtData.map(item => {
+                if(item.totalDebt + data.grandTotal <= item.debtLimit) {
+                    successOrder();
+                } else {
+                    confirmDialog({
+                        group: 'basic',
+                        message: `Transaction has exceeded the limit for this member, Are you sure you want to proceed?`,
+                        header: 'Confirmation',
+                        icon: 'pi pi-exclamation-triangle',
+                        acceptClassName: "btn-primary rounded",
+                        accept: () =>  setTimeout(successOrder(), 50000),
+                        reject
+                    });
+                }
+            })
+        } else {
+            toastTR.current.show({
+                severity: 'error', 
+                summary: 'Error!', 
+                detail: 'This payment method allowed for member only!', 
+                life: 3000
             });
         }
+    }
+
+    const futurePayment = () =>{
+        toastTR.current.show({
+            severity: 'error', 
+            summary: 'Error!', 
+            detail: 'This payment method not available right now!', 
+            life: 3000
+        });
     }
 
     useEffect(() => {
         setPayMethod(tmp);
     }, [handleSelect])
+    
+    useEffect(() => {
+        fetchDebt();
+    }, [data])
 
 
     return(
+
+        <>
+        <Toast ref={toastTR} position="top-right" />
+        <ConfirmDialog draggable={false} resizable={false}
+            group="headless"
+            content={({ headerRef, contentRef, footerRef, hide, message }) => (
+                <div className="d-flex flex-column align-items-center p-5 surface-overlay border-round">
+                    <div className="border-circle success inline-flex justify-content-center align-items-center">
+                        <box-icon name='check' color="#FFFFFF" size="60px"></box-icon>
+                    </div>
+                    <span className="fw-bold block mb-2 mt-4" ref={headerRef} style={{fontSize: "21px", color: "#344050"}}>
+                        {message.header}
+                    </span>
+                    <p className="mb-0" ref={contentRef}>
+                        {message.message}
+                    </p>
+                    <div className="flex align-items-center gap-2 mt-4" ref={footerRef}>
+                        <Button
+                            onClick={(event) => {
+                                hide(event);
+                                onHide();
+                            }}
+                            isSuccess={true}
+                            isRounded={false}
+                        >Ok</Button>
+                    </div>
+                </div>
+        )}/>
+        <ConfirmDialog group="basic" draggable={false} resizable={false} />
+
         <Modal 
         fullscreen={true} show={show} onHide={onHide} id="splitedModal">
-            <Modal.Header>
+            <Modal.Header  style={{textAlign: "center"}}>
                 <Modal.Title>Order Payment</Modal.Title>
             </Modal.Header>
             { 
                 data ?     
                 (
                 <Modal.Body>  
+                    {/* succes payment ui */}
+                    <div class="payment-complete-card" style={visible ? {display: "block"} : {display: "none"}}>
+                        <h3 style={payLater ? {display: "none"} : {display: "block"}}>Kembali <br />
+                            <NumberFormat intlConfig={{
+                                value: keypadValue.origin === 0 ? 0 : (keypadValue.origin - data.grandTotal), 
+                                locale: "id-ID",
+                                style: "currency", 
+                                currency: "IDR",
+                            }} 
+                            />
+                        </h3>
+                        <iframe src="https://lottie.host/embed/359edf46-9877-42c7-9679-dbcafc211080/9h9JpVWZys.json"></iframe>
+                        <div className="payment-complete-body">
+                            <h5 className='payment-complete-title'>Transaction Successfull</h5>
+                            <p style={{marginBottom: "2rem"}}>Click ok to continue shopping or print invoice</p>
+                            <Button isSuccess={true} onClick={continueShopping} style={{ marginRight: "1rem"}}>Ok</Button>
+                            <Button isSecondary={true} isLight={true} onClick={continueShopping}>Print Invoice</Button>
+                        </div>
+                    </div>
+
+                    {/* split panel */}
                     <div className="split-panel">
                         <div className="information-panel">
                             <div className="order-num-detail">
@@ -210,15 +353,17 @@ export default function OrderPaymentModal({show, onHide, data }) {
                                         <div className="items">
                                             <div className="item-list" 
                                                 onMouseEnter={handleMouseEnter} 
-                                                onMouseLeave={() => setIsHover(null)}>
+                                                onMouseLeave={() => setIsHover(null)}
+                                                onClick={checkingDebt}
+                                                >
                                                 <box-icon 
                                                 name='timer' 
                                                 color={isHover ? "#ffffff" : "#344050"} 
                                                 size="auto">
                                                 </box-icon>
-                                                <p className="iten-name">Hutang</p>
+                                                <p className="item-name">Hutang</p>
                                             </div>
-                                            <div className="item-list">
+                                            <div className="item-list" onClick={futurePayment}>
                                                 <p className="item-name">Coming soon</p>
                                             </div>
                                         </div>
@@ -231,10 +376,14 @@ export default function OrderPaymentModal({show, onHide, data }) {
                 ) : ""
             }
           
-            <Modal.Footer>
+            <Modal.Footer style={visible ? {display: "none"} : {display: "flex"}}>
                 <Button isSecondary={true} isLight={true} onClick={onHide}>cancel</Button>
             </Modal.Footer>
-            <ToastContainer style={{top: "4rem", right: "2rem"}}>
+           
+            {/* <ConfirmDialog visible={visible} onHide={() => setVisible(false)} message="Are you sure you want to proceed?"
+                    header="Confirmation" icon="pi pi-exclamation-triangle" accept={accept} reject={reject} 
+            /> */}
+            {/* <ToastContainer style={{top: "4rem", right: "2rem"}}>
                 <Toast 
                 className={`align-items-center border-0 ${showToast ? toastDetail.theme: ""}`}
                 aria-live='assertive' 
@@ -246,7 +395,8 @@ export default function OrderPaymentModal({show, onHide, data }) {
                 autohide>
                     <Toast.Body style={{fontWeight: "700"}}>{showToast ? toastDetail.message : ""}</Toast.Body>
                 </Toast>
-            </ToastContainer>
+            </ToastContainer> */}
         </Modal>
+        </>
     )
 }
