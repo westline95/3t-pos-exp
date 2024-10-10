@@ -22,7 +22,7 @@ const SalesModel = sequelize.define("sales",
             type: Sequelize.INTEGER,
         },
         custType: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
         },
         salesData: {
             type: Sequelize.STRING,
