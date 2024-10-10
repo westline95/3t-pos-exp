@@ -88,7 +88,6 @@ export default function AddMemberFast({show, onHide, updatedData}) {
                     defaultValue={0}
                     controller={useController({ name: 'custType', control })}
                 />
-
                 <InputWLabel 
                     label="address (optional)" 
                     as="textarea" 

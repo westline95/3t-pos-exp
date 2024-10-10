@@ -21,6 +21,9 @@ const SalesModel = sequelize.define("sales",
         custID: {
             type: Sequelize.INTEGER,
         },
+        custType: {
+            type: Sequelize.INTEGER,
+        },
         salesData: {
             type: Sequelize.STRING,
         },
@@ -32,7 +35,7 @@ const SalesModel = sequelize.define("sales",
         },
     }, 
     {
-        tableName: 'customer',
+        tableName: 'sales',
     }
 )
 
