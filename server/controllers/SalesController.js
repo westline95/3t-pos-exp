@@ -1,13 +1,13 @@
 import SalesModel from "../models/SalesModel.js";
 import { Sequelize, where } from "sequelize";
 
-const getCustomers = async (req, res) => {
+const getAllSales = async (req, res) => {
     try{
-        const allCust = await CustomerModel.findAll();
-        if(allCust){
-            res.json(allCust);
+        const allSales = await SalesModel.findAll();
+        if(allSales){
+            res.json(allSales);
         } else {
-            res.status(404).json({error: `get all customer not found!`});
+            res.status(404).json({error: `get all sales not found!`});
         }
     } 
     catch(err) {
@@ -38,55 +38,55 @@ const insertSales = async (req, res) => {
     }
 }
 
-const insertMultipleCustomer = async (req, res) => {
+const insertMultipleSales = async (req, res) => {
     try{
-        const newCusts = await CustomerModel.bulkCreate(req.body);
-        res.status(201).json(newCusts);
+        const newSales = await SalesModel.bulkCreate(req.body);
+        res.status(201).json(newSales);
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
     }
 }
 
-const updateCust= async (req, res) => {
+const updateSales= async (req, res) => {
     try{
-        const cust = await CustomerModel.update(req.body, {where:{id: req.query.id}});
+        const sales = await SalesModel.update(req.body, {where:{id: req.query.id}});
         
-        res.status(201).json(cust);
+        res.status(201).json(sales);
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
     }
 }
 
-const deleteCust = async (req, res) => {
+const deleteSales = async (req, res) => {
     try{
-        const delCust = await CustomerModel.destroy({where:{id: req.query.id}});
+        const delSales = await SalesModel.destroy({where:{id: req.query.id}});
         
-        res.status(201).json(delCust);
+        res.status(201).json(delSales);
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
     }
 }
 
-const countCustByName = async (req, res) => {
+const countSalesByCust = async (req, res) => {
     // const name = req.query.name;
     try{
-        const countCust = await CustomerModel.findAll(
+        const countSales = await SalesModel.findAll(
             
             {
-                group: `name`,
+                group: `custID`,
                 attributes: [
-                  [Sequelize.literal(`name`), `name`],
-                  [Sequelize.fn(`COUNT`, `name`), `count`]
+                  [Sequelize.literal(`custID`), `custID`],
+                  [Sequelize.fn(`COUNT`, `custID`), `count`]
                 ]
             }
         );
-        if(countProduct){
-            res.json(countProduct);
+        if(countSales){
+            res.json(countSales);
         } else {
-            res.status(404).json({error: `product with ? not found!`});
+            res.status(404).json({error: `sales data by custID is not found!`});
         }
     } 
     catch(err) {
@@ -115,10 +115,27 @@ const getDebtData = async(req, res) => {
     }
 }
 
-const getCustomerByID = async(req, res) => {
+const getSalesCust = async(req, res) => {
     try{
-        const getData = await CustomerModel.findAll({
+        const getData = await SalesModel.findAll({
             where: {id: req.query.id}
+        })
+
+        if(getData){
+            res.json(getData);
+        } else {
+            res.status(404).json({error: `get customer data with ID not found!`});
+        }
+    }
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+const getSalesByStatus = async(req, res) => {
+    try{
+        const getData = await SalesModel.findAll({
+            where: {id: req.query.id, status: req.query.status},
         })
 
         if(getData){
@@ -135,12 +152,12 @@ const getCustomerByID = async(req, res) => {
 
 
 export default {
-    getCustomers, 
-    getCustomerByID,
+    getAllSales,
     insertSales, 
-    insertMultipleCustomer, 
-    updateCust,  
-    deleteCust,
-    countCustByName,
-    getDebtData
+    updateSales,
+    insertMultipleSales, 
+    deleteSales,  
+    countSalesByCust,
+    getSalesCust,
+    getSalesByStatus
 };
