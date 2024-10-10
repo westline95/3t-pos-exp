@@ -3,7 +3,7 @@ import SalesController from "../controllers/SalesController.js";
 
 const SalesRoute = express.Router();
 
-SalesRoute.get("/sales", SalesController.getAllSales);
+SalesRoute.get("/sales-data", SalesController.getAllSales);
 SalesRoute.get("/sales/member", SalesController.getSalesCust);
 SalesRoute.get("/sales/group", SalesController.countSalesByCust);
 SalesRoute.post("/sales/write", SalesController.insertSales);

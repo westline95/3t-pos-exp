@@ -1,5 +1,5 @@
 import SalesModel from "../models/SalesModel.js";
-import { Sequelize, where } from "sequelize";
+import { Sequelize } from "sequelize";
 
 const getAllSales = async (req, res) => {
     try{
