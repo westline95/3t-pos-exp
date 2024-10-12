@@ -76,9 +76,17 @@ const countSalesByCust = async (req, res) => {
         const countSales = await SalesModel.findAll(
             
             {
-                group: `custID`,
+                group: [
+                    'custID',
+                    'custName',
+                    'custType',
+                    'salesData'
+                ],
                 attributes: [
-                  [Sequelize.literal(`custID`), `custID`],
+                  'custID',
+                  'custName',
+                  'custType',
+                  'salesData',
                   [Sequelize.fn(`COUNT`, `custID`), `count`]
                 ]
             }
@@ -135,7 +143,7 @@ const getSalesCust = async(req, res) => {
 const getSalesByStatus = async(req, res) => {
     try{
         const getData = await SalesModel.findAll({
-            where: {id: req.query.id, status: req.query.status},
+            where: {status: req.query.status},
         })
 
         if(getData){
