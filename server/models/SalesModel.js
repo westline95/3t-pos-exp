@@ -45,6 +45,9 @@ const SalesModel = sequelize.define("sales",
         paymentMethod: {
             type: Sequelize.INTEGER,
         },
+        grandTotal: {
+            type: Sequelize.STRING,
+        },
     }, 
     {
         tableName: 'sales',
