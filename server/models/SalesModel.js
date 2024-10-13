@@ -33,6 +33,18 @@ const SalesModel = sequelize.define("sales",
         source: {
             type: Sequelize.STRING,
         },
+        totalSales: {
+            type: Sequelize.STRING,
+        },
+        totalPayment: {
+            type: Sequelize.STRING,
+        },
+        remainingPayment: {
+            type: Sequelize.STRING,
+        },
+        paymentMethod: {
+            type: Sequelize.INTEGER,
+        },
     }, 
     {
         tableName: 'sales',
