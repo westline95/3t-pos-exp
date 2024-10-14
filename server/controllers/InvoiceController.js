@@ -16,13 +16,12 @@ const getAllInv = async (req, res) => {
 }
 
 const insertInv = async (req, res) => {
-    const { custID, custName, custType, salesRef, amount,
+    const { custID, custName, salesRef, amount,
         paid, dueDate, amountDue } = req.body;
     try{
         const newInv = await InvoiceModel.create({
             custID,
-            custName,      
-            custType,
+            custName,  
             salesRef,
             amount,
             paid,
