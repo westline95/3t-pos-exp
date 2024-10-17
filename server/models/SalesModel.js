@@ -48,6 +48,9 @@ const SalesModel = sequelize.define("sales",
         grandTotal: {
             type: Sequelize.STRING,
         },
+        note: {
+            type: Sequelize.STRING,
+        },
     }, 
     {
         tableName: 'sales',

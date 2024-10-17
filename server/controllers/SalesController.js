@@ -16,7 +16,8 @@ const getAllSales = async (req, res) => {
 }
 
 const insertSales = async (req, res) => {
-    const { salesDate, salesDue, custID, custName, custType, salesData, status, source } = req.body;
+    const { salesDate, salesDue, custID, custName, custType, salesData, status, source, 
+        discount, grandTotal, note, totalPayment, remainingPayment, totalSales, paymentMethod } = req.body;
     try{
         const newCust = await SalesModel.create({
             salesDate,
@@ -26,7 +27,14 @@ const insertSales = async (req, res) => {
             custType,      
             salesData,
             status,
-            source
+            source,
+            discount,
+            grandTotal,
+            note,
+            totalPayment, 
+            remainingPayment, 
+            totalSales, 
+            paymentMethod
         });
         
         res.status(201).json(newCust);
