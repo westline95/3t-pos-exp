@@ -30,6 +30,9 @@ const ProductsCatalogModel = sequelize.define("products",
         status: {
             type: Sequelize.STRING,
         },
+        img: {
+            type: Sequelize.STRING,
+        }
     }, 
     {
         tableName: 'products',
