@@ -70,6 +70,18 @@ const updateProduct = async (req, res) => {
     }
 }
 
+const getProductID = async (req, res) => {
+    try{
+        const product = await ProductsCatalogModel.update(req.body, {where:{id: req.query.id}});
+        
+        res.status(201).json(product);
+        res.status(404).json("product with that id not found!");
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 const deleteProduct = async (req, res) => {
     try{
         const delProduct = await ProductsCatalogModel.destroy({where:{id: req.query.id}});
@@ -114,5 +126,6 @@ export default {
     updateProduct,  
     deleteProduct,
     countProductByName,
-    getProductsByCategory
+    getProductsByCategory,
+    getProductID
 };

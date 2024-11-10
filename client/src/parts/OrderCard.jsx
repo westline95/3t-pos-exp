@@ -419,15 +419,15 @@ export default function OrderCard(props) {
                                     <box-icon name='search' size="14px" color="#BDC4D1item" style={{marginTop: "-3px"}}></box-icon>
                                 </span>
                                 <Form.Control style={{textTransform: "capitalize"}}
-                                type="text" 
-                                autoComplete='off' 
-                                className="input-w-icon-right" 
-                                placeholder="Search..." 
-                                value={chooseCust ? chooseCust.name : ""} 
-                                id="searchCustMem" 
-                                onChange={searchMembCust} 
-                                ref={refToThis}
-                                onFocus={(e) => e.currentTarget.value === "" ? setFilteredCust(custData) : ""}  
+                                    type="text" 
+                                    autoComplete='off' 
+                                    className="input-w-icon-right" 
+                                    placeholder="Search..." 
+                                    value={chooseCust ? chooseCust.name : ""} 
+                                    id="searchCustMem" 
+                                    onChange={searchMembCust} 
+                                    ref={refToThis}
+                                    onFocus={(e) => e.currentTarget.value === "" ? setFilteredCust(custData) : ""}  
                                 />
                                 <div className="popup-element" aria-expanded={openPopup}>
                                 {filterCust.length > 0 ? 
