@@ -8,6 +8,7 @@ import SubCategoryRoute from "./routes/SubCategoryRoute.js";
 import CustomersRoute from "./routes/CustomerRoute.js";
 import SalesRoute from "./routes/SalesRoute.js";
 import InvoiceRoute from "./routes/InvoiceRoute.js";
+import StatusRoute from "./routes/StatusRoute.js";
 
 dotenv.config();
 
@@ -33,6 +34,8 @@ app.use(CustomersRoute);
 app.use(SalesRoute);
 // invoice CRUD
 app.use(InvoiceRoute);
+// status CRUD
+app.use(StatusRoute);
 
 
 app.listen(port, () => console.log(`
