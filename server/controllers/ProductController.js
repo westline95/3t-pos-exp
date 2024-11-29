@@ -1,5 +1,6 @@
 import ProductsCatalogModel from "../models/ProductsCatalogModel.js";
 import { Sequelize } from "sequelize";
+
 const getProducts = async (req, res) => {
     try{
         const allProduct = await ProductsCatalogModel.findAll();

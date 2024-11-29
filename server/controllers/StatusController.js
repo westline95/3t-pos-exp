@@ -6,8 +6,9 @@ const getAllStatus = async (req, res) => {
         if(allStatus){
             res.json(allStatus);
         } else {
-            res.status(404).json({error: `get all statuss not found!`});
+            res.json({error: res.status});
         }
+        // console.log(res.status)
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});

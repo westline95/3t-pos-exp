@@ -11,7 +11,7 @@ const StatusModel = sequelize.define("status",
         },
         status: {
             type: Sequelize.STRING,
-        },
+        }
     },
     {
         tableName: "status"
