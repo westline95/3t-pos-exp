@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import sequelize from "../config/Database";
+import sequelize from "../config/Database.js";
 
 const StatusModel = sequelize.define("status", 
     {
