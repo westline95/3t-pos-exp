@@ -5,7 +5,7 @@ import ProductController from "../controllers/ProductController.js";
 const ProductsRoute = express.Router();
 
 ProductsRoute.get("/products", ProductController.getProducts);
-ProductsRoute.get("/product", ProductController.getProductID);
+ProductsRoute.post("/product", ProductController.getProductID);
 ProductsRoute.get("/products/group", ProductController.countProductByName);
 ProductsRoute.get("/products/category", ProductController.getProductsByCategory);
 ProductsRoute.post("/product", ProductController.insertProducts);
