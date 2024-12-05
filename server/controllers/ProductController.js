@@ -72,8 +72,10 @@ const updateProduct = async (req, res) => {
 }
 
 const getProductID = async (req, res) => {
+    const { id } = req.body;
+
     try{
-        const product = await ProductsCatalogModel.findAll({where:{id: req.query.id}});
+        const product = await ProductsCatalogModel.findAll({where:{id: id}});
         
         res.status(201).json(product);
         // res.status(404).json("product with that id not found!");
