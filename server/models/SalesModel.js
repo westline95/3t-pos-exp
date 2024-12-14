@@ -51,6 +51,10 @@ const SalesModel = sequelize.define("sales",
         note: {
             type: Sequelize.STRING,
         },
+        totalQty: {
+            type: Sequelize.STRING,
+        },
+
     }, 
     {
         tableName: 'sales',
