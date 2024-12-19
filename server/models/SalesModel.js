@@ -57,6 +57,9 @@ const SalesModel = sequelize.define("sales",
         totalQty: {
             type: Sequelize.STRING,
         },
+        paymentDate: {
+            type: Sequelize.STRING,
+        }
 
     }, 
     {
