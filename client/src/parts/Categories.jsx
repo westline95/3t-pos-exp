@@ -2,6 +2,10 @@ import React, {useState, useEffect} from "react";
 import propTypes from "prop-types";
 import CategoriesCard from "../elements/CaegoriesCard";
 
+import Tahu from "../assets/images/tahu.png";
+import Tauge from "../assets/images/tauge.png";
+import Tempe from "../assets/images/tempe.png";
+
 export default function Categories({data, onClick}) {
     const [ isActive, setActive ] = useState(0);
     const [ prodData, products] = useState([]);
@@ -42,6 +46,7 @@ export default function Categories({data, onClick}) {
             mergeDataArr.push(mergeData);
         }
     })
+    console.log(mergeDataArr)
 
     const handleCategory = (category, id) => {
         setActive(id);
@@ -59,9 +64,10 @@ export default function Categories({data, onClick}) {
             onClick={()=>handleCategory(el, idx)}
             // onClick={() => onClick(el, idx)}
             >
-                {idx === 0 ? 
+                {el.img === "" ? 
                 <box-icon type='solid' size="24px" name='grid-alt' color={isActive === idx ? "#42C0FB" : "#344050" } style={{verticalAlign: "sub"}}></box-icon> 
                 : ""}
+                
             </CategoriesCard>         
         );
         // })

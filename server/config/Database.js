@@ -50,7 +50,7 @@ const sequelize = new Sequelize({
     //            .toString()
     //   },
         ssl: {
-            require: true,
+            require: true, 
             rejectUnauthorized: false
         }
     },
