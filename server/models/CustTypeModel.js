@@ -16,7 +16,9 @@ const CustTypeModel = sequelize.define("custType",
             type: Sequelize.BOOLEAN
         }
     },
-    {tableName: "custType"}
+    {
+        tableName: "custType"
+    }
 )
 
 export default CustTypeModel;

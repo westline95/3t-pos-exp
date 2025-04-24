@@ -3,13 +3,13 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import cors from "cors";
 import ProductsRoute from "./routes/ProductsRoute.js";
+import CustomerTypeRoute from "./routes/CustTypeRoute.js";
 import CategoryRoute from "./routes/CategoryRoute.js";
 import SubCategoryRoute from "./routes/SubCategoryRoute.js";
 import CustomersRoute from "./routes/CustomerRoute.js";
 import SalesRoute from "./routes/SalesRoute.js";
 import InvoiceRoute from "./routes/InvoiceRoute.js";
 import StatusRoute from "./routes/StatusRoute.js";
-import CustomerTypeRoute from "./routes/CustTypeRoute.js";
 
 dotenv.config();
 
