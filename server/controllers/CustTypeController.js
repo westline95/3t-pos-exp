@@ -1,7 +1,7 @@
 import CustTypeModel from "../models/CustTypeModel.js";
 import { Sequelize } from "sequelize";
 
-const getCustType = async(req, res) => {
+const getCustType = async (req, res) => {
     try {
         const allType = await CustTypeModel.findAll();
         if(allType) {
@@ -16,7 +16,7 @@ const getCustType = async(req, res) => {
 
 const getCustTypeByID = async(req, res) => {
     try {
-        const getType = CustTypeModel.findAll({
+        const getType = await CustTypeModel.findAll({
             where: {id: req.query.id}
         })
 

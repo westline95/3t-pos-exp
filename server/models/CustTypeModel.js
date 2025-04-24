@@ -17,7 +17,7 @@ const CustTypeModel = sequelize.define("custType",
         }
     },
     {
-        tableName: "custType"
+        tableName: "custType",
     }
 )
 
