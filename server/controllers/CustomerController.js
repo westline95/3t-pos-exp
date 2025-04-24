@@ -22,12 +22,13 @@ const insertCustomers = async (req, res) => {
     try{
         const newCust = await CustomerModel.create({
             name,
+            img,
             custType,   
             email,
             debtLimit,   
             phonenumber,
-            // totalSales,
-            // totalDebt,
+            totalSales,
+            totalDebt,
             gender,
             dob,
             country,

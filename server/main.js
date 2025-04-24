@@ -9,6 +9,7 @@ import CustomersRoute from "./routes/CustomerRoute.js";
 import SalesRoute from "./routes/SalesRoute.js";
 import InvoiceRoute from "./routes/InvoiceRoute.js";
 import StatusRoute from "./routes/StatusRoute.js";
+import CustomerTypeRoute from "./routes/CustTypeRoute.js";
 
 dotenv.config();
 
@@ -36,6 +37,9 @@ app.use(SalesRoute);
 app.use(InvoiceRoute);
 // status CRUD
 app.use(StatusRoute);
+// customer type CRUD
+app.use(CustomerTypeRoute);
+
 
 
 app.listen(port, () => console.log(`
