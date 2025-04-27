@@ -17,6 +17,9 @@ const CustomerModel = sequelize.define("customer",
         },
         custType: {
             type: Sequelize.STRING,
+        },  
+        custTypeId: {
+            type: Sequelize.INTEGER,
         },        
         email: {
             type: Sequelize.STRING,

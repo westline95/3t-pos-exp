@@ -16,7 +16,7 @@ const getCustomers = async (req, res) => {
 }
 
 const insertCustomers = async (req, res) => {
-    const { name, img, custType, email, phonenumber,
+    const { name, img, custType, custTypeId, email, phonenumber,
         debtLimit, totalSales, totalDebt, gender, dob,
         country, province, city, postalCode, address } = req.body;
     try{
@@ -24,6 +24,7 @@ const insertCustomers = async (req, res) => {
             name,
             img,
             custType,   
+            custTypeId,   
             email,
             debtLimit,   
             phonenumber,
