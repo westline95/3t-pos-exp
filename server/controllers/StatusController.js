@@ -6,7 +6,7 @@ const getAllStatus = async (req, res) => {
         if(allStatus){
             res.json(allStatus);
         } else {
-            res.json({error: res.status});
+            res.status(404).json({error: `get all status not found!`});
         }
         // console.log(res.status)
     } 
