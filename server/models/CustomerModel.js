@@ -41,6 +41,7 @@ const CustomerModel = sequelize.define("customer",
         },
         dob: {
             type: Sequelize.DATE,
+            allowNull: true,
         },
         country: {
             type: Sequelize.STRING,
