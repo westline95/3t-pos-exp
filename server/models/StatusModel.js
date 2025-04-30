@@ -1,20 +1,20 @@
 import { Sequelize } from "sequelize";
 import sequelize from "../config/Database.js";
 
-const StatusModel = sequelize.define("status", 
+const StatusModel = sequelize.define("statusList", 
     {
         id:{
-            type:  Sequelize.INTEGER,
+            type: Sequelize.INTEGER,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
         },
-        status: {
+        status:{
             type: Sequelize.STRING,
         }
     },
     {
-        tableName: "status"
+        tableName: 'status',
     }
 
 )
