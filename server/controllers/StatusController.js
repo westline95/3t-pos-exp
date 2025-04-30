@@ -19,7 +19,7 @@ const getAllStatus = async (req, res) => {
 const getStatusByID = async(req, res) => {
     try{
         const getData = await StatusModel.findAll({
-            where: {id: req.body.id}
+            where: {id: req.query.id}
         })
 
         if(getData){
