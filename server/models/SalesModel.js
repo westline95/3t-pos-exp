@@ -12,9 +12,6 @@ const SalesModel = sequelize.define("sales",
         salesDate: {
             type: Sequelize.DATE,
         },
-        salesDue: {
-            type: Sequelize.DATE,
-        },
         custName: {
             type: Sequelize.STRING,
         },        

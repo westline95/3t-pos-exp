@@ -134,5 +134,5 @@ QtyButton.propTypes = {
     min: propTypes.number,
     max: propTypes.number,
     id: propTypes.string,
-    data: propTypes.object
+    data: propTypes.object,
 }
