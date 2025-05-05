@@ -34,30 +34,30 @@ const SalesModel = sequelize.define("sales",
             type: Sequelize.STRING,
         },
         totalSales: {
-            type: Sequelize.STRING,
+            type: Sequelize.DECIMAL,
         },
         totalPayment: {
-            type: Sequelize.STRING,
+            type: Sequelize.DECIMAL,
         },
         remainingPayment: {
-            type: Sequelize.STRING,
+            type: Sequelize.DECIMAL,
         },
         paymentMethod: {
             type: Sequelize.INTEGER,
         },
         discount: {
-            type: Sequelize.STRING,
+            type: Sequelize.DECIMAL,
         },
         grandTotal: {
-            type: Sequelize.STRING,
+            type: Sequelize.DECIMAL,
         },
         note: {
             type: Sequelize.STRING,
         },
         totalQty: {
-            type: Sequelize.STRING,
+            type: Sequelize.DECIMAL,
         },
-        paymentDate: {
+        paymentData: {
             type: Sequelize.STRING,
         }
 
