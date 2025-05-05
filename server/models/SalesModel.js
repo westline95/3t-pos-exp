@@ -55,7 +55,7 @@ const SalesModel = sequelize.define("sales",
             type: Sequelize.STRING,
         },
         totalQty: {
-            type: Sequelize.DECIMAL,
+            type: Sequelize.FLOAT,
         },
         paymentData: {
             type: Sequelize.STRING,
