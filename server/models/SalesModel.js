@@ -59,8 +59,10 @@ const SalesModel = sequelize.define("sales",
         },
         paymentData: {
             type: Sequelize.STRING,
-        }
-
+        },
+        paid: {
+            type: Sequelize.INTEGER,
+        },
     }, 
     {
         tableName: 'sales',
