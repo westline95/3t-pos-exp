@@ -63,6 +63,9 @@ const SalesModel = sequelize.define("sales",
         paid: {
             type: Sequelize.INTEGER,
         },
+        orderType: {
+            type: Sequelize.INTEGER,
+        },
     }, 
     {
         tableName: 'sales',
