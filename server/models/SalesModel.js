@@ -63,8 +63,11 @@ const SalesModel = sequelize.define("sales",
         paid: {
             type: Sequelize.INTEGER,
         },
-        orderType: {
+        orderTypeId: {
             type: Sequelize.INTEGER,
+        },
+        orderType: {
+            type: Sequelize.STRING
         },
     }, 
     {
