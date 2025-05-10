@@ -11,12 +11,15 @@ const SalesModel = sequelize.define("sales",
         },
         salesDate: {
             type: Sequelize.DATE,
+            allowNull: false,
         },
         custName: {
             type: Sequelize.STRING,
+            allowNull: false,
         },        
         custID: {
             type: Sequelize.INTEGER,
+            allowNull: false,
         },
         custType: {
             type: Sequelize.STRING,
@@ -26,12 +29,15 @@ const SalesModel = sequelize.define("sales",
         },
         statusId: {
             type: Sequelize.INTEGER,
+            allowNull: false,
         },
         status: {
             type: Sequelize.STRING,
+            allowNull: false,
         },
         source: {
             type: Sequelize.STRING,
+            allowNull: false,
         },
         totalSales: {
             type: Sequelize.DECIMAL,
@@ -42,8 +48,9 @@ const SalesModel = sequelize.define("sales",
         remainingPayment: {
             type: Sequelize.DECIMAL,
         },
-        paymentMethod: {
+        paymentType: {
             type: Sequelize.INTEGER,
+            allowNull: false,
         },
         discount: {
             type: Sequelize.DECIMAL,
@@ -62,12 +69,15 @@ const SalesModel = sequelize.define("sales",
         },
         paid: {
             type: Sequelize.INTEGER,
+            allowNull: false,
         },
         orderTypeId: {
             type: Sequelize.INTEGER,
+            allowNull: false,
         },
         orderType: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false,
         },
     }, 
     {
