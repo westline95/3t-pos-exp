@@ -19,16 +19,7 @@ const insertInv = async (req, res) => {
     const { custID, custName, salesRef, amount,
         paid, dueDate, amountDue, status } = req.body;
     try{
-        const newInv = await InvoiceModel.create({
-            custID,
-            custName,  
-            salesRef,
-            amount,
-            paid,
-            dueDate,
-            amountDue,
-            status
-        });
+        const newInv = await InvoiceModel.create(req.body);
         
         res.status(201).json(newInv);
     } 

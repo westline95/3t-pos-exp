@@ -11,27 +11,47 @@ const InvoiceModel = sequelize.define("invoice",
         },
         custID: {
             type: Sequelize.INTEGER,
+            allowNull: false,
         },
         custName: {
             type: Sequelize.STRING,
+            allowNull: false,
         },
         salesRef: {
             type: Sequelize.STRING,
+            allowNull: false,
         },
-        amount: {
-            type: Sequelize.STRING,
+        subtotal: {
+            type: Sequelize.DECIMAL,
+            allowNull: false,
         },
-        paid: {
-            type: Sequelize.STRING,
+        discount: {
+            type: Sequelize.DECIMAL,
+            allowNull: true,
         },
-        dueDate: {
-            type: Sequelize.DATE,
+        grandTotal: {
+            type: Sequelize.DECIMAL,
+            allowNull: false,
         },
         amountDue: {
-            type: Sequelize.STRING,
+            type: Sequelize.DECIMAL,
+            allowNull: false,
+        },
+        invDate: {
+            type: Sequelize.DATE,
+            allowNull: false,
         },
         status: {
             type: Sequelize.STRING,
+            allowNull: false,
+        },
+        statusId: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+        url: {
+            type: Sequelize.STRING,
+            allowNull: true,
         }
     }, 
     {
