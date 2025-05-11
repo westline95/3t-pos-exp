@@ -21,6 +21,10 @@ const PaymentModel = sequelize.define("payment",
             type: Sequelize.DECIMAL,
             allowNull: false,
         },
+        change: {
+            type: Sequelize.DECIMAL,
+            allowNull: true,
+        },
         paymentMethod: {
             type: Sequelize.STRING,
             allowNull: false,
