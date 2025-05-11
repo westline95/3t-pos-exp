@@ -10,6 +10,8 @@ import CustomersRoute from "./routes/CustomerRoute.js";
 import SalesRoute from "./routes/SalesRoute.js";
 import InvoiceRoute from "./routes/InvoiceRoute.js";
 import StatusRoute from "./routes/StatusRoute.js";
+import PaymentRoute from "./routes/PaymentRoute.js";
+import InstallmentPayRoute from "./routes/InstallPayRoute.js";
 
 dotenv.config();
 
@@ -39,6 +41,10 @@ app.use(InvoiceRoute);
 app.use(StatusRoute);
 // customer type CRUD
 app.use(CustomerTypeRoute);
+// payment CRUD
+app.use(PaymentRoute);
+// installment payment CRUD
+app.use(InstallmentPayRoute);
 
 
 
