@@ -27,10 +27,6 @@ const SalesModel = sequelize.define("sales",
         salesData: {
             type: Sequelize.STRING,
         },
-        statusId: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-        },
         status: {
             type: Sequelize.STRING,
             allowNull: false,
