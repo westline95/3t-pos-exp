@@ -8,6 +8,6 @@ PaymentRoute.post("/payment/write", PaymentController.insertPayment);
 PaymentRoute.put("/payment/update", PaymentController.updatePayment);
 PaymentRoute.delete("/payment/del", PaymentController.deletePayment);
 PaymentRoute.get("/payment/inv", PaymentController.getPaymentByInvId);
-PaymentRoute.get("/payment", PaymentController.getPaymentByIDs);
+PaymentRoute.get("/payment", PaymentController.getPaymentByID);
 
 export default PaymentRoute;
