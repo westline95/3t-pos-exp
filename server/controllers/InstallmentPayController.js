@@ -1,4 +1,4 @@
-import InstallmentPaymentModel from "../models/InstallmentInstallmentPaymentModel.js";
+import InstallmentPaymentModel from "../models/InstallmentPaymentModel.js";
 import { Sequelize } from "sequelize";
 
 const getAllInstallPayment = async (req, res) => {
