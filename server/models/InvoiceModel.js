@@ -45,10 +45,6 @@ const InvoiceModel = sequelize.define("invoice",
             type: Sequelize.STRING,
             allowNull: false,
         },
-        statusId: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-        },
         url: {
             type: Sequelize.STRING,
             allowNull: true,
