@@ -28,11 +28,10 @@ const ReceiptModel = sequelize.define("receipt",
         tableName: 'receipt',
     }
 );
+export default ReceiptModel;
 
 ReceiptModel.belongsTo(InvoiceModel, {
     foreignKey: {
         name: 'invoiceID'
     }
 })
-
-export default ReceiptModel;
