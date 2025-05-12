@@ -119,7 +119,11 @@ const deletePayment = async (req, res) => {
 const getPaymentByInvId = async(req, res) => {
     try{
         const getData = await PaymentModel.findAll({
-            where: {invoiceID: req.query.id}
+            where: {invoiceID: req.query.id},
+            include: {
+                model: InvoiceModel,
+                as: 'invoice'
+            } 
         })
 
         if(getData){
@@ -153,7 +157,11 @@ const getPaymentByInvId = async(req, res) => {
 const getPaymentByID = async(req, res) => {
     try{
         const getData = await PaymentModel.findAll({
-            where: {id: req.query.id}
+            where: {id: req.query.id},
+            include: {
+                model: InvoiceModel,
+                as: 'invoice'
+            } 
         })
 
         if(getData){

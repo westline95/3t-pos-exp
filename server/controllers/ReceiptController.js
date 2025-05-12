@@ -150,22 +150,26 @@ const deleteReceipt = async (req, res) => {
 //     }
 // }
 
-// const getPaymentByID = async(req, res) => {
-//     try{
-//         const getData = await ReceiptModel.findAll({
-//             where: {id: req.query.id}
-//         })
+const getReceiptByID = async(req, res) => {
+    try{
+        const getData = await ReceiptModel.findAll({
+            where: {id: req.query.id},
+            include: {
+                model: InvoiceModel,
+                as: 'invoice'
+            }  
+        })
 
-//         if(getData){
-//             res.json(getData);
-//         } else {
-//             res.status(404).json({error: `get payment data with ID is not found!`});
-//         }
-//     }
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
-//     }
-// }
+        if(getData){
+            res.json(getData);
+        } else {
+            res.status(404).json({error: `get payment data with ID is not found!`});
+        }
+    }
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
 
 
 
@@ -173,5 +177,6 @@ export default {
     getAllReceipt,
     insertReceipt,
     deleteReceipt,
-    updateReceipt
+    updateReceipt,
+    getReceiptByID
 };
