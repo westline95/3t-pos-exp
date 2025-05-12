@@ -1,7 +1,5 @@
 import Sequelize from "sequelize";
 import sequelize from "../config/Database.js";
-import PaymentModel from "./PaymentModel.js";
-import InvoiceModel from "./InvoiceModel.js";
 
 const ReceiptModel = sequelize.define("receipt", 
     {
