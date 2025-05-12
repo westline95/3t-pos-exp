@@ -56,7 +56,8 @@ const InvoiceModel = sequelize.define("invoice",
         tableName: 'invoice',
     }
 );
-export default InvoiceModel;
 
 InvoiceModel.hasOne(ReceiptModel);
 InvoiceModel.hasMany(PaymentModel);
+
+export default InvoiceModel;
