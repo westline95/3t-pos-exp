@@ -1,5 +1,10 @@
 import InvoiceModel from "../models/InvoiceModel.js";
 import { Sequelize, where } from "sequelize";
+import ReceiptModel from "../models/ReceiptModel.js";
+import PaymentModel from "../models/PaymentModel.js";
+
+InvoiceModel.hasOne(ReceiptModel);
+InvoiceModel.hasMany(PaymentModel);
 
 const getAllInv = async (req, res) => {
     try{

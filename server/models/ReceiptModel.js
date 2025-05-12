@@ -29,11 +29,5 @@ const ReceiptModel = sequelize.define("receipt",
     }
 );
 
-ReceiptModel.belongsTo(InvoiceModel, {
-    foreignKey: {
-        name: 'invoiceID'
-    }
-});
-
 export default ReceiptModel;
 

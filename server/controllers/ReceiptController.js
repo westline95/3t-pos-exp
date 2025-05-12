@@ -2,6 +2,12 @@ import ReceiptModel from "../models/ReceiptModel.js";
 import InvoiceModel from "../models/InvoiceModel.js";
 import { Sequelize } from "sequelize";
 
+ReceiptModel.belongsTo(InvoiceModel, {
+    foreignKey: {
+        name: 'invoiceID'
+    }
+});
+
 const getAllReceipt = async (req, res) => {
     try{
         const allReceipt = await ReceiptModel.findAll({ 

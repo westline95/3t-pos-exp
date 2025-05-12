@@ -48,10 +48,6 @@ const PaymentModel = sequelize.define("payment",
     }
 );
 
-PaymentModel.belongsTo(InvoiceModel, {
-    foreignKey: {
-        name: 'invoiceID'
-    }
-})
+
 
 export default PaymentModel;
