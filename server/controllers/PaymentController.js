@@ -2,6 +2,7 @@ import InvoiceModel from "../models/InvoiceModel.js";
 import PaymentModel from "../models/PaymentModel.js";
 import { Sequelize } from "sequelize";
 
+InvoiceModel.hasMany(PaymentModel);
 PaymentModel.belongsTo(InvoiceModel, {
     foreignKey: {
         name: 'invoiceID'
