@@ -1,5 +1,7 @@
 import Sequelize from "sequelize";
 import sequelize from "../config/Database.js";
+import ReceiptModel from "./ReceiptModel.js";
+import PaymentModel from "./PaymentModel.js";
 
 const InvoiceModel = sequelize.define("invoice", 
     {
@@ -53,6 +55,9 @@ const InvoiceModel = sequelize.define("invoice",
     {
         tableName: 'invoice',
     }
-)
+);
+
+InvoiceModel.hasOne(ReceiptModel);
+InvoiceModel.hasMany(PaymentModel);
 
 export default InvoiceModel;

@@ -1,19 +1,19 @@
+import ReceiptModel from "../models/ReceiptModel.js";
 import InvoiceModel from "../models/InvoiceModel.js";
-import PaymentModel from "../models/PaymentModel.js";
 import { Sequelize } from "sequelize";
 
-const getAllPayment = async (req, res) => {
+const getAllReceipt = async (req, res) => {
     try{
-        const allPayment = await PaymentModel.findAll({ 
+        const allReceipt = await ReceiptModel.findAll({ 
             include: {
                 model: InvoiceModel,
                 as: 'invoice'
             }  
         });
-        if(allPayment){
-            res.json(allPayment);
+        if(allReceipt){
+            res.json(allReceipt);
         } else {
-            res.status(404).json({error: `get all payment is not found!`});
+            res.status(404).json({error: `get all receipt is not found!`});
         }
     } 
     catch(err) {
@@ -21,10 +21,10 @@ const getAllPayment = async (req, res) => {
     }
 }
 
-const insertPayment = async (req, res) => {
+const insertReceipt = async (req, res) => {
     try{
-        const newPayment = await PaymentModel.create(req.body);
-        res.status(201).json(newPayment);
+        const newReceipt = await ReceiptModel.create(req.body);
+        res.status(201).json(newReceipt);
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -41,22 +41,22 @@ const insertPayment = async (req, res) => {
 //     }
 // }
 
-const updatePayment= async (req, res) => {
+const updateReceipt= async (req, res) => {
     try{
-        const payment = await PaymentModel.update(req.body, {where:{id: req.query.id}});
+        const receipt = await ReceiptModel.update(req.body, {where:{id: req.query.id}});
         
-        res.status(201).json(payment);
+        res.status(201).json(receipt);
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
     }
 }
 
-const deletePayment = async (req, res) => {
+const deleteReceipt = async (req, res) => {
     try{
-        const delPayment = await PaymentModel.destroy({where:{id: req.query.id}});
+        const delReceipt = await ReceiptModel.destroy({where:{id: req.query.id}});
         
-        res.status(201).json(delPayment);
+        res.status(201).json(delReceipt);
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -116,22 +116,22 @@ const deletePayment = async (req, res) => {
 //     }
 // }
 
-const getPaymentByInvId = async(req, res) => {
-    try{
-        const getData = await PaymentModel.findAll({
-            where: {invoiceID: req.query.id}
-        })
+// const getPaymentByInvId = async(req, res) => {
+//     try{
+//         const getData = await ReceiptModel.findAll({
+//             where: {invoiceID: req.query.id}
+//         })
 
-        if(getData){
-            res.json(getData);
-        } else {
-            res.status(404).json({error: `get payment by invoice id is not found!`});
-        }
-    }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
-    }
-}
+//         if(getData){
+//             res.json(getData);
+//         } else {
+//             res.status(404).json({error: `get payment by invoice id is not found!`});
+//         }
+//     }
+//     catch(err) {
+//         res.status(500).json({err: "internal server error"});
+//     }
+// }
 
 // const getSalesByStatus = async(req, res) => {
 //     try{
@@ -150,30 +150,28 @@ const getPaymentByInvId = async(req, res) => {
 //     }
 // }
 
-const getPaymentByID = async(req, res) => {
-    try{
-        const getData = await PaymentModel.findAll({
-            where: {id: req.query.id}
-        })
+// const getPaymentByID = async(req, res) => {
+//     try{
+//         const getData = await ReceiptModel.findAll({
+//             where: {id: req.query.id}
+//         })
 
-        if(getData){
-            res.json(getData);
-        } else {
-            res.status(404).json({error: `get payment data with ID is not found!`});
-        }
-    }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
-    }
-}
+//         if(getData){
+//             res.json(getData);
+//         } else {
+//             res.status(404).json({error: `get payment data with ID is not found!`});
+//         }
+//     }
+//     catch(err) {
+//         res.status(500).json({err: "internal server error"});
+//     }
+// }
 
 
 
 export default {
-    getAllPayment,
-    insertPayment,
-    updatePayment,
-    deletePayment,
-    getPaymentByID,
-    getPaymentByInvId
+    getAllReceipt,
+    insertReceipt,
+    deleteReceipt,
+    updateReceipt
 };

@@ -1,5 +1,6 @@
 import Sequelize from "sequelize";
 import sequelize from "../config/Database.js";
+import InvoiceModel from "./InvoiceModel.js";
 
 const PaymentModel = sequelize.define("payment", 
     {
@@ -45,6 +46,12 @@ const PaymentModel = sequelize.define("payment",
     {
         tableName: 'payment',
     }
-)
+);
+
+PaymentModel.belongsTo(InvoiceModel, {
+    foreignKey: {
+        name: 'invoiceID'
+    }
+})
 
 export default PaymentModel;
