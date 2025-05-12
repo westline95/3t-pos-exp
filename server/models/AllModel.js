@@ -107,7 +107,8 @@ const PaymentModel = sequelize.define("payment",
 
 InvoiceModel.hasMany(PaymentModel);
 PaymentModel.belongsTo(InvoiceModel, {
-    foreignKey: 'invoiceID'
+    foreignKey: 'invoiceID',
+    as: 'invoice'
 });
 
 
