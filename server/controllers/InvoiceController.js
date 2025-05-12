@@ -1,13 +1,13 @@
-import InvoiceModel from "../models/InvoiceModel.js";
+// import AllModel.InvoiceModel from "../models/AllModel.InvoiceModel.js";
 import { Sequelize, where } from "sequelize";
 import ReceiptModel from "../models/ReceiptModel.js";
-import PaymentModel from "../models/PaymentModel.js";
+// import PaymentModel from "../models/PaymentModel.js";
+import AllModel from "../models/AllModel.js";
 
-InvoiceModel.hasOne(ReceiptModel);
 
 const getAllInv = async (req, res) => {
     try{
-        const allInv = await InvoiceModel.findAll();
+        const allInv = await AllModel.InvoiceModel.findAll();
         if(allInv){
             res.json(allInv);
         } else {
@@ -23,7 +23,7 @@ const insertInv = async (req, res) => {
     const { custID, custName, salesRef, amount,
         paid, dueDate, amountDue, status } = req.body;
     try{
-        const newInv = await InvoiceModel.create(req.body);
+        const newInv = await AllModel.InvoiceModel.create(req.body);
         
         res.status(201).json(newInv);
     } 
@@ -36,7 +36,7 @@ const insertInv = async (req, res) => {
 
 const insertMultipleInv = async (req, res) => {
     try{
-        const newInvs = await InvoiceModel.bulkCreate(req.body);
+        const newInvs = await AllModel.InvoiceModel.bulkCreate(req.body);
         res.status(201).json(newInvs);
     } 
     catch(err) {
@@ -46,7 +46,7 @@ const insertMultipleInv = async (req, res) => {
 
 const updateInv= async (req, res) => {
     try{
-        const inv = await InvoiceModel.update(req.body, {where:{id: req.query.id}});
+        const inv = await AllModel.InvoiceModel.update(req.body, {where:{id: req.query.id}});
         
         res.status(201).json(inv);
     } 
@@ -57,7 +57,7 @@ const updateInv= async (req, res) => {
 
 const deleteInv = async (req, res) => {
     try{
-        const delInv = await InvoiceModel.destroy({where:{id: req.query.id}});
+        const delInv = await AllModel.InvoiceModel.destroy({where:{id: req.query.id}});
         
         res.status(201).json(delInv);
     } 
@@ -69,7 +69,7 @@ const deleteInv = async (req, res) => {
 const countInvByCust = async (req, res) => {
     // const name = req.query.name;
     try{
-        const countInv = await InvoiceModel.findAll(
+        const countInv = await AllModel.InvoiceModel.findAll(
             
             {
                 group: `name`,
@@ -110,7 +110,7 @@ const getInvByStatus = async(req, res) => {
 
 const getInvByID = async(req, res) => {
     try{
-        const getInv = await InvoiceModel.findAll({
+        const getInv = await AllModel.InvoiceModel.findAll({
             where: {id: req.query.id}
         })
 

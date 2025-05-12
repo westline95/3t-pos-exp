@@ -1,7 +1,6 @@
 import AllModel from "../models/AllModel.js";
 import { Sequelize } from "sequelize";
 
-
 const getAllPayment = async (req, res) => {
     try{
         const allPayment = await AllModel.PaymentModel.findAll({ 
