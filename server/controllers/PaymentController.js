@@ -1,17 +1,12 @@
-import InvoiceModel from "../models/InvoiceModel.js";
-import PaymentModel from "../models/PaymentModel.js";
+import AllModel from "../models/AllModel";
 import { Sequelize } from "sequelize";
 
-InvoiceModel.hasMany(PaymentModel);
-PaymentModel.belongsTo(InvoiceModel, {
-    foreignKey: 'invoiceID'
-});
 
 const getAllPayment = async (req, res) => {
     try{
-        const allPayment = await PaymentModel.findAll({ 
+        const allPayment = await AllModel.PaymentModel.findAll({ 
             include: {
-                model: InvoiceModel,
+                model: AllModel.InvoiceModel,
                 as: 'invoice'
             }  
         });
@@ -28,7 +23,7 @@ const getAllPayment = async (req, res) => {
 
 const insertPayment = async (req, res) => {
     try{
-        const newPayment = await PaymentModel.create(req.body);
+        const newPayment = await AllModel.PaymentModel.create(req.body);
         res.status(201).json(newPayment);
     } 
     catch(err) {
@@ -48,7 +43,7 @@ const insertPayment = async (req, res) => {
 
 const updatePayment= async (req, res) => {
     try{
-        const payment = await PaymentModel.update(req.body, {where:{id: req.query.id}});
+        const payment = await AllModel.PaymentModel.update(req.body, {where:{id: req.query.id}});
         
         res.status(201).json(payment);
     } 
@@ -59,7 +54,7 @@ const updatePayment= async (req, res) => {
 
 const deletePayment = async (req, res) => {
     try{
-        const delPayment = await PaymentModel.destroy({where:{id: req.query.id}});
+        const delPayment = await AllModel.PaymentModel.destroy({where:{id: req.query.id}});
         
         res.status(201).json(delPayment);
     } 
@@ -123,10 +118,10 @@ const deletePayment = async (req, res) => {
 
 const getPaymentByInvId = async(req, res) => {
     try{
-        const getData = await PaymentModel.findAll({
+        const getData = await AllModel.PaymentModel.findAll({
             where: {invoiceID: req.query.id},
             include: {
-                model: InvoiceModel,
+                model: AllModel.InvoiceModel,
                 as: 'invoice'
             } 
         })
@@ -161,10 +156,10 @@ const getPaymentByInvId = async(req, res) => {
 
 const getPaymentByID = async(req, res) => {
     try{
-        const getData = await PaymentModel.findAll({
+        const getData = await AllModel.PaymentModel.findAll({
             where: {id: req.query.id},
             include: {
-                model: InvoiceModel,
+                model: AllModel.InvoiceModel,
                 as: 'invoice'
             } 
         })
