@@ -1,4 +1,4 @@
-import AllModel from "../models/AllModel";
+import AllModel from "../models/AllModel.js";
 import { Sequelize } from "sequelize";
 
 
