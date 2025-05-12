@@ -3,9 +3,7 @@ import InvoiceModel from "../models/InvoiceModel.js";
 import { Sequelize } from "sequelize";
 
 ReceiptModel.belongsTo(InvoiceModel, {
-    foreignKey: {
-        name: 'invoiceID'
-    }
+    foreignKey: 'invoiceID'
 });
 
 const getAllReceipt = async (req, res) => {

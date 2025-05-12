@@ -4,9 +4,7 @@ import { Sequelize } from "sequelize";
 
 InvoiceModel.hasMany(PaymentModel);
 PaymentModel.belongsTo(InvoiceModel, {
-    foreignKey: {
-        name: 'invoiceID'
-    }
+    foreignKey: 'invoiceID'
 });
 
 const getAllPayment = async (req, res) => {

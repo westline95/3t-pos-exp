@@ -13,6 +13,10 @@ const PaymentModel = sequelize.define("payment",
         invoiceID: {
             type: Sequelize.INTEGER,
             allowNull: false,
+            references: {
+                model: InvoiceModel,
+                key: 'id'
+            }
         },
         custID: {
             type: Sequelize.INTEGER,
