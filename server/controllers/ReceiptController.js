@@ -1,19 +1,13 @@
 import ReceiptModel from "../models/ReceiptModel.js";
-import InvoiceModel from "../models/InvoiceModel.js";
 import { Sequelize } from "sequelize";
 
-ReceiptModel.belongsTo(InvoiceModel, {
-    foreignKey: 'invoiceID'
-});
+// ReceiptModel.belongsTo(InvoiceModel, {
+//     foreignKey: 'invoiceID'
+// });
 
 const getAllReceipt = async (req, res) => {
     try{
-        const allReceipt = await ReceiptModel.findAll({ 
-            include: {
-                model: InvoiceModel,
-                as: 'invoice'
-            }  
-        });
+        const allReceipt = await ReceiptModel.findAll();
         if(allReceipt){
             res.json(allReceipt);
         } else {
@@ -158,10 +152,6 @@ const getReceiptByID = async(req, res) => {
     try{
         const getData = await ReceiptModel.findAll({
             where: {id: req.query.id},
-            include: {
-                model: InvoiceModel,
-                as: 'invoice'
-            }  
         })
 
         if(getData){
