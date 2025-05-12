@@ -13,7 +13,14 @@ const InstallmentPaymentModel = sequelize.define("installmentPayment",
         invoiceID: {
             type: Sequelize.INTEGER,
             allowNull: false,
-            
+        },
+        custID: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+        custName: {
+            type: Sequelize.STRING,
+            allowNull: false,
         },
         dueDate: {
             type: Sequelize.DATE,
