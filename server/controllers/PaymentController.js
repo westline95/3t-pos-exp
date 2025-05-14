@@ -4,10 +4,10 @@ import { Sequelize } from "sequelize";
 const getAllPayment = async (req, res) => {
     try{
         const allPayment = await AllModel.PaymentModel.findAll({ 
-            include: {
+            include: [{
                 model: AllModel.InvoiceModel,
                 as: 'invoice'
-            }  
+            }]  
         });
         if(allPayment){
             res.json(allPayment);
