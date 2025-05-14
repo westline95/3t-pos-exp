@@ -67,7 +67,7 @@ const PaymentModel = sequelize.define("payment",
             type: Sequelize.INTEGER,
             allowNull: false,
             references: {
-                model: InvoiceModel,
+                model: 'invoice',
                 key: 'id'
             }
         },
