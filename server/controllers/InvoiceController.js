@@ -1,13 +1,17 @@
-// import AllModel.InvoiceModel from "../models/AllModel.InvoiceModel.js";
 import { Sequelize, where } from "sequelize";
-import ReceiptModel from "../models/ReceiptModel.js";
 // import PaymentModel from "../models/PaymentModel.js";
 import AllModel from "../models/AllModel.js";
 
-
 const getAllInv = async (req, res) => {
     try{
-        const allInv = await AllModel.InvoiceModel.findAll();
+        const allInv = await AllModel.InvoicesModel.findAll({
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
+        });
         if(allInv){
             res.json(allInv);
         } else {
@@ -23,21 +27,42 @@ const insertInv = async (req, res) => {
     const { custID, custName, salesRef, amount,
         paid, dueDate, amountDue, status } = req.body;
     try{
-        const newInv = await AllModel.InvoiceModel.create(req.body);
+        const newInv = await AllModel.InvoicesModel.create(req.body,{
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
+        });
         
-        res.status(201).json(newInv);
+        if(newInv){
+            res.status(201).json(newInv);
+        } else {
+            res.status(404).json({error: `failed to insert invoice!`});
+        }
     } 
     catch(err) {
-        console.log(err)
-
         res.status(500).json({err: "internal server error"});
     }
 }
 
 const insertMultipleInv = async (req, res) => {
     try{
-        const newInvs = await AllModel.InvoiceModel.bulkCreate(req.body);
-        res.status(201).json(newInvs);
+        const newInvs = await AllModel.InvoicesModel.bulkCreate(req.body, {
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
+        });
+        
+        if(newInvs){
+            res.status(201).json(newInvs);
+        } else {
+            res.status(404).json({error: `failed to insert multiple invoice`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -46,9 +71,21 @@ const insertMultipleInv = async (req, res) => {
 
 const updateInv= async (req, res) => {
     try{
-        const inv = await AllModel.InvoiceModel.update(req.body, {where:{id: req.query.id}});
+        const inv = await AllModel.InvoicesModel.update(req.body, {
+            where:{invoice_id: req.query.id},
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
+        });
         
-        res.status(201).json(inv);
+        if(inv){
+            res.status(201).json(inv);
+        } else {
+            res.status(404).json({error: `failed to update invoice`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -57,9 +94,13 @@ const updateInv= async (req, res) => {
 
 const deleteInv = async (req, res) => {
     try{
-        const delInv = await AllModel.InvoiceModel.destroy({where:{id: req.query.id}});
+        const delInv = await AllModel.InvoicesModel.destroy({where:{invoice_id: req.query.id}});
         
-        res.status(201).json(delInv);
+        if(delInv){
+            res.status(201).json(delInv);
+        } else {
+            res.status(404).json({error: `failed to delete invoice`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -69,20 +110,20 @@ const deleteInv = async (req, res) => {
 const countInvByCust = async (req, res) => {
     // const name = req.query.name;
     try{
-        const countInv = await AllModel.InvoiceModel.findAll(
+        const countInv = await AllModel.InvoicesModel.findAll(
             
             {
-                group: `name`,
+                group: `customer_id`,
                 attributes: [
-                  [Sequelize.literal(`name`), `name`],
-                  [Sequelize.fn(`COUNT`, `name`), `count`]
-                ]
+                  [Sequelize.literal(`customer_id`), `customer_id`],
+                  [Sequelize.fn(`COUNT`, `customer_id`), `count`]
+                ],
             }
         );
-        if(countProduct){
+        if(countInv){
             res.json(countInv);
         } else {
-            res.status(404).json({error: `product with ? not found!`});
+            res.status(404).json({error: `invoice with cust id not found!`});
         }
     } 
     catch(err) {
@@ -92,15 +133,21 @@ const countInvByCust = async (req, res) => {
 
 const getInvByStatus = async(req, res) => {
     try{
-        const getInv = await CustomerModel.findAll({
+        const getInv = await AllModel.InvoicesModel.findAll({
             
-            where: {status: req.query.status}
+            where: {is_paid: req.query.ispaid},
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
         })
 
         if(getInv){
             res.json(getInv);
         } else {
-            res.status(404).json({error: `get customer debt data not found!`});
+            res.status(404).json({error: `get invoice data by paid status!`});
         }
     }
     catch(err) {
@@ -110,14 +157,20 @@ const getInvByStatus = async(req, res) => {
 
 const getInvByID = async(req, res) => {
     try{
-        const getInv = await AllModel.InvoiceModel.findAll({
-            where: {id: req.query.id}
+        const getInv = await AllModel.InvoicesModel.findAll({
+            where: {invoice_id: req.query.id},
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
         })
 
         if(getInv){
             res.json(getInv);
         } else {
-            res.status(404).json({error: `get customer data with ID not found!`});
+            res.status(404).json({error: `get invoice data with ID not found!`});
         }
     }
     catch(err) {

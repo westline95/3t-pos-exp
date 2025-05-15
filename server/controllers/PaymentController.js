@@ -3,11 +3,17 @@ import { Sequelize } from "sequelize";
 
 const getAllPayment = async (req, res) => {
     try{
-        const allPayment = await AllModel.PaymentModel.findAll({ 
-            include: [{
-                model: AllModel.InvoiceModel,
-                as: 'invoice'
-            }]  
+        const allPayment = await AllModel.PaymentsModel.findAll({ 
+            include: [
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice'
+                },
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                }
+            ]
         });
         if(allPayment){
             res.json(allPayment);
@@ -22,8 +28,24 @@ const getAllPayment = async (req, res) => {
 
 const insertPayment = async (req, res) => {
     try{
-        const newPayment = await AllModel.PaymentModel.create(req.body);
-        res.status(201).json(newPayment);
+        const newPayment = await AllModel.PaymentsModel.create(req.body, {
+            include: [
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice'
+                },
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                }
+            ]
+        });
+        
+        if(newPayment){
+            res.status(201).json(newPayment);
+        } else {
+            res.status(404).json({error: `failed to insert payment!`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -42,9 +64,25 @@ const insertPayment = async (req, res) => {
 
 const updatePayment= async (req, res) => {
     try{
-        const payment = await AllModel.PaymentModel.update(req.body, {where:{id: req.query.id}});
+        const payment = await AllModel.PaymentsModel.update(req.body, {
+            where:{payment_id: req.query.id},
+            include: [
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice'
+                },
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                }
+            ]
+        });
         
-        res.status(201).json(payment);
+        if(payment){
+            res.status(201).json(payment);
+        } else {
+            res.status(404).json({error: `failed  to update payment!`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -53,9 +91,13 @@ const updatePayment= async (req, res) => {
 
 const deletePayment = async (req, res) => {
     try{
-        const delPayment = await AllModel.PaymentModel.destroy({where:{id: req.query.id}});
+        const delPayment = await AllModel.PaymentsModel.destroy({where:{payment_id: req.query.id}});
         
-        res.status(201).json(delPayment);
+        if(delPayment){
+            res.status(201).json(delPayment);
+        } else {
+            res.status(404).json({error: `failed to delete payment!`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -117,12 +159,18 @@ const deletePayment = async (req, res) => {
 
 const getPaymentByInvId = async(req, res) => {
     try{
-        const getData = await AllModel.PaymentModel.findAll({
-            where: {invoiceID: req.query.id},
-            include: {
-                model: AllModel.InvoiceModel,
-                as: 'invoice'
-            } 
+        const getData = await AllModel.PaymentsModel.findAll({
+            where: {invoice_id: req.query.invid},
+            include: [
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice'
+                },
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                }
+            ]
         })
 
         if(getData){
@@ -155,12 +203,18 @@ const getPaymentByInvId = async(req, res) => {
 
 const getPaymentByID = async(req, res) => {
     try{
-        const getData = await AllModel.PaymentModel.findAll({
-            where: {id: req.query.id},
-            include: {
-                model: AllModel.InvoiceModel,
-                as: 'invoice'
-            } 
+        const getData = await AllModel.PaymentsModel.findAll({
+            where: {payment_id: req.query.id},
+            include: [
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice'
+                },
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                }
+            ]
         })
 
         if(getData){

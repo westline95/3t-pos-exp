@@ -1,9 +1,16 @@
-import ProductsCatalogModel from "../models/ProductsCatalogModel.js";
+import AllModel from "../models/AllModel.js";
 import { Sequelize } from "sequelize";
 
 const getProducts = async (req, res) => {
     try{
-        const allProduct = await ProductsCatalogModel.findAll();
+        const allProduct = await AllModel.ProductsCatalogModel.findAll({
+            include: [
+                {
+                    model: AllModel.CategoriesModel,
+                    as: 'category'
+                },
+            ]
+        });
         if(allProduct){
             res.json(allProduct);
         } else {
@@ -17,7 +24,15 @@ const getProducts = async (req, res) => {
 
 const getProductsByCategory = async (req, res) => {
     try{
-        const allProduct = await ProductsCatalogModel.findAll({where:{category: req.query.category}});
+        const allProduct = await AllModel.ProductsCatalogModel.findAll({
+            where:{category_id: req.query.categoryid},
+            include: [
+                {
+                    model: AllModel.CategoriesModel,
+                    as: 'category'
+                },
+            ]
+        });
         if(allProduct){
             res.json(allProduct);
         } else {
@@ -33,17 +48,20 @@ const getProductsByCategory = async (req, res) => {
 const insertProducts = async (req, res) => {
     const { name, category, variant, unit, prodCost, sellPrice, status } = req.body;
     try{
-        const newProduct = await ProductsCatalogModel.create({
-            name,
-            category,
-            variant,      
-            unit,
-            prodCost,
-            sellPrice,
-            status
+        const newProduct = await AllModel.ProductsCatalogModel.create(req.body, {
+            include: [
+                {
+                    model: AllModel.CategoriesModel,
+                    as: 'category'
+                },
+            ]
         });
         
-        res.status(201).json(newProduct);
+        if(newProduct){
+            res.status(201).json(newProduct);
+        } else {
+            res.status(404).json({error: `failed to insert product!`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -52,8 +70,20 @@ const insertProducts = async (req, res) => {
 
 const insertMultipleProducts = async (req, res) => {
     try{
-        const newProducts = await ProductsCatalogModel.bulkCreate(req.body);
-        res.status(201).json(newProducts);
+        const newProducts = await AllModel.ProductsCatalogModel.bulkCreate(req.body,{
+            include: [
+                {
+                    model: AllModel.CategoriesModel,
+                    as: 'category'
+                },
+            ]
+        });
+        
+        if(newProducts){
+            res.status(201).json(newProducts);
+        } else {
+            res.status(404).json({error: `failed to insert multiple product!`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -62,9 +92,22 @@ const insertMultipleProducts = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try{
-        const product = await ProductsCatalogModel.update(req.body, {where:{id: req.query.id}});
+        const product = await AllModel.ProductsCatalogModel.update(req.body, 
+            {
+                where:{product_id: req.query.id},
+                include: [
+                    {
+                        model: AllModel.CategoriesModel,
+                        as: 'category'
+                    },
+                ]
+            });
         
-        res.status(201).json(product);
+        if(product){
+            res.status(201).json(product);
+        } else {
+            res.status(404).json({error: `failed to update product!`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -72,13 +115,22 @@ const updateProduct = async (req, res) => {
 }
 
 const getProductID = async (req, res) => {
-    const { id } = req.body;
-
     try{
-        const product = await ProductsCatalogModel.findAll({where:{id: id}});
+        const product = await AllModel.ProductsCatalogModel.findAll({
+            where:{product_id: req.query.id},
+            include: [
+                {
+                    model: AllModel.CategoriesModel,
+                    as: 'category'
+                },
+            ]
+        });
         
-        res.status(201).json(product);
-        // res.status(404).json("product with that id not found!");
+        if(product){
+            res.status(201).json(product);
+        } else {
+            res.status(404).json({error: `failed to get product by id!`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -87,9 +139,13 @@ const getProductID = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try{
-        const delProduct = await ProductsCatalogModel.destroy({where:{id: req.query.id}});
+        const delProduct = await AllModel.ProductsCatalogModel.destroy({where:{product_id: req.query.id}});
         
-        res.status(201).json(delProduct);
+        if(delProduct){
+            res.status(201).json(delProduct);
+        } else {
+            res.status(404).json({error: `failed to delete product!`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -99,14 +155,14 @@ const deleteProduct = async (req, res) => {
 const countProductByName = async (req, res) => {
     // const name = req.query.name;
     try{
-        const countProduct = await ProductsCatalogModel.findAll(
+        const countProduct = await AllModel.ProductsCatalogModel.findAll(
             
             {
-                group: `category`,
+                group: `category_id`,
                 attributes: [
-                  [Sequelize.literal(`category`), `category`],
-                  [Sequelize.fn(`COUNT`, `name`), `count`]
-                ]
+                  [Sequelize.literal(`category_id`), `category_id`],
+                  [Sequelize.fn(`COUNT`, `product_name`), `count`],
+                ],
             }
         );
         if(countProduct){

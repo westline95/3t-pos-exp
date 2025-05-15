@@ -1,9 +1,16 @@
-import SalesModel from "../models/SalesModel.js";
+import AllModel from "../models/AllModel.js";
 import { Sequelize } from "sequelize";
 
 const getAllSales = async (req, res) => {
     try{
-        const allSales = await SalesModel.findAll();
+        const allSales = await AllModel.OrdersModel.findAll({
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
+        });
         if(allSales){
             res.json(allSales);
         } else {
@@ -22,7 +29,14 @@ const insertSales = async (req, res) => {
         paymentMethod, totalQty, paymentData, paid, orderType, orderTypeId
     } = req.body;
     try{
-        const newCust = await SalesModel.create(req.body);
+        const newCust = await AllModel.OrdersModel.create(req.body, {
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
+        });
         
         res.status(201).json(newCust);
     } 
@@ -35,7 +49,14 @@ const insertSales = async (req, res) => {
 
 const insertMultipleSales = async (req, res) => {
     try{
-        const newSales = await SalesModel.bulkCreate(req.body);
+        const newSales = await AllModel.OrdersModel.bulkCreate(req.body, {
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
+        });
         res.status(201).json(newSales);
     } 
     catch(err) {
@@ -45,7 +66,15 @@ const insertMultipleSales = async (req, res) => {
 
 const updateSales= async (req, res) => {
     try{
-        const sales = await SalesModel.update(req.body, {where:{id: req.query.id}});
+        const sales = await AllModel.OrdersModel.update(req.body, {
+            where:{order_id: req.query.id},
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
+        });
         
         res.status(201).json(sales);
     } 
@@ -56,7 +85,7 @@ const updateSales= async (req, res) => {
 
 const deleteSales = async (req, res) => {
     try{
-        const delSales = await SalesModel.destroy({where:{id: req.query.id}});
+        const delSales = await AllModel.OrdersModel.destroy({where:{order_id: req.query.id}});
         
         res.status(201).json(delSales);
     } 
@@ -68,21 +97,21 @@ const deleteSales = async (req, res) => {
 const countSalesByCust = async (req, res) => {
     // const name = req.query.name;
     try{
-        const countSales = await SalesModel.findAll(
+        const countSales = await AllModel.OrdersModel.findAll(
             
             {
                 group: [
-                    'custID',
-                    'custName',
-                    'custType',
-                    'salesData'
+                    'customer_id',
                 ],
                 attributes: [
-                  'custID',
-                  'custName',
-                  'custType',
-                  'salesData',
-                  [Sequelize.fn(`COUNT`, `custID`), `count`]
+                  'customer_id',
+                  [Sequelize.fn(`COUNT`, `customer_id`), `count`]
+                ],
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
                 ]
             }
         );
@@ -97,31 +126,16 @@ const countSalesByCust = async (req, res) => {
     }
 }
 
-const getDebtData = async(req, res) => {
-    try{
-        const getData = await CustomerModel.findAll({
-            attributes: [
-                'debtLimit',
-                'totalDebt'
-            ],
-            where: {id: req.query.id}
-        })
-
-        if(getData){
-            res.json(getData);
-        } else {
-            res.status(404).json({error: `get customer debt data not found!`});
-        }
-    }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
-    }
-}
-
 const getSalesCust = async(req, res) => {
     try{
-        const getData = await SalesModel.findAll({
-            where: {id: req.query.id}
+        const getData = await AllModel.OrdersModel.findAll({
+            where: {customer_id: req.query.id},
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
         })
 
         if(getData){
@@ -137,8 +151,14 @@ const getSalesCust = async(req, res) => {
 
 const getSalesByStatus = async(req, res) => {
     try{
-        const getData = await SalesModel.findAll({
-            where: {status: req.query.status},
+        const getData = await AllModel.OrdersModel.findAll({
+            where: {is_complete: req.query.iscomplete},
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
         })
 
         if(getData){
@@ -154,8 +174,14 @@ const getSalesByStatus = async(req, res) => {
 
 const getSalesByID = async(req, res) => {
     try{
-        const getData = await SalesModel.findAll({
-            where: {id: req.query.id}
+        const getData = await AllModel.OrdersModel.findAll({
+            where: {order_id: req.query.id},
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
         })
 
         if(getData){

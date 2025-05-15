@@ -1,8 +1,8 @@
-import CategoryModel from "../models/CategoryModel.js";
+import AllModel from "../models/AllModel.js";
 
 const getCategories = async (req, res) => {
     try{
-        const allCategory = await CategoryModel.findAll();
+        const allCategory = await AllModel.CategoriesModel.findAll();
         if(allCategory){
             res.json(allCategory);
         } else {
@@ -18,13 +18,13 @@ const getCategories = async (req, res) => {
 const insertCategory = async (req, res) => {
     const { name, img, status } = req.body;
     try{
-        const newCategory = await CategoryModel.create({
-            name,
-            img,
-            status
-        });
+        const newCategory = await AllModel.CategoriesModel.create(req.body);
         
-        res.status(201).json(newCategory);
+        if(newCategory){
+            res.status(201).json(newCategory);
+        } else {
+            res.status(404).json({error: `failed to insert category`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -33,8 +33,13 @@ const insertCategory = async (req, res) => {
 
 const insertMultipleCategory = async (req, res) => {
     try{
-        const newCategories = await CategoryModel.bulkCreate(req.body);
-        res.status(201).json(newCategories);
+        const newCategories = await AllModel.CategoriesModel.bulkCreate(req.body);
+        
+        if(newCategories){
+            res.status(201).json(newCategories);
+        } else {
+            res.status(404).json({error: `failed to multiple insert category!`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -43,9 +48,15 @@ const insertMultipleCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
     try{
-        const category = await CategoryModel.update(req.body, {where:{id: req.query.id}});
+        const category = await AllModel.CategoriesModel.update(req.body, {
+            where:{category_id: req.query.id}
+        });
         
-        res.status(201).json(category);
+        if(category){
+            res.status(201).json(category);
+        } else {
+            res.status(404).json({error: `failed to update category`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -54,9 +65,15 @@ const updateCategory = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
     try{
-        await CategoryModel.destroy({where:{id: req.query.id}});
+        await AllModel.CategoriesModel.destroy({
+            where:{category_id: req.query.id}
+        });
         
-        res.status(201).json({message: "delete category success"});
+        if(category){
+            res.status(201).json({message: "delete category success"});
+        } else {
+            res.status(404).json({error: `failed to delete category`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});

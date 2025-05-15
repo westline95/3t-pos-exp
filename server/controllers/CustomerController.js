@@ -1,9 +1,9 @@
-import CustomerModel from "../models/CustomerModel.js";
+import AllModel from "../models/AllModel.js";
 import { Sequelize, where } from "sequelize";
 
 const getCustomers = async (req, res) => {
     try{
-        const allCust = await CustomerModel.findAll();
+        const allCust = await AllModel.CustomersModel.findAll();
         if(allCust){
             res.json(allCust);
         } else {
@@ -20,38 +20,28 @@ const insertCustomers = async (req, res) => {
         debtLimit, totalSales, totalDebt, gender, dob,
         country, province, city, postalCode, address } = req.body;
     try{
-        const newCust = await CustomerModel.create({
-            name,
-            img,
-            custType,   
-            custTypeId,   
-            email,
-            debtLimit,   
-            phonenumber,
-            totalSales,
-            totalDebt,
-            gender,
-            dob,
-            country,
-            province,
-            city,
-            postalCode,
-            address,
-        });
+        const newCust = await AllModel.CustomersModel.create(req.body);
         
-        res.status(201).json(newCust);
+        if(newCust){
+            res.status(201).json(newCust);
+        } else {
+            res.status(404).json({error: `failed to insert customer`});
+        }
     } 
     catch(err) {
-        console.log(err)
-
         res.status(500).json({err: "internal server error"});
     }
 }
 
 const insertMultipleCustomer = async (req, res) => {
     try{
-        const newCusts = await CustomerModel.bulkCreate(req.body);
-        res.status(201).json(newCusts);
+        const newCusts = await AllModel.CustomersModel.bulkCreate(req.body);
+        
+        if(newCusts){
+            res.status(201).json(newCusts);
+        } else {
+            res.status(404).json({error: `failed to multiple insert customer`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -60,9 +50,15 @@ const insertMultipleCustomer = async (req, res) => {
 
 const updateCust= async (req, res) => {
     try{
-        const cust = await CustomerModel.update(req.body, {where:{id: req.query.id}});
+        const cust = await AllModel.CustomersModel.update(req.body, {
+            where:{customer_id: req.query.id}
+        });
         
-        res.status(201).json(cust);
+        if(cust){
+            res.status(201).json(cust);
+        } else {
+            res.status(404).json({error: `failed to update customer`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -71,9 +67,15 @@ const updateCust= async (req, res) => {
 
 const deleteCust = async (req, res) => {
     try{
-        const delCust = await CustomerModel.destroy({where:{id: req.query.id}});
+        const delCust = await AllModel.CustomersModel.destroy({
+            where:{customer_id: req.query.id}
+        });
         
-        res.status(201).json(delCust);
+        if(delCust){
+            res.status(201).json(delCust);
+        } else {
+            res.status(404).json({error: `failed to delete customer`});
+        }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -83,7 +85,7 @@ const deleteCust = async (req, res) => {
 const countCustByName = async (req, res) => {
     // const name = req.query.name;
     try{
-        const countCust = await CustomerModel.findAll(
+        const countCust = await AllModel.CustomersModel.findAll(
             
             {
                 group: `name`,
@@ -93,10 +95,10 @@ const countCustByName = async (req, res) => {
                 ]
             }
         );
-        if(countProduct){
-            res.json(countProduct);
+        if(countCust){
+            res.json(countCust);
         } else {
-            res.status(404).json({error: `product with ? not found!`});
+            res.status(404).json({error: `cust with ? not found!`});
         }
     } 
     catch(err) {
@@ -106,12 +108,12 @@ const countCustByName = async (req, res) => {
 
 const getDebtData = async(req, res) => {
     try{
-        const getData = await CustomerModel.findAll({
+        const getData = await AllModel.CustomersModel.findAll({
             attributes: [
-                'debtLimit',
-                'totalDebt'
+                'debt_limit',
+                'total_debt'
             ],
-            where: {id: req.query.id}
+            where: {customer_id: req.query.id}
         })
 
         if(getData){
@@ -127,8 +129,8 @@ const getDebtData = async(req, res) => {
 
 const getCustomerByID = async(req, res) => {
     try{
-        const getData = await CustomerModel.findAll({
-            where: {id: req.query.id}
+        const getData = await AllModel.CustomersModel.findAll({
+            where: {customer_id: req.query.id}
         })
 
         if(getData){

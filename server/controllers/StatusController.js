@@ -1,8 +1,8 @@
-import StatusModel from "../models/StatusModel.js";
+import AllModel from "../models/AllModel.js";
 
 const getAllStatus = async (req, res) => {
     try{
-        const allStatus = await StatusModel.findAll();
+        const allStatus = await AllModel.StatusModel.findAll();
         if(allStatus){
             res.json(allStatus);
         } else {
@@ -11,21 +11,20 @@ const getAllStatus = async (req, res) => {
         // console.log(res.status)
     } 
     catch(err) {
-        console.log(err)
         res.status(500).json({err: "internal server error"});
     }
 }
 
 const getStatusByID = async(req, res) => {
     try{
-        const getData = await StatusModel.findAll({
+        const getData = await AllModel.StatusModel.findAll({
             where: {id: req.query.id}
         })
 
         if(getData){
             res.json(getData);
         } else {
-            res.status(404).json({error: `get sales data with ID not found!`});
+            res.status(404).json({error: `get status data with ID not found!`});
         }
     }
     catch(err) {
