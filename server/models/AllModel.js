@@ -200,6 +200,7 @@ const OrdersModel = sequelize.define("orders",
         },
         shipped_date:{
             type: Sequelize.DATE,
+            allowNull: true,
         },
         subtotal: {
             type: Sequelize.DECIMAL,
