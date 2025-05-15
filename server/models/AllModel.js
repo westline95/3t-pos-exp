@@ -21,6 +21,10 @@ const CustomersModel = sequelize.define("customers",
             type: Sequelize.STRING,
             allowNull: true,
         },
+        cust_type: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
         phonenumber: {
             type: Sequelize.STRING,
             allowNull: false,
@@ -192,10 +196,6 @@ const OrdersModel = sequelize.define("orders",
         },
         source: {
             type: Sequelize.STRING,
-            allowNull: false,
-        },
-        required_date:{
-            type: Sequelize.DATE,
             allowNull: false,
         },
         shipped_date:{
