@@ -129,7 +129,7 @@ const deleteOrderItem = async (req, res) => {
 const getOrderItemByID = async(req, res) => {
     try{
         const getData = await AllModel.OrderItemsModel.findAll({
-            where: {order_item_id: req.query.id},
+            where: {item_id: req.query.id},
             include: [
                 {
                     model: AllModel.OrdersModel,
@@ -151,6 +151,33 @@ const getOrderItemByID = async(req, res) => {
     catch(err) {
         res.status(500).json({err: "internal server error"});
     }
+};
+
+const orderItemsByOrder = async (req, res) => {
+    // const name = req.query.name;
+    try{
+        const orderItemGroup = await AllModel.OrderItemsModel.findAll({
+            where: {order_id: req.query.id},
+            include: [
+                {
+                    model: AllModel.OrdersModel,
+                    as: 'order'
+                },
+                {
+                    model: AllModel.ProductsCatalogModel,
+                    as: 'product'
+                },
+            ]
+        });
+        if(orderItemGroup){
+            res.json(orderItemGroup);
+        } else {
+            res.status(404).json({error: `order item group by order id is not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
 }
 
 export default {
@@ -159,5 +186,6 @@ export default {
     updateOrderItem,
     insertMultipleOrderItem, 
     deleteOrderItem,
-    getOrderItemByID
+    getOrderItemByID,
+    orderItemsByOrder
 };
