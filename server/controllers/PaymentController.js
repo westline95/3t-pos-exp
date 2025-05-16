@@ -28,11 +28,7 @@ const getAllPayment = async (req, res) => {
 
 const insertPayment = async (req, res) => {
     try{
-        const newPayment = await AllModel.PaymentsModel.create(
-            {...req.body}, 
-            { include: [AllModel.InvoicesModel, AllModel.CustomersModel]
-        }
-        );
+        const newPayment = await AllModel.PaymentsModel.create(req.body);
         
         if(newPayment){
             res.status(201).json(newPayment);
