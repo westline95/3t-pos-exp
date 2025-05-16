@@ -156,6 +156,10 @@ const ProductsCatalogModel = sequelize.define("products",
             type: Sequelize.DECIMAL,
             allowNull:false
         },
+        discount: {
+            type: Sequelize.DECIMAL,
+            allowNull:true
+        },
         status: {
             type: Sequelize.STRING,
             allowNull: false,
@@ -204,6 +208,10 @@ const OrdersModel = sequelize.define("orders",
         },
         shipped_date:{
             type: Sequelize.DATE,
+            allowNull: true,
+        },
+        order_discount: {
+            type: Sequelize.DECIMAL,
             allowNull: true,
         },
         subtotal: {
@@ -257,7 +265,6 @@ const OrderItemsModel = sequelize.define("order_items", {
     discount: {
         type:  Sequelize.DECIMAL,
         allowNull: true,
-        defaultValue: 0
     },
 
 }, { 
