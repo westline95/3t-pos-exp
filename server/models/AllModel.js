@@ -198,6 +198,10 @@ const OrdersModel = sequelize.define("orders",
             type: Sequelize.STRING,
             allowNull: false,
         },
+        payment_type: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
         shipped_date:{
             type: Sequelize.DATE,
             allowNull: true,
