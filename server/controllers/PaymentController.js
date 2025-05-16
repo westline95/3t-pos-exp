@@ -29,7 +29,7 @@ const getAllPayment = async (req, res) => {
 const insertPayment = async (req, res) => {
     try{
         const newPayment = await AllModel.PaymentsModel.create(
-            req.body, 
+            {...req.body}, 
             { include: [AllModel.InvoicesModel, AllModel.CustomersModel]
         }
         );
