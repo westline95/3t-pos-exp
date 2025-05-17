@@ -425,6 +425,10 @@ const ReceiptsModel = sequelize.define("receipts",
             type: Sequelize.INTEGER,
             allowNull: false,
         },
+        receipt_date: {
+            type: Sequelize.DATE,
+            allowNull: false,
+        },
         total_payment: {
             type: Sequelize.DECIMAL,
             allowNull: false,
