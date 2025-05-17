@@ -262,7 +262,7 @@ const OrderItemsModel = sequelize.define("order_items", {
         type:  Sequelize.DECIMAL,
         allowNull: false,
     },
-    discount: {
+    total_discount: {
         type:  Sequelize.DECIMAL,
         allowNull: true,
     },
