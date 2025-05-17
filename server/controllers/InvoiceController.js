@@ -178,6 +178,32 @@ const getInvByID = async(req, res) => {
     }
 }
 
+const getInvByStatusCustId = async(req, res) => {
+    try{
+        const getInv = await AllModel.InvoicesModel.findAll({
+            where: {
+                is_paid: req.query.ispaid,
+                customer_id: req.query.custid
+            },
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
+        })
+
+        if(getInv){
+            res.json(getInv);
+        } else {
+            res.status(404).json({error: `get invoice data with status and cust id is not found!`});
+        }
+    }
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 
 
 export default {
@@ -188,5 +214,6 @@ export default {
     deleteInv,
     countInvByCust,
     getInvByStatus,
-    getInvByID
+    getInvByID,
+    getInvByStatusCustId
 };
