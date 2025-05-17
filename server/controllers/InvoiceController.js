@@ -182,8 +182,8 @@ const getInvByStatusCustId = async(req, res) => {
     try{
         const getInv = await AllModel.InvoicesModel.findAll({
             where: {
+                customer_id: req.query.custid,
                 is_paid: req.query.ispaid,
-                customer_id: req.query.custid
             },
             include: [
                 {

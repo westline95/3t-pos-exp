@@ -5,7 +5,7 @@ const InvoiceRoute = express.Router();
 
 InvoiceRoute.get("/inv", InvoiceController.getAllInv);
 InvoiceRoute.get("/inv", InvoiceController.getInvByID);
-InvoiceRoute.get("/inv", InvoiceController.getInvByStatusCustId);
+InvoiceRoute.get("/inv/check", InvoiceController.getInvByStatusCustId);
 InvoiceRoute.get("/inv/group", InvoiceController.countInvByCust);
 InvoiceRoute.post("/inv/write", InvoiceController.insertInv);
 InvoiceRoute.post("/inv/writes", InvoiceController.insertMultipleInv);
