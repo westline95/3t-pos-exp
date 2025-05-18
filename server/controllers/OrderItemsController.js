@@ -126,6 +126,21 @@ const deleteOrderItem = async (req, res) => {
     }
 };
 
+const deleteOrderItemByOrderID = async (req, res) => {
+    try{
+        const delOrderItem = await AllModel.OrderItemsModel.destroy({where:{order_id: req.query.id}});
+        
+        if(delOrderItem){
+            res.status(201).json(delOrderItem);
+        } else {
+            res.status(404).json({error: `failed to delete order item by order id!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+};
+
 const getOrderItemByID = async(req, res) => {
     try{
         const getData = await AllModel.OrderItemsModel.findAll({
@@ -187,5 +202,6 @@ export default {
     insertMultipleOrderItem, 
     deleteOrderItem,
     getOrderItemByID,
-    orderItemsByOrder
+    orderItemsByOrder,
+    deleteOrderItemByOrderID
 };

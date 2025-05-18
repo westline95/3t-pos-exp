@@ -10,5 +10,6 @@ OrderItemsRoute.post("/order-item/write", OrderItemsController.insertOrderItems)
 OrderItemsRoute.post("/order-item/writes", OrderItemsController.insertMultipleOrderItem);
 OrderItemsRoute.put("/order-item", OrderItemsController.updateOrderItem);
 OrderItemsRoute.delete("/order-item", OrderItemsController.deleteOrderItem);
+OrderItemsRoute.delete("/order-item/order", OrderItemsController.deleteOrderItemByOrderID);
 
 export default OrderItemsRoute;
