@@ -189,6 +189,10 @@ const OrdersModel = sequelize.define("orders",
         customer_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
+        },       
+        invoice_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
         },
         order_type: {
             type: Sequelize.STRING,
