@@ -356,6 +356,10 @@ const InvoicesModel = sequelize.define("invoices",
             allowNull: false,
             defaultValue: false
         },
+        payment_type: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
         remaining_payment: {
             type: Sequelize.DECIMAL,
             allowNull: false,

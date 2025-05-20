@@ -202,9 +202,7 @@ const getInvByStatusCustId = async(req, res) => {
     catch(err) {
         res.status(500).json({err: "internal server error"});
     }
-}
-
-
+};
 
 export default {
     getAllInv,
@@ -215,5 +213,5 @@ export default {
     countInvByCust,
     getInvByStatus,
     getInvByID,
-    getInvByStatusCustId
+    getInvByStatusCustId,
 };
