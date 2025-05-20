@@ -184,6 +184,7 @@ const getInvByStatusCustId = async(req, res) => {
             where: {
                 customer_id: req.query.custid,
                 is_paid: req.query.ispaid,
+                payment_type: req.query.type
             },
             include: [
                 {
