@@ -107,18 +107,33 @@ const countSalesByCust = async (req, res) => {
                   'customer_id',
                   [Sequelize.fn(`COUNT`, `customer_id`), `count`]
                 ],
-                include: [
-                    {
-                        model: AllModel.CustomersModel,
-                        as: 'customer'
-                    },
-                ]
             }
         );
         if(countSales){
             res.json(countSales);
         } else {
             res.status(404).json({error: `sales data by custID is not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+const salesByCustPayType = async (req, res) => {
+    // const name = req.query.name;
+    try{
+        const countSales = await AllModel.OrdersModel.findAll({
+                 where: {
+                    payment_type: req.query.type,
+                    customer_id: req.query.custid,
+                },
+            }
+        );
+        if(countSales){
+            res.json(countSales);
+        } else {
+            res.status(404).json({error: `sales data by cust unpaid is not found!`});
         }
     } 
     catch(err) {
@@ -206,5 +221,6 @@ export default {
     countSalesByCust,
     getSalesCust,
     getSalesByStatus,
-    getSalesByID
+    getSalesByID,
+    salesByCustPayType
 };
