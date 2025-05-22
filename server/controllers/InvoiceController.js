@@ -49,14 +49,7 @@ const insertInv = async (req, res) => {
 
 const insertMultipleInv = async (req, res) => {
     try{
-        const newInvs = await AllModel.InvoicesModel.bulkCreate(req.body, {
-            include: [
-                {
-                    model: AllModel.CustomersModel,
-                    as: 'customer'
-                },
-            ]
-        });
+        const newInvs = await AllModel.InvoicesModel.bulkCreate(req.body);
         
         if(newInvs){
             res.status(201).json(newInvs);
