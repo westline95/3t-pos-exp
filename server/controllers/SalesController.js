@@ -1,3 +1,4 @@
+import sequelize from "../config/Database.js";
 import AllModel from "../models/AllModel.js";
 import { Sequelize } from "sequelize";
 
@@ -120,16 +121,30 @@ const countSalesByCust = async (req, res) => {
     }
 }
 
-const salesByCustPayType = async (req, res) => {
+const salesByCustUnpaid = async (req, res) => {
     // const name = req.query.name;
     try{
-        const countSales = await AllModel.OrdersModel.findAll({
-                 where: {
-                    payment_type: req.query.type,
-                    customer_id: req.query.custid,
-                },
-            }
-        );
+        // const countSales = await AllModel.OrdersModel.findAll({
+        //     where:{
+        //         customer_id: req.query.id,
+        //         payment_type: req.query.type,
+        //         invoice_id: null
+        //     },
+        //     // attributes: [
+        //     //     [Sequelize.fn(`SUM`, `subtotal`), `subtotal`],
+        //     //     [Sequelize.fn(`SUM`, `grandtotal`), `grandtotal`]
+        //     // ],
+        // });
+         const countSales = await AllModel.CustomersModel.findAll({
+            include: [
+                {
+                model: AllModel.OrdersModel,
+                as: 'orders',
+                where: { payment_type: 'unpaid' },
+                required: true
+                }
+            ]
+        });
         if(countSales){
             res.json(countSales);
         } else {
@@ -222,5 +237,5 @@ export default {
     getSalesCust,
     getSalesByStatus,
     getSalesByID,
-    salesByCustPayType
+    salesByCustUnpaid
 };

@@ -335,7 +335,7 @@ const InvoicesModel = sequelize.define("invoices",
             allowNull: false,
         },
         order_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
             allowNull: false,
         },
         invoice_date: {
