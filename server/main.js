@@ -14,6 +14,8 @@ import PaymentRoute from "./routes/PaymentRoute.js";
 // import InstallmentPayRoute from "./routes/InstallPayRoute.js";
 import ReceiptRoute from "./routes/ReceiptRoute.js";
 import OrderItemsRoute from "./routes/OrderItemsRoute.js";
+import InvSettRoute from "./routes/InvSettRoute.js";
+import MailerSettRoute from "./routes/MailerSettRoute.js";
 
 dotenv.config();
 
@@ -51,6 +53,10 @@ app.use(PaymentRoute);
 app.use(ReceiptRoute);
 // order items CRUD
 app.use(OrderItemsRoute);
+// inv sett CRUD
+app.use(InvSettRoute);
+// mailer sett CRUD
+app.use(MailerSettRoute);
 
 
 

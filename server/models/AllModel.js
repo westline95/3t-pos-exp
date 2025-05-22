@@ -456,6 +456,58 @@ const ReceiptsModel = sequelize.define("receipts",
     }
 );
 
+const invSettModel = sequelize.define("inv_setting", 
+    {
+        id:{
+            type:  Sequelize.INTEGER,
+            primaryKey:  true,
+            autoIncrement: true,
+            allowNull: false,
+        },
+        weekly_created: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+        }
+    }, 
+    {
+        tableName: 'inv_setting',
+    }
+);
+
+const mailerModel = sequelize.define("mailer_setting", 
+    {
+        id:{
+            type:  Sequelize.INTEGER,
+            primaryKey:  true,
+            autoIncrement: true,
+            allowNull: false,
+        },
+        mailer_host: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        mailer_port: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+        mailer_mail: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        mailer_pass: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        mailer_from_mail: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        }
+    }, 
+    {
+        tableName: 'mailer_setting',
+    }
+);
+
 
 // assocations
 // one to many (categories - products)
@@ -570,5 +622,7 @@ export default {
     OrdersModel,
     InvoicesModel, 
     PaymentsModel,
-    ReceiptsModel
+    ReceiptsModel,
+    invSettModel,
+    mailerModel
 };
