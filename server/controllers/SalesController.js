@@ -10,7 +10,12 @@ const getAllSales = async (req, res) => {
                     model: AllModel.CustomersModel,
                     as: 'customer'
                 },
-            ]
+                {
+                    model: AllModel.OrderItemsModel,
+                    as: 'order_items',
+                    required: true
+                    }
+            ],
         });
         if(allSales){
             res.json(allSales);
@@ -166,6 +171,11 @@ const getSalesCust = async(req, res) => {
                     model: AllModel.CustomersModel,
                     as: 'customer'
                 },
+                {
+                    model: AllModel.OrderItemsModel,
+                    as: 'order_items',
+                    required: true
+                }
             ]
         })
 
@@ -189,6 +199,11 @@ const getSalesByStatus = async(req, res) => {
                     model: AllModel.CustomersModel,
                     as: 'customer'
                 },
+                {
+                    model: AllModel.OrderItemsModel,
+                    as: 'order_items',
+                    required: true
+                }
             ]
         })
 
@@ -212,6 +227,11 @@ const getSalesByID = async(req, res) => {
                     model: AllModel.CustomersModel,
                     as: 'customer'
                 },
+                {
+                    model: AllModel.OrderItemsModel,
+                    as: 'order_items',
+                    required: true
+                }
             ]
         })
 
@@ -242,12 +262,12 @@ const salesWOrderItems = async (req, res) => {
         //     // ],
         // });
          const countSales = await AllModel.OrdersModel.findAll({
+            where: {order_id: req.query.id},
             include: [
                 {
-                model: AllModel.OrderItemsModel,
-                as: 'order_items',
-                // where: { payment_type: 'unpaid' },
-                required: true
+                    model: AllModel.OrderItemsModel,
+                    as: 'order_items',
+                    required: true
                 }
             ]
         });
