@@ -2,7 +2,7 @@ import AllModel from "../models/AllModel.js";
 
 const getInvSett = async (req, res) => {
     try{
-        const invSett = await AllModel.invSettModel.findAll({});
+        const invSett = await AllModel.invSettModel.findOne();
         if(invSett){
             res.json(invSett);
         } else {
@@ -30,4 +30,4 @@ const updateInvSett = async (req, res) => {
 export default {
     getInvSett,
     updateInvSett
-}
+};

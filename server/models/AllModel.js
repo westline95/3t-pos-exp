@@ -459,7 +459,7 @@ const ReceiptsModel = sequelize.define("receipts",
 const invSettModel = sequelize.define("inv_setting", 
     {
         id:{
-            type:  Sequelize.INTEGER,
+            type: Sequelize.INTEGER,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -474,7 +474,7 @@ const invSettModel = sequelize.define("inv_setting",
     }
 );
 
-const mailerModel = sequelize.define("mailer_setting", 
+const mailerSettModel = sequelize.define("mailer_setting", 
     {
         id:{
             type:  Sequelize.INTEGER,
@@ -624,5 +624,5 @@ export default {
     PaymentsModel,
     ReceiptsModel,
     invSettModel,
-    mailerModel
+    mailerSettModel
 };

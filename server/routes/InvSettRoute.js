@@ -4,6 +4,6 @@ import InvSettController from "../controllers/InvSettController.js";
 const InvSettRoute = express.Router();
 
 InvSettRoute.get("/inv-sett", InvSettController.getInvSett);
-InvSettRoute.put("/updt/invsett", InvSettController.updateInvSett);
+InvSettRoute.put("/updt/inv-sett", InvSettController.updateInvSett);
 
 export default InvSettRoute;

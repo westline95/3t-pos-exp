@@ -2,7 +2,7 @@ import AllModel from "../models/AllModel.js";
 
 const getMailerSett = async (req, res) => {
     try{
-        const mailerSett = await AllModel.mailerModel.findAll();
+        const mailerSett = await AllModel.mailerSettModel.findOne();
         if(mailerSett){
             res.json(mailerSett);
         } else {
@@ -16,7 +16,7 @@ const getMailerSett = async (req, res) => {
 
 const updateMailerSett = async (req, res) => {
     try{
-        const mailerSett = await AllModel.mailerModel.update(req.body, {
+        const mailerSett = await AllModel.mailerSettModel.update(req.body, {
             where:{id: req.query.id}
         });
         
