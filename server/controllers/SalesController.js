@@ -267,7 +267,14 @@ const salesWOrderItems = async (req, res) => {
                 {
                     model: AllModel.OrderItemsModel,
                     as: 'order_items',
-                    required: true
+                    required: true,
+                    include: [
+                        {
+                            model: AllModel.ProductsCatalogModel,
+                            as: 'product',
+                            required: true,
+                        }
+                    ]
                 }
             ]
         });
