@@ -88,6 +88,7 @@ const updateOrderItem= async (req, res) => {
         const orderItem = await AllModel.OrderItemsModel.update(req.body, 
             {
                 where:{id: req.query.id},
+                returning: true,
                 include: [
                     {
                         model: AllModel.OrdersModel,
@@ -97,7 +98,7 @@ const updateOrderItem= async (req, res) => {
                         model: AllModel.ProductsCatalogModel,
                         as: 'product'
                     },
-                ]
+                ],
             });
         
         if(orderItem){

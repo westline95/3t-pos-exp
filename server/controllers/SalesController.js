@@ -69,6 +69,7 @@ const updateSales= async (req, res) => {
     try{
         const sales = await AllModel.OrdersModel.update(req.body, {
             where:{order_id: req.query.id},
+            returning: true,
             include: [
                 {
                     model: AllModel.CustomersModel,

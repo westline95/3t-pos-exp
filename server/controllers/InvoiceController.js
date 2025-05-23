@@ -71,7 +71,8 @@ const updateInv= async (req, res) => {
                     model: AllModel.CustomersModel,
                     as: 'customer'
                 },
-            ]
+            ],
+            returning: true
         });
         
         if(inv){

@@ -55,6 +55,7 @@ const updatePayment= async (req, res) => {
     try{
         const payment = await AllModel.PaymentsModel.update(req.body, {
             where:{payment_id: req.query.id},
+            returning: true,
             include: [
                 {
                     model: AllModel.InvoicesModel,

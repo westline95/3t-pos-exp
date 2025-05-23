@@ -47,7 +47,10 @@ const insertCustType = async(req, res) => {
 
 const updateCustType = async(req, res) => {
     try {
-        const type = await AllModel.CustTypeModel.update(req.body, {where: {cust_type_id: req.query.id}});
+        const type = await AllModel.CustTypeModel.update(req.body, {
+            where: {cust_type_id: req.query.id},
+            returning: true,
+        });
         
         if(type){
             res.status(201).json(type);

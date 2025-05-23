@@ -49,7 +49,8 @@ const insertMultipleCategory = async (req, res) => {
 const updateCategory = async (req, res) => {
     try{
         const category = await AllModel.CategoriesModel.update(req.body, {
-            where:{category_id: req.query.id}
+            where:{category_id: req.query.id},
+            returning: true,
         });
         
         if(category){

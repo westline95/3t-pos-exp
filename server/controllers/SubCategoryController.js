@@ -62,7 +62,10 @@ const insertMultipleSubCategory = async (req, res) => {
 
 const updateSubCategory = async (req, res) => {
     try{
-        const subCategory = await AllModel.SubCategoryModel.update(req.body, {where:{id: req.query.id}});
+        const subCategory = await AllModel.SubCategoryModel.update(req.body, {
+            where:{id: req.query.id},
+            returning: true,
+        });
         
         if(subCategory){
             res.status(201).json(subCategory);

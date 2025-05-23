@@ -51,7 +51,8 @@ const insertMultipleCustomer = async (req, res) => {
 const updateCust= async (req, res) => {
     try{
         const cust = await AllModel.CustomersModel.update(req.body, {
-            where:{customer_id: req.query.id}
+            where:{customer_id: req.query.id},
+            returning: true,
         });
         
         if(cust){

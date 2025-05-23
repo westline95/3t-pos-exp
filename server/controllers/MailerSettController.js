@@ -17,7 +17,8 @@ const getMailerSett = async (req, res) => {
 const updateMailerSett = async (req, res) => {
     try{
         const mailerSett = await AllModel.mailerSettModel.update(req.body, {
-            where:{id: req.query.id}
+            where:{id: req.query.id},
+            returning: true,
         });
         
         res.status(201).json(mailerSett);

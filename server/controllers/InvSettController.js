@@ -17,7 +17,8 @@ const getInvSett = async (req, res) => {
 const updateInvSett = async (req, res) => {
     try{
         const invSett = await AllModel.invSettModel.update(req.body, {
-            where:{id: req.query.id}
+            where:{id: req.query.id},
+            returning: true,
         });
         
         res.status(201).json(invSett);

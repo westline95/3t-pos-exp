@@ -11,7 +11,6 @@ import SalesRoute from "./routes/SalesRoute.js";
 import InvoiceRoute from "./routes/InvoiceRoute.js";
 import StatusRoute from "./routes/StatusRoute.js";
 import PaymentRoute from "./routes/PaymentRoute.js";
-// import InstallmentPayRoute from "./routes/InstallPayRoute.js";
 import ReceiptRoute from "./routes/ReceiptRoute.js";
 import OrderItemsRoute from "./routes/OrderItemsRoute.js";
 import InvSettRoute from "./routes/InvSettRoute.js";

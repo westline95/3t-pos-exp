@@ -95,6 +95,7 @@ const updateProduct = async (req, res) => {
         const product = await AllModel.ProductsCatalogModel.update(req.body, 
             {
                 where:{product_id: req.query.id},
+                returning: true,
                 include: [
                     {
                         model: AllModel.CategoriesModel,

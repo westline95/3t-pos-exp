@@ -70,6 +70,7 @@ const updateReceipt= async (req, res) => {
     try{
         const receipt = await AllModel.ReceiptsModel.update(req.body, {
             where:{receipt_id: req.query.id},
+            returning: true,
             include: [
                 {
                     model: AllModel.InvoicesModel,
