@@ -227,6 +227,41 @@ const getSalesByID = async(req, res) => {
 }
 
 
+const salesWOrderItems = async (req, res) => {
+    // const name = req.query.name;
+    try{
+        // const countSales = await AllModel.OrdersModel.findAll({
+        //     where:{
+        //         customer_id: req.query.id,
+        //         payment_type: req.query.type,
+        //         invoice_id: null
+        //     },
+        //     // attributes: [
+        //     //     [Sequelize.fn(`SUM`, `subtotal`), `subtotal`],
+        //     //     [Sequelize.fn(`SUM`, `grandtotal`), `grandtotal`]
+        //     // ],
+        // });
+         const countSales = await AllModel.OrdersModel.findAll({
+            include: [
+                {
+                model: AllModel.OrderItemsModel,
+                as: 'order_items',
+                // where: { payment_type: 'unpaid' },
+                required: true
+                }
+            ]
+        });
+        if(countSales){
+            res.json(countSales);
+        } else {
+            res.status(404).json({error: `sales data with order items is not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 
 export default {
     getAllSales,
@@ -238,5 +273,6 @@ export default {
     getSalesCust,
     getSalesByStatus,
     getSalesByID,
-    salesByCustUnpaid
+    salesByCustUnpaid,
+    salesWOrderItems
 };

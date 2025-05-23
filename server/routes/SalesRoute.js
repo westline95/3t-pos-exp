@@ -13,5 +13,6 @@ SalesRoute.post("/sales/writes", SalesController.insertMultipleSales);
 SalesRoute.put("/sales", SalesController.updateSales);
 SalesRoute.delete("/sales", SalesController.deleteSales);
 SalesRoute.get("/sales/status", SalesController.getSalesByStatus);
+SalesRoute.get("/sales/order-items", SalesController.salesWOrderItems);
 
 export default SalesRoute;
