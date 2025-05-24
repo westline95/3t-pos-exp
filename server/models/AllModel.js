@@ -582,13 +582,14 @@ InvoicesModel.belongsTo(CustomersModel, {
 
 // one to many (invoices - orders)
 // orderid in invoices model diff data types because wanted to be array with full of order id
-// InvoicesModel.hasMany(OrdersModel, {
-//     sourceKey: 'order_id',
-//     foreignKey: 'order_id',
-// });
-// OrdersModel.belongsTo(InvoicesModel, {
-//     foreignKey: 'order_id',
-//     targetKey: 'order_id'
+// foreing key is in order table => invoice_id
+InvoicesModel.hasMany(OrdersModel, {
+    sourceKey: 'invoice_id',
+    foreignKey: 'invoice_id',
+});
+// OrdersModel.belongsToMany(InvoicesModel, {
+//     foreignKey: 'invoice_id',
+//     targetKey: 'invoice_id'
 // });
 
 // one to many (customers - invoices)

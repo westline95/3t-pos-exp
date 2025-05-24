@@ -8,6 +8,7 @@ SalesRoute.post("/sales", SalesController.getSalesByID);
 SalesRoute.get("/sales/member", SalesController.getSalesCust);
 SalesRoute.get("/sales/group", SalesController.countSalesByCust);
 SalesRoute.get("/sales/group/unpaid", SalesController.salesByCustUnpaid);
+SalesRoute.get("/sales/cust/unpaid", SalesController.salesByOneCustUnpaid);
 SalesRoute.post("/sales/write", SalesController.insertSales);
 SalesRoute.post("/sales/writes", SalesController.insertMultipleSales);
 SalesRoute.put("/sales", SalesController.updateSales);

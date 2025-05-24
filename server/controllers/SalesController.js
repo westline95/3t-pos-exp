@@ -162,6 +162,33 @@ const salesByCustUnpaid = async (req, res) => {
     }
 }
 
+const salesByOneCustUnpaid = async (req, res) => {
+    try{
+         const countSales = await AllModel.CustomersModel.findAll({
+            where: {customer_id: req.query.custid},
+            include: [
+                {
+                model: AllModel.OrdersModel,
+                as: 'orders',
+                where: { 
+                    payment_type: 'unpaid',
+                    invoice_id: null 
+                },
+                required: true
+                }
+            ]
+        });
+        if(countSales){
+            res.json(countSales);
+        } else {
+            res.status(404).json({error: `sales data by cust id where unpaid and doesn't have invoice is not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 const getSalesCust = async(req, res) => {
     try{
         const getData = await AllModel.OrdersModel.findAll({
@@ -301,5 +328,6 @@ export default {
     getSalesByStatus,
     getSalesByID,
     salesByCustUnpaid,
-    salesWOrderItems
+    salesWOrderItems,
+    salesByOneCustUnpaid
 };
