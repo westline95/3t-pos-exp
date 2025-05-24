@@ -181,11 +181,10 @@ const salesByOneCustUnpaid = async (req, res) => {
         if(countSales){
             res.json(countSales);
         } else {
-            
-            res.status(404).json({error: `sales data by cust id where unpaid and doesn't have invoice is not found!`});
-            if(res.status(404)){
-                return 404;
-            }
+            res.status(404).json({
+                error: 404, 
+                message: `sales data by cust id where unpaid and doesn't have invoice is not found!`
+            });
         }
     } 
     catch(err) {
