@@ -164,7 +164,7 @@ const salesByCustUnpaid = async (req, res) => {
 
 const salesByOneCustUnpaid = async (req, res) => {
     try{
-         const countSales = await AllModel.CustomersModel.findAll({
+         const countSales = await AllModel.CustomersModel.findOne({
             where: {customer_id: req.query.custid},
             include: [
                 {
