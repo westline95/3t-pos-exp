@@ -342,6 +342,10 @@ const InvoicesModel = sequelize.define("invoices",
             type: Sequelize.DATE,
             allowNull: false,
         },
+        invoice_due: {
+            type: Sequelize.DATE,
+            allowNull: false,
+        },
         subtotal: {
             type: Sequelize.DECIMAL,
             allowNull: false,
