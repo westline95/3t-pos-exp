@@ -414,6 +414,10 @@ const PaymentsModel = sequelize.define("payments",
         note: {
             type: Sequelize.STRING,
             allowNull: true,
+        },
+        payment_ref: {
+            type: Sequelize.STRING,
+            allowNull: true,
         }
     }, 
     {
