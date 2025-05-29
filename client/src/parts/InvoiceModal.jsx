@@ -19,6 +19,7 @@ export default function InvoiceModal({show, onHide}) {
             onClick(e);
           }}
         >
+            download
           {children}
         </a>
     ));

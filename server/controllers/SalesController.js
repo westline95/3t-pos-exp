@@ -278,19 +278,7 @@ const getSalesByID = async(req, res) => {
 
 
 const salesWOrderItems = async (req, res) => {
-    // const name = req.query.name;
     try{
-        // const countSales = await AllModel.OrdersModel.findAll({
-        //     where:{
-        //         customer_id: req.query.id,
-        //         payment_type: req.query.type,
-        //         invoice_id: null
-        //     },
-        //     // attributes: [
-        //     //     [Sequelize.fn(`SUM`, `subtotal`), `subtotal`],
-        //     //     [Sequelize.fn(`SUM`, `grandtotal`), `grandtotal`]
-        //     // ],
-        // });
          const countSales = await AllModel.OrdersModel.findAll({
             where: {order_id: req.query.id},
             include: [
@@ -319,6 +307,33 @@ const salesWOrderItems = async (req, res) => {
     }
 }
 
+const getSalesAndSum = async(req, res) => {
+    try{
+        const getData = await AllModel.OrdersModel.findAll({
+            where: {
+                customer_id: req.query.id,
+                payment_type: req.query.paytype
+            },
+            attributes: [
+                "customer_id",
+                [sequelize.fn("SUM", sequelize.col("subtotal")), "total_subtotal"],
+                [sequelize.fn("SUM", sequelize.col("grandtotal")), "total_grandtotal"],
+                [sequelize.fn("SUM", sequelize.col("order_discount")), "total_order_disc"],
+            ],
+            group: ['customer_id'],
+        })
+
+        if(getData){
+            res.json(getData);
+        } else {
+            res.status(404).json({error: `get sales data with sum not found!`});
+        }
+    }
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 
 export default {
     getAllSales,
@@ -332,5 +347,6 @@ export default {
     getSalesByID,
     salesByCustUnpaid,
     salesWOrderItems,
-    salesByOneCustUnpaid
+    salesByOneCustUnpaid,
+    getSalesAndSum
 };

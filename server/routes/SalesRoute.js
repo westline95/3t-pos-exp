@@ -15,5 +15,6 @@ SalesRoute.put("/sales", SalesController.updateSales);
 SalesRoute.delete("/sales", SalesController.deleteSales);
 SalesRoute.get("/sales/status", SalesController.getSalesByStatus);
 SalesRoute.get("/sales/order-items", SalesController.salesWOrderItems);
+SalesRoute.get("/sales/summary", SalesController.getSalesAndSum);
 
 export default SalesRoute;
