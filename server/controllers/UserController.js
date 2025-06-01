@@ -1,6 +1,21 @@
 import { json } from "sequelize";
 import AllModel from "../models/AllModel.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+const getUsers = async (req, res) => {
+    try{
+        const allUser = await AllModel.UsersModel.findAll();
+        if(allUser){
+            res.json(allUser);
+        } else {
+            res.status(404).json({error: `get all user not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
 
 const userLogin = async (req, res) => {
     const {user_mail, user_pass} = req.body;
@@ -23,10 +38,23 @@ const userLogin = async (req, res) => {
         const isValidPass = await bcrypt.compare(user_pass, user.user_pass);
 
         if(isValidPass){
-            return json({
+            const payload = {
                 id: user.id,
                 name: user.user_name,
                 role: user.role
+            };
+            const secret = process.env.JWT_SECRET;
+            const expiresIn = 60 * 60 * 1;
+            const token = jwt.sign(payload, secret, {expiresIn: expiresIn});
+            console.log(secret)
+
+            return res.json({
+                user: {
+                    id: user.id,
+                    name: user.user_name,
+                    role: user.role,
+                },
+                user_token: token
             })
         } else {
             return res.status(403).json({
@@ -100,6 +128,7 @@ const deleteUser = async (req, res) => {
 
 
 export default {
+    getUsers,
     userLogin,
     insertUser,
     updateUser,
