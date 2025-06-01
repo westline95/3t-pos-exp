@@ -1,6 +1,37 @@
 import Sequelize from "sequelize";
 import sequelize from "../config/Database.js";
 
+const UsersModel = sequelize.define("users", 
+    {
+        id:{
+            type:  Sequelize.INTEGER,
+            primaryKey:  true,
+            autoIncrement: true,
+            allowNull: false,
+        },
+        user_name: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },    
+        user_mail: {
+            type: Sequelize.STRING,
+            allowNull: false,
+            unique:true
+        },
+        user_pass: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+        role: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+    }, 
+    {
+        tableName: 'users',
+    }
+);
+
 const CustomersModel = sequelize.define("customers", 
     {
         customer_id:{
@@ -621,6 +652,7 @@ ReceiptsModel.belongsTo(InvoicesModel, {
 })
 
 export default {
+    UsersModel,
     CustomersModel,
     CategoriesModel,
     SubCategoryModel,

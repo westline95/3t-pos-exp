@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import cors from "cors";
+import UserRoute from "./routes/UserRoute.js";
 import ProductsRoute from "./routes/ProductsRoute.js";
 import CustomerTypeRoute from "./routes/CustTypeRoute.js";
 import CategoryRoute from "./routes/CategoryRoute.js";
@@ -28,6 +29,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.get('/', (req, res) => res.send("HelloWorld"));
 
+// user CRUD
+app.use(UserRoute);
 // product CRUD
 app.use(ProductsRoute);
 // category CRUD
