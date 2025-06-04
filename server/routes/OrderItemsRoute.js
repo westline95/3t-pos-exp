@@ -1,16 +1,15 @@
 import express from "express";
 import OrderItemsController from "../controllers/OrderItemsController.js";
-import accessValidation from "../api/auth.js";
 
 const OrderItemsRoute = express.Router();
 
-OrderItemsRoute.get("/order-items",accessValidation, OrderItemsController.getAllOrderItem);
-OrderItemsRoute.get("/order-item",accessValidation, OrderItemsController.getOrderItemByID);
-OrderItemsRoute.get("/order-item/order",accessValidation, OrderItemsController.orderItemsByOrder);
-OrderItemsRoute.post("/order-item/write",accessValidation, OrderItemsController.insertOrderItems);
-OrderItemsRoute.post("/order-item/writes",accessValidation, OrderItemsController.insertMultipleOrderItem);
-OrderItemsRoute.put("/order-item",accessValidation, OrderItemsController.updateOrderItem);
-OrderItemsRoute.delete("/order-item",accessValidation, OrderItemsController.deleteOrderItem);
-OrderItemsRoute.delete("/order-item/order",accessValidation, OrderItemsController.deleteOrderItemByOrderID);
+OrderItemsRoute.get("/order-items", OrderItemsController.getAllOrderItem);
+OrderItemsRoute.get("/order-item", OrderItemsController.getOrderItemByID);
+OrderItemsRoute.get("/order-item/order", OrderItemsController.orderItemsByOrder);
+OrderItemsRoute.post("/order-item/write", OrderItemsController.insertOrderItems);
+OrderItemsRoute.post("/order-item/writes", OrderItemsController.insertMultipleOrderItem);
+OrderItemsRoute.put("/order-item", OrderItemsController.updateOrderItem);
+OrderItemsRoute.delete("/order-item", OrderItemsController.deleteOrderItem);
+OrderItemsRoute.delete("/order-item/order", OrderItemsController.deleteOrderItemByOrderID);
 
 export default OrderItemsRoute;

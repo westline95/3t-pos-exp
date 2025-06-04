@@ -1,7 +1,4 @@
-import { json } from "sequelize";
 import AllModel from "../models/AllModel.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 const getUsers = async (req, res) => {
     try{
@@ -10,56 +7,6 @@ const getUsers = async (req, res) => {
             res.json(allUser);
         } else {
             res.status(404).json({error: `get all user not found!`});
-        }
-    } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
-    }
-}
-
-const userLogin = async (req, res) => {
-    const {user_mail, user_pass} = req.body;
-    try{
-        const user = await AllModel.UsersModel.findOne({
-            where:{user_mail: user_mail}
-        });
-
-
-        if(!user){
-            res.status(404).json({error: `user not found!`});
-        }
-
-        if(!user.user_pass){
-            return res.status.json({
-                message: 'Password not set'
-            })
-        }
-
-        const isValidPass = await bcrypt.compare(user_pass, user.user_pass);
-
-        if(isValidPass){
-            const payload = {
-                id: user.id,
-                name: user.user_name,
-                role: user.role
-            };
-            const secret = process.env.JWT_SECRET;
-            const expiresIn = 60 * 60 * 1;
-            const token = jwt.sign(payload, secret, {expiresIn: expiresIn});
-            console.log(secret)
-
-            return res.json({
-                user: {
-                    id: user.id,
-                    name: user.user_name,
-                    role: user.role,
-                },
-                user_token: token
-            })
-        } else {
-            return res.status(403).json({
-                message: 'Wrong password!'
-            })
         }
     } 
     catch(err) {
@@ -129,7 +76,6 @@ const deleteUser = async (req, res) => {
 
 export default {
     getUsers,
-    userLogin,
     insertUser,
     updateUser,
     deleteUser

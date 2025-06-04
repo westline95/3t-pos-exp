@@ -26,6 +26,11 @@ const UsersModel = sequelize.define("users",
             type: Sequelize.STRING,
             allowNull: true,
         },
+        refresh_token: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+
     }, 
     {
         tableName: 'users',

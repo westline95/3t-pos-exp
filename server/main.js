@@ -2,6 +2,13 @@ import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import cors from "cors";
+import corsOptions from "./config/corsOptions.js";
+import credentials from "./middleware/credentials.js";
+import accessValidation from "./api/auth.js";
+// import verifyJWT from "./middleware/verifyJWT.js";
+import AuthRouter from "./routes/AuthRoute.js";
+import RefreshRoute from "./routes/RefreshTokenRoute.js";
+import LogOutRouter from "./routes/LogOutRoute.js";
 import UserRoute from "./routes/UserRoute.js";
 import ProductsRoute from "./routes/ProductsRoute.js";
 import CustomerTypeRoute from "./routes/CustTypeRoute.js";
@@ -22,15 +29,32 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 4000;
 
-app.use(cors());
+// Handle options credentials check - before CORS!
+// and fetch cookies credentials requirement
+app.use(credentials);
+
+// Cross Origin Resource Sharing
+app.use(cors(corsOptions));
+// app.use(cors());
+
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.set('views', './views');
 // app.set('view engine', 'pug');
 app.use(express.json());
 app.get('/', (req, res) => res.send("HelloWorld"));
 
+// auth
+app.use(AuthRouter);
+// refresh
+app.use(RefreshRoute);
+// logout
+app.use(LogOutRouter);
+
+// app.use(verifyJWT);
+app.use(accessValidation);
 // user CRUD
 app.use(UserRoute);
+
 // product CRUD
 app.use(ProductsRoute);
 // category CRUD
@@ -49,8 +73,6 @@ app.use(StatusRoute);
 app.use(CustomerTypeRoute);
 // payment CRUD
 app.use(PaymentRoute);
-// installment payment CRUD
-// app.use(InstallmentPayRoute);
 // receipt CRUD
 app.use(ReceiptRoute);
 // order items CRUD

@@ -1,17 +1,16 @@
 import express from "express";
 import InvoiceController from "../controllers/InvoiceController.js";
-import accessValidation from "../api/auth.js";
 
 const InvoiceRoute = express.Router();
 
-InvoiceRoute.get("/inv",accessValidation, InvoiceController.getAllInv);
-InvoiceRoute.get("/inv",accessValidation, InvoiceController.getInvByID);
-InvoiceRoute.get("/inv/check",accessValidation, InvoiceController.getInvByStatusCustId);
-InvoiceRoute.get("/inv/group",accessValidation, InvoiceController.countInvByCust);
-InvoiceRoute.post("/inv/write",accessValidation, InvoiceController.insertInv);
-InvoiceRoute.post("/inv/writes",accessValidation, InvoiceController.insertMultipleInv);
-InvoiceRoute.put("/inv",accessValidation, InvoiceController.updateInv);
-InvoiceRoute.delete("/inv",accessValidation, InvoiceController.deleteInv);
-InvoiceRoute.get("/inv/status",accessValidation, InvoiceController.getInvByStatus);
+InvoiceRoute.get("/inv", InvoiceController.getAllInv);
+InvoiceRoute.get("/inv", InvoiceController.getInvByID);
+InvoiceRoute.get("/inv/check", InvoiceController.getInvByStatusCustId);
+InvoiceRoute.get("/inv/group", InvoiceController.countInvByCust);
+InvoiceRoute.post("/inv/write", InvoiceController.insertInv);
+InvoiceRoute.post("/inv/writes", InvoiceController.insertMultipleInv);
+InvoiceRoute.put("/inv", InvoiceController.updateInv);
+InvoiceRoute.delete("/inv", InvoiceController.deleteInv);
+InvoiceRoute.get("/inv/status", InvoiceController.getInvByStatus);
 
 export default InvoiceRoute;

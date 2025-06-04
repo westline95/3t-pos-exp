@@ -1,14 +1,12 @@
 import express from "express";
 import PaymentController from "../controllers/PaymentController.js";
-import accessValidation from "../api/auth.js";
 
 const PaymentRoute = express.Router();
 
-PaymentRoute.get("/payment/all",accessValidation, PaymentController.getAllPayment);
-PaymentRoute.post("/payment/write",accessValidation, PaymentController.insertPayment);
-PaymentRoute.put("/payment/update",accessValidation, PaymentController.updatePayment);
-PaymentRoute.delete("/payment/del",accessValidation, PaymentController.deletePayment);
-PaymentRoute.get("/payment/inv",accessValidation, PaymentController.getPaymentByInvId);
-PaymentRoute.get("/payment",accessValidation, PaymentController.getPaymentByID);
-
+PaymentRoute.get("/payment/all", PaymentController.getAllPayment);
+PaymentRoute.post("/payment/write", PaymentController.insertPayment);
+PaymentRoute.put("/payment/update", PaymentController.updatePayment);
+PaymentRoute.delete("/payment/del", PaymentController.deletePayment);
+PaymentRoute.get("/payment/inv", PaymentController.getPaymentByInvId);
+PaymentRoute.get("/payment", PaymentController.getPaymentByID)
 export default PaymentRoute;
