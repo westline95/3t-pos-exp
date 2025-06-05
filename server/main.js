@@ -4,8 +4,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import corsOptions from "./config/corsOptions.js";
 import credentials from "./middleware/credentials.js";
+import cookieParser from "cookie-parser";
 import accessValidation from "./api/auth.js";
-// import verifyJWT from "./middleware/verifyJWT.js";
+import verifyJWT from "./middleware/verifyJWT.js";
 import AuthRouter from "./routes/AuthRoute.js";
 import RefreshRoute from "./routes/RefreshTokenRoute.js";
 import LogOutRouter from "./routes/LogOutRoute.js";
@@ -41,6 +42,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // app.set('views', './views');
 // app.set('view engine', 'pug');
 app.use(express.json());
+
+app.use(cookieParser());
+
+// ROUTES
 app.get('/', (req, res) => res.send("HelloWorld"));
 
 // auth
@@ -50,8 +55,8 @@ app.use(RefreshRoute);
 // logout
 app.use(LogOutRouter);
 
-// app.use(verifyJWT);
-app.use(accessValidation);
+app.use(verifyJWT);
+// app.use(accessValidation);
 // user CRUD
 app.use(UserRoute);
 

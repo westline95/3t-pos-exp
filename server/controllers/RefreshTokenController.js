@@ -14,18 +14,20 @@ const handleRefreshToken = async (req, res) => {
                 where:{refresh_token: refreshToken}
     });
     if (!foundUser) return res.sendStatus(403); //Forbidden 
+
+    const roles = JSON.parse(foundUser.role);
     // evaluate jwt 
     jwt.verify(
         refreshToken,
-        process.env.REFRESH_TOKEN_SECRET,
+        process.env.JWT_REFRESH_SECRET,
         (err, decoded) => {
             if (err || foundUser.user_mail !== decoded.user_mail) return res.sendStatus(403);
-            const accessToken = jwt.sign(
+            const access_token = jwt.sign(
                 { "user_mail": decoded.user_mail },
-                process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '30s' }
+                process.env.JWT_SECRET,
+                { expiresIn: '15m' }
             );
-            res.json({ accessToken })
+            res.json({ roles, access_token })
         }
     );
 }
