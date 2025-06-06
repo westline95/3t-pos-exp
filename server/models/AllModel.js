@@ -57,10 +57,6 @@ const CustomersModel = sequelize.define("customers",
             type: Sequelize.STRING,
             allowNull: true,
         },
-        cust_type: {
-            type: Sequelize.STRING,
-            allowNull: true,
-        },
         phonenumber: {
             type: Sequelize.STRING,
             allowNull: false,
@@ -68,16 +64,15 @@ const CustomersModel = sequelize.define("customers",
         debt_limit: {
             type: Sequelize.DECIMAL,
             allowNull: false,
-            defaultValue: 0.00
         },
         total_sales: {
             type: Sequelize.DECIMAL,
-            allowNull: false,
+            allowNull: true,
             defaultValue: 0.00
         },
         total_debt: {
             type: Sequelize.DECIMAL,
-            allowNull: false,
+            allowNull: true,
             defaultValue: 0.00
         },
         gender: {
