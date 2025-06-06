@@ -26,7 +26,6 @@ export default function InputGroup(props) {
                         setVal(formatedNumber.format(formatCurrency));
                         // e.target.value = formatedNumber.format(formatCurrency);
 
-                        console.log(formatCurrency);
                     } else {
                         setVal(0);
                     }
