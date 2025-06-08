@@ -14,7 +14,7 @@ const getAllSales = async (req, res) => {
                     model: AllModel.OrderItemsModel,
                     as: 'order_items',
                     required: true
-                    }
+                }
             ],
         });
         if(allSales){
