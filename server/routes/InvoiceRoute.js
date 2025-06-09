@@ -4,7 +4,7 @@ import InvoiceController from "../controllers/InvoiceController.js";
 const InvoiceRoute = express.Router();
 
 InvoiceRoute.get("/inv", InvoiceController.getAllInv);
-InvoiceRoute.get("/inv", InvoiceController.getInvByID);
+InvoiceRoute.get("/inv/by", InvoiceController.getInvByID);
 InvoiceRoute.get("/inv/check", InvoiceController.getInvByStatusCustId);
 InvoiceRoute.get("/inv/group", InvoiceController.countInvByCust);
 InvoiceRoute.post("/inv/write", InvoiceController.insertInv);
