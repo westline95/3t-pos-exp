@@ -547,6 +547,53 @@ const mailerSettModel = sequelize.define("mailer_setting",
     }
 );
 
+const DeliveryModel = sequelize.define("delivery", 
+    {
+        delivery_id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement:true,
+            allowNull: false
+        },
+        order_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }, 
+        tracking_number: {
+            type: Sequelize.STRING,
+            allowNull: true
+        },
+        ship_date: {
+            type: Sequelize.DATE,
+            allowNull: false
+        },
+        courier_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true,
+        },
+        courier_name: {
+            type: Sequelize.STRING,
+            allowNull: true
+        },
+        delivery_status: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        delivery_address: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        shipped_date: {
+            type: Sequelize.DATE,
+            allowNull: true
+        },
+        
+    },
+    {
+        tableName: 'delivery'
+    }
+);
+
 
 // assocations
 // one to many (categories - products)
@@ -651,6 +698,18 @@ ReceiptsModel.belongsTo(InvoicesModel, {
     targetKey: 'invoice_id'
 })
 
+// one to one (orders - delivery)
+OrdersModel.hasOne(DeliveryModel, {
+    sourceKey: 'order_id',
+    foreignKey: 'order_id',
+})
+DeliveryModel.belongsTo(OrdersModel,{
+    foreignKey: 'order_id',
+    targetKey: 'order_id'
+})
+
+
+
 export default {
     UsersModel,
     CustomersModel,
@@ -665,5 +724,6 @@ export default {
     PaymentsModel,
     ReceiptsModel,
     invSettModel,
-    mailerSettModel
+    mailerSettModel,
+    DeliveryModel
 };
