@@ -14,6 +14,23 @@ const getUsers = async (req, res) => {
     }
 }
 
+const getUserCourierRole = async (req, res) => {
+    try{
+        const allUserCourier = await AllModel.UsersModel.findAll({ where: {role: "courier"}});
+        if(allUserCourier){
+            const user_name = allUserCourier.user_name;
+            const user_mail = allUserCourier.user_mail;
+            const role = allUserCourier.role;
+            return res.json({ user_name, user_mail, role });
+        } else {
+            res.status(404).json({error: `get all user:courier not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 const insertUser = async (req, res) => {
     const { user_name, user_mail, user_pass, role } = req.body;
     try{
@@ -78,5 +95,6 @@ export default {
     getUsers,
     insertUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserCourierRole
 };

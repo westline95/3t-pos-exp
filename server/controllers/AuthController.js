@@ -24,7 +24,7 @@ const handleLogin = async (req, res) => {
         const isValidPass = await bcrypt.compare(user_pass, user.user_pass);
 
         if(isValidPass){
-            const roles = JSON.parse(user.role);
+            const roles = user.role;
             // const roles = user.role;
             const payload = {
                 id: user.id,
