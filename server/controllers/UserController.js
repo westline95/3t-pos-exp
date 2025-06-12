@@ -16,12 +16,12 @@ const getUsers = async (req, res) => {
 
 const getUserCourierRole = async (req, res) => {
     try{
-        const allUserCourier = await AllModel.UsersModel.findAll({ where: {role: "courier"}});
+        const allUserCourier = await AllModel.UsersModel.findAll({ 
+            where: {role: "courier"},
+            attributes: ['user_name', 'user_mail', 'role']
+        });
         if(allUserCourier){
-            const user_name = allUserCourier.user_name;
-            const user_mail = allUserCourier.user_mail;
-            const role = allUserCourier.role;
-            return res.json({ user_name, user_mail, role });
+            res.json(allUserCourier);
         } else {
             res.status(404).json({error: `get all user:courier not found!`});
         }
