@@ -4,7 +4,7 @@ const validStatus = ['pending', 'loading', 'on the way', 'delivered', 'failed'];
 
 const createDelivery = async (req, res) => {
     try {
-        const { order_id, tracking_number, ship_date, delivery_status, delivery_address } = req.body;
+        const { order_id, tracking_number, ship_date, delivery_status, delivery_address, courier_id, courier_name } = req.body;
 
         // checking first, order_id && order_type == delivery
         const checkOrder = await AllModel.OrdersModel.findByPk(order_id);
@@ -24,6 +24,8 @@ const createDelivery = async (req, res) => {
 
         const delivery = await AllModel.DeliveryModel.create({
             order_id,
+            courier_id,
+            courier_name,
             ship_date,
             delivery_status: 'pending',
             delivery_address
