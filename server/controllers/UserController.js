@@ -18,7 +18,7 @@ const getUserCourierRole = async (req, res) => {
     try{
         const allUserCourier = await AllModel.UsersModel.findAll({ 
             where: {role: "courier"},
-            attributes: ['user_name', 'user_mail', 'role']
+            attributes: ['id','user_name', 'user_mail', 'role']
         });
         if(allUserCourier){
             res.json(allUserCourier);
