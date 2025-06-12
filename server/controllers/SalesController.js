@@ -70,6 +70,27 @@ const insertMultipleSales = async (req, res) => {
     }
 }
 
+const updateSalesAddInv= async (req, res) => {
+     try{
+        const { invoice_id } = req.body;
+        const { order_id } = req.params;
+
+        const sales = await AllModel.OrdersModel.findByPk(order_id);
+        
+        if(!sales){
+            return res.status(404).json({ message: 'Sales not found.' });
+        } 
+
+        sales.invoice_id = invoice_id;
+        await sales.save();
+
+         res.json({ message: 'Update sales => invoice id column.', sales });
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+};
+
 const updateSales= async (req, res) => {
     try{
         const { order_type, ship_date, delivery_address } = req.body;
@@ -380,5 +401,6 @@ export default {
     salesByCustUnpaid,
     salesWOrderItems,
     salesByOneCustUnpaid,
-    getSalesAndSum
+    getSalesAndSum,
+    updateSalesAddInv
 };

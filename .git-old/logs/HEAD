@@ -1,0 +1,167 @@
+0000000000000000000000000000000000000000 c8bdebd6c55f30e1f3fc9b45019febc5754f2edd westline95 <westline.1995@gmail.com> 1722428935 +0700	commit (initial): first
+c8bdebd6c55f30e1f3fc9b45019febc5754f2edd 2b48ac65516afdc19a837419df562ee7406ace62 westline95 <westline.1995@gmail.com> 1722429198 +0700	commit: tes
+2b48ac65516afdc19a837419df562ee7406ace62 7c1bab8a4096665a461388f6da3e0426fc8aeb24 westline95 <westline.1995@gmail.com> 1722430185 +0700	commit: tesss
+7c1bab8a4096665a461388f6da3e0426fc8aeb24 c38dda53e4adf7f00754fd6022eb12b426744626 westline95 <westline.1995@gmail.com> 1722430845 +0700	commit: tesssss
+c38dda53e4adf7f00754fd6022eb12b426744626 dc8e6ca2cd18016084e4a18be9b2853bbd8e9ecf westline95 <westline.1995@gmail.com> 1722434278 +0700	commit: tesssssss
+dc8e6ca2cd18016084e4a18be9b2853bbd8e9ecf b7944d034619b4fc70166300c287bb70446cb660 westline95 <westline.1995@gmail.com> 1722435399 +0700	commit: tes
+b7944d034619b4fc70166300c287bb70446cb660 1f09962dfd91a52a0e9602da28a436aa9eb6f4f4 westline95 <westline.1995@gmail.com> 1722435538 +0700	commit: tesss
+1f09962dfd91a52a0e9602da28a436aa9eb6f4f4 fdb096b8c731cfcd5b7b5837cc5553277a4e6956 westline95 <westline.1995@gmail.com> 1722435636 +0700	commit: tess
+fdb096b8c731cfcd5b7b5837cc5553277a4e6956 254021cbad2543c9a2b40a0678ca1bfaf0d46458 westline95 <westline.1995@gmail.com> 1722435765 +0700	commit: tessss
+254021cbad2543c9a2b40a0678ca1bfaf0d46458 e6e4c8580b7f58e4ad8ed5db601b3a8eeaf5d01c westline95 <westline.1995@gmail.com> 1722435799 +0700	commit: tes
+e6e4c8580b7f58e4ad8ed5db601b3a8eeaf5d01c 3e1eefaa4764614d367a0a673e401092b3471db0 westline95 <westline.1995@gmail.com> 1722435945 +0700	commit: tessf
+3e1eefaa4764614d367a0a673e401092b3471db0 2db8d0fc3cd79bdb2ef8d111e797ff4daec53d2c westline95 <westline.1995@gmail.com> 1722443488 +0700	commit: tes
+2db8d0fc3cd79bdb2ef8d111e797ff4daec53d2c d11891882e233ef27129f979ba7b8cfb97073e67 westline95 <westline.1995@gmail.com> 1722526002 +0700	commit: sidebar
+d11891882e233ef27129f979ba7b8cfb97073e67 a2d679c4bac87f6f52e70240121235e603c651e6 westline95 <westline.1995@gmail.com> 1723038821 +0700	commit: update
+a2d679c4bac87f6f52e70240121235e603c651e6 e19abd357340603ff1e5e668018cf825121656a7 westline95 <westline.1995@gmail.com> 1723039607 +0700	commit: updates
+e19abd357340603ff1e5e668018cf825121656a7 e044ecec763880c8fc30fef20683f5ff9dee081c westline95 <westline.1995@gmail.com> 1723044458 +0700	commit: router update
+e044ecec763880c8fc30fef20683f5ff9dee081c 640e058705fd5a7fda346c22e5711888b24fd545 westline95 <westline.1995@gmail.com> 1723044812 +0700	commit: model update
+640e058705fd5a7fda346c22e5711888b24fd545 8deb9931a02e93416e475161d97c0ba703f89cde westline95 <westline.1995@gmail.com> 1723045643 +0700	commit: model update
+8deb9931a02e93416e475161d97c0ba703f89cde 29fae15b459235757a3311955b9e7dc5d1b80df4 westline95 <westline.1995@gmail.com> 1723123054 +0700	commit: order variant and add to cart modal
+29fae15b459235757a3311955b9e7dc5d1b80df4 215daa624e0a637b5a3608496fef6f2580a69e5d westline95 <westline.1995@gmail.com> 1723124211 +0700	commit: update src
+215daa624e0a637b5a3608496fef6f2580a69e5d 5333b371a810c8a51f8b426571e97d3f96d12d2a westline95 <westline.1995@gmail.com> 1724343919 +0700	commit: store redux
+5333b371a810c8a51f8b426571e97d3f96d12d2a 8b9c483020fc09b445630d55b51c13f6e540feed westline95 <westline.1995@gmail.com> 1724344309 +0700	commit: store redux inc dec
+8b9c483020fc09b445630d55b51c13f6e540feed b130655124dcf0bd15c51285e61f7e87cdceb619 westline95 <westline.1995@gmail.com> 1724345027 +0700	commit: store redux inc dec onchange
+b130655124dcf0bd15c51285e61f7e87cdceb619 1f0d9858e5b6e8b811cea9db25252be69e177ba4 westline95 <westline.1995@gmail.com> 1724345320 +0700	commit: store redux inc dec
+1f0d9858e5b6e8b811cea9db25252be69e177ba4 00727815bc7bc6e4e32f191d84e3bfc498fae25a westline95 <westline.1995@gmail.com> 1724867261 +0700	commit: voucher percent
+00727815bc7bc6e4e32f191d84e3bfc498fae25a bceb408ef0ddef67059179b2dc57f99e8810ff99 westline95 <westline.1995@gmail.com> 1724944428 +0700	commit: db customer
+bceb408ef0ddef67059179b2dc57f99e8810ff99 e8495ea987ce2f25f3605e30b30157845966c179 westline95 <westline.1995@gmail.com> 1725033565 +0700	commit: search autocomplete suggestion
+e8495ea987ce2f25f3605e30b30157845966c179 985a02407806a2d04dcf5a539a8d0838a4fa9acc westline95 <westline.1995@gmail.com> 1725033933 +0700	commit: search autocomplete
+985a02407806a2d04dcf5a539a8d0838a4fa9acc 90e6faaa476eb143863c599e3a1b116e0c753f3c westline95 <westline.1995@gmail.com> 1725344806 +0700	commit: validatiion form
+90e6faaa476eb143863c599e3a1b116e0c753f3c 90e6faaa476eb143863c599e3a1b116e0c753f3c westline95 <westline.1995@gmail.com> 1725949814 +0700	reset: moving to HEAD
+90e6faaa476eb143863c599e3a1b116e0c753f3c 314ed5a5d865aab53493c7d7daeeaf6c83c8092b westline95 <westline.1995@gmail.com> 1725949825 +0700	merge origin/master: Fast-forward
+314ed5a5d865aab53493c7d7daeeaf6c83c8092b 7a0c1ed35e1079e6b04b2115dd43b07eb9b541bc westline95 <westline.1995@gmail.com> 1726148554 +0700	commit: form validation
+7a0c1ed35e1079e6b04b2115dd43b07eb9b541bc f3c0994a3cab0fa3cbb982fa3fe8f95fe7ae1c1c westline95 <westline.1995@gmail.com> 1726150365 +0700	commit: form validation, submit order fix select style
+f3c0994a3cab0fa3cbb982fa3fe8f95fe7ae1c1c a1a64422c5ae25834cb554ba0be61083b45e6c85 westline95 <westline.1995@gmail.com> 1726241018 +0700	commit: fixing 2 bugs and progressing ordermodal
+a1a64422c5ae25834cb554ba0be61083b45e6c85 9e6ccd006e0a88d3b01d4559d467424cfe8a1e06 westline95 <westline.1995@gmail.com> 1727153563 +0700	commit: adding new route
+9e6ccd006e0a88d3b01d4559d467424cfe8a1e06 b29f02e66af34bdc2b3ae6c9c5738c57a3fde400 westline95 <westline.1995@gmail.com> 1728032951 +0700	commit: order payment modal success
+b29f02e66af34bdc2b3ae6c9c5738c57a3fde400 a0488ed1e531970f5d1a8849076bb0a14276ebf1 westline95 <westline.1995@gmail.com> 1728063398 +0700	commit: add new cust route
+a0488ed1e531970f5d1a8849076bb0a14276ebf1 bacf8c6a534182515486019fe73cc4bc29313b32 westline95 <westline.1995@gmail.com> 1728564240 +0700	commit: adding sales first route
+bacf8c6a534182515486019fe73cc4bc29313b32 2f61bc207a554671d4cfe6c2f1e23693637b26cf westline95 <westline.1995@gmail.com> 1728565549 +0700	commit: fix sales route
+2f61bc207a554671d4cfe6c2f1e23693637b26cf 41b6fd9c735bf0439a7e1a98d4884e2c26648c82 westline95 <westline.1995@gmail.com> 1728566404 +0700	commit: fix sales routeeee
+41b6fd9c735bf0439a7e1a98d4884e2c26648c82 e82f86eead36dae4bb6453a89501d3dc3e1d7caf westline95 <westline.1995@gmail.com> 1728566871 +0700	commit: fix sales routeeees
+e82f86eead36dae4bb6453a89501d3dc3e1d7caf 006519c9e2ab00e1fe50306b8742d4e037c1f6c5 westline95 <westline.1995@gmail.com> 1728567420 +0700	commit: fix sales route
+006519c9e2ab00e1fe50306b8742d4e037c1f6c5 02e1599e0f68a29e78c3fa21c0f212fd02c0505f westline95 <westline.1995@gmail.com> 1728567960 +0700	commit: pusing
+02e1599e0f68a29e78c3fa21c0f212fd02c0505f e356a7d0a08ad5d71f9c8038c8b5761eef7036ab westline95 <westline.1995@gmail.com> 1728736896 +0700	commit: fixing sales route
+e356a7d0a08ad5d71f9c8038c8b5761eef7036ab 151da5a8cd4aa9b42e4d3e4ebf2a7ceb64dfd8a9 westline95 <westline.1995@gmail.com> 1728782944 +0700	commit: updating sales model
+151da5a8cd4aa9b42e4d3e4ebf2a7ceb64dfd8a9 147e278799b2ace9fec39a2c4c285843c773960d westline95 <westline.1995@gmail.com> 1728804745 +0700	commit: updating sales model: grandTotal
+147e278799b2ace9fec39a2c4c285843c773960d d1b9d77c21c606ea05adaea7da1d284b668720e2 westline95 <westline.1995@gmail.com> 1728908735 +0700	commit: add invoice route
+d1b9d77c21c606ea05adaea7da1d284b668720e2 0bc0f5bd37d9c3725f1be237cc4352f28302a6dd westline95 <westline.1995@gmail.com> 1728909247 +0700	commit: add invoice routes
+0bc0f5bd37d9c3725f1be237cc4352f28302a6dd c9aa3eee25b1cc6ae211c7f914f4e91c74149459 westline95 <westline.1995@gmail.com> 1729148711 +0700	commit: fixing sales and inv controller
+c9aa3eee25b1cc6ae211c7f914f4e91c74149459 b85d18762068b5924541d6f3936f293d9101db5e westline95 <westline.1995@gmail.com> 1731235155 +0700	commit: adding product route
+b85d18762068b5924541d6f3936f293d9101db5e 2478e4fba5e810b7fcf24de4afc469496d36722c westline95 <westline.1995@gmail.com> 1731235437 +0700	commit: adding product routeeee
+2478e4fba5e810b7fcf24de4afc469496d36722c dcb8198542589b2830a4ef6dafba8ac915b1cd06 westline95 <westline.1995@gmail.com> 1731235656 +0700	commit: fixing product route
+dcb8198542589b2830a4ef6dafba8ac915b1cd06 6aee298a5328106bd10676e65d091872288969ba westline95 <westline.1995@gmail.com> 1731244280 +0700	commit: fixing product routeeee
+6aee298a5328106bd10676e65d091872288969ba ce499cfb974e39c26b7c8483976074fdc4d40816 westline95 <westline.1995@gmail.com> 1731244737 +0700	commit: adding model in product
+ce499cfb974e39c26b7c8483976074fdc4d40816 3c2cebe062ec86730065c793e019bb3580b4bb5a westline95 <westline.1995@gmail.com> 1731340171 +0700	commit: adding sales route
+3c2cebe062ec86730065c793e019bb3580b4bb5a baefc269809d63b807c95aeaa94279c6fbf86f0d westline95 <westline.1995@gmail.com> 1731340488 +0700	commit: adding sales routeeee
+baefc269809d63b807c95aeaa94279c6fbf86f0d 3a3765c1d92082137b1cca461ca3497587f6b269 westline95 <westline.1995@gmail.com> 1732890549 +0700	commit: status route
+3a3765c1d92082137b1cca461ca3497587f6b269 c473d4744447c2113ec267ae99b794187ed535c7 westline95 <westline.1995@gmail.com> 1732891597 +0700	commit: status routeeee
+c473d4744447c2113ec267ae99b794187ed535c7 0aa9e30df35b7a0c4d7f7a289efa24fc83627301 westline95 <westline.1995@gmail.com> 1732900208 +0700	commit: status routeeeexss
+0aa9e30df35b7a0c4d7f7a289efa24fc83627301 549c9ae374e83d71a478840ccce932f4fd38eb0c westline95 <westline.1995@gmail.com> 1733410111 +0700	commit: get product id by body req
+549c9ae374e83d71a478840ccce932f4fd38eb0c 62c8e22d33d58006e27692ae077e2299b2e0bb4e westline95 <westline.1995@gmail.com> 1733410662 +0700	commit: change prod route
+62c8e22d33d58006e27692ae077e2299b2e0bb4e d8108dc294167d83913ca090cd1e1091b559bb43 westline95 <westline.1995@gmail.com> 1734161714 +0700	commit: adding new column in sales model
+d8108dc294167d83913ca090cd1e1091b559bb43 4a91c1bc71067dd217e16d6b5ecd82ba2e10c574 westline95 <westline.1995@gmail.com> 1734619644 +0700	commit: adding disc model in sales
+4a91c1bc71067dd217e16d6b5ecd82ba2e10c574 b4da69d213b7c1fd50995090a76ff56202e53396 westline95 <westline.1995@gmail.com> 1734622287 +0700	commit: adding payment date model in sales
+b4da69d213b7c1fd50995090a76ff56202e53396 cf58659620075666fce48f454c37d3dbc1269c85 westline95 <westline.1995@gmail.com> 1745395221 +0700	commit: adding debtlimit
+cf58659620075666fce48f454c37d3dbc1269c85 3b369aeca64bfce88657453ff5e6a100c1d26904 westline95 <westline.1995@gmail.com> 1745395852 +0700	commit: adding req body cust
+3b369aeca64bfce88657453ff5e6a100c1d26904 b859154fbbfb4782efe50e74332b4db6c36501e5 westline95 <westline.1995@gmail.com> 1745421528 +0700	commit: hehe
+b859154fbbfb4782efe50e74332b4db6c36501e5 3572c6045d45dfe694284338906794942af0445c westline95 <westline.1995@gmail.com> 1745421860 +0700	commit: totalsales and debt
+3572c6045d45dfe694284338906794942af0445c c66dff7e08c9eb0cf7429ab8c54db5e8b27f978a westline95 <westline.1995@gmail.com> 1745466321 +0700	commit: adding custtype route
+c66dff7e08c9eb0cf7429ab8c54db5e8b27f978a b687928293ae1fc94f5876005cd04bb3a1322222 westline95 <westline.1995@gmail.com> 1745467503 +0700	commit: adding custtype routess
+b687928293ae1fc94f5876005cd04bb3a1322222 93e0c8c6f456d0f005cf0ad5f6e20ac91c7bd580 westline95 <westline.1995@gmail.com> 1745471272 +0700	commit: apanih
+93e0c8c6f456d0f005cf0ad5f6e20ac91c7bd580 dd4bf7b68ddfac3276befb0ecf6b093f68605e8a westline95 <westline.1995@gmail.com> 1745481312 +0700	commit: fix custtype route
+dd4bf7b68ddfac3276befb0ecf6b093f68605e8a 8f21a14a27c46c9eb60a70fceddb670bc8491742 westline95 <westline.1995@gmail.com> 1745727159 +0700	commit: adding custtypeid
+8f21a14a27c46c9eb60a70fceddb670bc8491742 4c2dafff1136703ed81cffcdbf75f31cb26dbc0f westline95 <westline.1995@gmail.com> 1745916989 +0700	commit: allow null for dob
+4c2dafff1136703ed81cffcdbf75f31cb26dbc0f c79e5e1404a5508b8840eb9a058ec29dcfc6a371 westline95 <westline.1995@gmail.com> 1745936275 +0700	commit: status route
+c79e5e1404a5508b8840eb9a058ec29dcfc6a371 b30693cf3b582d8640fdb1aa73de452344dec70d westline95 <westline.1995@gmail.com> 1745936460 +0700	commit: status routex
+b30693cf3b582d8640fdb1aa73de452344dec70d 8ae7e0e625736db72870faccd8daafcf0fcd8163 westline95 <westline.1995@gmail.com> 1745937605 +0700	commit: status routeeee
+8ae7e0e625736db72870faccd8daafcf0fcd8163 449c0b5cabcfcce7d89e159096471579a080d3c4 westline95 <westline.1995@gmail.com> 1745985286 +0700	commit: editing status webhooks
+449c0b5cabcfcce7d89e159096471579a080d3c4 10c7cb890884b90af49ca03edc4b001b5e91141c westline95 <westline.1995@gmail.com> 1745985693 +0700	commit: editing status webhook
+10c7cb890884b90af49ca03edc4b001b5e91141c 51f88a4de56644bb8ac3b41dd7ff9082ceed9e5a westline95 <westline.1995@gmail.com> 1745985761 +0700	commit: editing status webhook fix
+51f88a4de56644bb8ac3b41dd7ff9082ceed9e5a c81349a65a903fa1b37b7d7712c2c3c7544d2686 westline95 <westline.1995@gmail.com> 1745986840 +0700	commit: editing status webhook fixxxx
+c81349a65a903fa1b37b7d7712c2c3c7544d2686 e77482e97a82e2a086688a48a85bf0ff2fbb61aa westline95 <westline.1995@gmail.com> 1745988590 +0700	commit: adding model status
+e77482e97a82e2a086688a48a85bf0ff2fbb61aa 69d1b63d0ef8bc57b5da20564717e15268554ab8 westline95 <westline.1995@gmail.com> 1746261769 +0700	commit: remove salesDue in model
+69d1b63d0ef8bc57b5da20564717e15268554ab8 2590df5b6d13cf7dd97687c1d7d5ca2af26c1f0e westline95 <westline.1995@gmail.com> 1746426810 +0700	commit: updating sales model
+2590df5b6d13cf7dd97687c1d7d5ca2af26c1f0e 4ed8431c3bc11fc9cfb31e1cde3970d645c12aa1 westline95 <westline.1995@gmail.com> 1746428561 +0700	commit: totalqty
+4ed8431c3bc11fc9cfb31e1cde3970d645c12aa1 94a797b1fc67e8384ac64b441f2e00341aa6af61 westline95 <westline.1995@gmail.com> 1746434895 +0700	commit: totalQty
+94a797b1fc67e8384ac64b441f2e00341aa6af61 45006a2a99f4981144cdca74608555f6c915bb05 westline95 <westline.1995@gmail.com> 1746435759 +0700	commit: fix sales controllerrrr
+45006a2a99f4981144cdca74608555f6c915bb05 b6c4ee0056b6ff8973f5c8bd5e567444622887f8 westline95 <westline.1995@gmail.com> 1746436210 +0700	commit: fix sales controller
+b6c4ee0056b6ff8973f5c8bd5e567444622887f8 42413cdea98d15c9264677a9f156950fe6828fcc westline95 <westline.1995@gmail.com> 1746686615 +0700	commit: adding paid column in sales
+42413cdea98d15c9264677a9f156950fe6828fcc afabdb402442ce558c25f73bd03829ef97247f04 westline95 <westline.1995@gmail.com> 1746808332 +0700	commit: adding orderType in sales model
+afabdb402442ce558c25f73bd03829ef97247f04 c68ef70b1304ae6e0db7b5d16625821eb14334af westline95 <westline.1995@gmail.com> 1746861890 +0700	commit: adding orderTypeId in sales model
+c68ef70b1304ae6e0db7b5d16625821eb14334af c1a0e2a80f23436543daf160a0475ef0cc3469e2 westline95 <westline.1995@gmail.com> 1746870478 +0700	commit: updating invoice
+c1a0e2a80f23436543daf160a0475ef0cc3469e2 82652dbca99a2cca023bfaa8c8c155f6792ffca4 westline95 <westline.1995@gmail.com> 1746873506 +0700	commit: updating sales model
+82652dbca99a2cca023bfaa8c8c155f6792ffca4 3f48e3716826951dd64439345ca4ef3e8279b79c westline95 <westline.1995@gmail.com> 1746953671 +0700	commit: adding 2 model,route,controller
+3f48e3716826951dd64439345ca4ef3e8279b79c b10df7b3fe2a83586ad6d637371e83854692c610 westline95 <westline.1995@gmail.com> 1746956880 +0700	commit: adding 2 model,route,controllers
+b10df7b3fe2a83586ad6d637371e83854692c610 cd901da303907f87d4d3349e6aa0651554b70c3d westline95 <westline.1995@gmail.com> 1746957293 +0700	commit: fixing payment route
+cd901da303907f87d4d3349e6aa0651554b70c3d f9036a71871ed4e60e30380ea608b5fbd41bf35d westline95 <westline.1995@gmail.com> 1746960296 +0700	commit: add change columh
+f9036a71871ed4e60e30380ea608b5fbd41bf35d 37126f68691d448c6ab6abbbc75dfc6a8566f5aa westline95 <westline.1995@gmail.com> 1746974318 +0700	commit: removing statusid
+37126f68691d448c6ab6abbbc75dfc6a8566f5aa 28447e9f6990936ec1c20f9134a35f3a36f4b5c6 westline95 <westline.1995@gmail.com> 1746975152 +0700	commit: undo statusid
+28447e9f6990936ec1c20f9134a35f3a36f4b5c6 9b445e1c5a1e78a6bfcc344907b627493828c0db westline95 <westline.1995@gmail.com> 1746975711 +0700	commit: remove statusid in inv model
+9b445e1c5a1e78a6bfcc344907b627493828c0db 002f74c8b3b6172cda7228e17270fb588b258a61 westline95 <westline.1995@gmail.com> 1747031786 +0700	commit: updating model
+002f74c8b3b6172cda7228e17270fb588b258a61 a389c697e693ff200cbec207b9170682639979a5 westline95 <westline.1995@gmail.com> 1747036225 +0700	commit: adding first associatiom
+a389c697e693ff200cbec207b9170682639979a5 e5726808e0fccd712a15fbb385fc48332145e0e1 westline95 <westline.1995@gmail.com> 1747036561 +0700	commit: adding first association
+e5726808e0fccd712a15fbb385fc48332145e0e1 1b69473c3e986dee200240f1a94781e689042405 westline95 <westline.1995@gmail.com> 1747036681 +0700	commit: adding first associationn
+1b69473c3e986dee200240f1a94781e689042405 5a82f93dea810b2eef5c5545405bdc0c3aafebb1 westline95 <westline.1995@gmail.com> 1747037090 +0700	commit: adding first associationnn
+5a82f93dea810b2eef5c5545405bdc0c3aafebb1 07932d34f56edce46c012592eec12b729975f8a5 westline95 <westline.1995@gmail.com> 1747037999 +0700	commit: adding first association
+07932d34f56edce46c012592eec12b729975f8a5 88cbf3f69db65c1abbd949d06043f57fe15c2234 westline95 <westline.1995@gmail.com> 1747038383 +0700	commit: adding first association
+88cbf3f69db65c1abbd949d06043f57fe15c2234 651a8809bcbe9a9923accfd5eef4acee4cfdae88 westline95 <westline.1995@gmail.com> 1747038994 +0700	commit: try association one
+651a8809bcbe9a9923accfd5eef4acee4cfdae88 ffc7913d529cb15dc5e929f24f8b8386ce089874 westline95 <westline.1995@gmail.com> 1747039519 +0700	commit: try association 2
+ffc7913d529cb15dc5e929f24f8b8386ce089874 2907cdea45c1c57471d83f13c82a6ca4c0fd79ed westline95 <westline.1995@gmail.com> 1747039975 +0700	commit: try association 3
+2907cdea45c1c57471d83f13c82a6ca4c0fd79ed 7bcb7282ec1926262b6db7a44e16ae33e126e3ef westline95 <westline.1995@gmail.com> 1747040100 +0700	commit: try association 4
+7bcb7282ec1926262b6db7a44e16ae33e126e3ef d33ec0faaec1b1ff067f4229523fc4ab835d45ef westline95 <westline.1995@gmail.com> 1747040581 +0700	commit: try association 5
+d33ec0faaec1b1ff067f4229523fc4ab835d45ef b4afae1b5330693552f70b4e199e14ad2b9fdfa0 westline95 <westline.1995@gmail.com> 1747040940 +0700	commit: try association 6
+b4afae1b5330693552f70b4e199e14ad2b9fdfa0 f1298971ef714d315e6255d7e75ed7010b632a35 westline95 <westline.1995@gmail.com> 1747041243 +0700	commit: try association 7
+f1298971ef714d315e6255d7e75ed7010b632a35 eca80dc4fcfc9e53609b830ec14d5801eacc0aac westline95 <westline.1995@gmail.com> 1747041480 +0700	commit: try association 8
+eca80dc4fcfc9e53609b830ec14d5801eacc0aac b0dc1a69cccfd2ecb3bd25a60c37fcaab7bae17d westline95 <westline.1995@gmail.com> 1747041878 +0700	commit: try association 9
+b0dc1a69cccfd2ecb3bd25a60c37fcaab7bae17d 8d1acea063650270bcfbca8376b7f92d961eee2c westline95 <westline.1995@gmail.com> 1747229199 +0700	commit: try association 10
+8d1acea063650270bcfbca8376b7f92d961eee2c 8ce36f5079b131bb1a328fbd0808de812ad1bc5a westline95 <westline.1995@gmail.com> 1747229645 +0700	commit: try association 10
+8ce36f5079b131bb1a328fbd0808de812ad1bc5a c71f22aad56fc599b3c708dcb9ca27b9c33e86b7 westline95 <westline.1995@gmail.com> 1747317827 +0700	commit: try association 12
+c71f22aad56fc599b3c708dcb9ca27b9c33e86b7 97646e609fcb90d6a39d19eeec0486be2e8f1cc5 westline95 <westline.1995@gmail.com> 1747323711 +0700	commit: try association 13
+97646e609fcb90d6a39d19eeec0486be2e8f1cc5 0054990c1994e4811f5c077696faf9b6fb757235 westline95 <westline.1995@gmail.com> 1747328785 +0700	commit: try association 14
+0054990c1994e4811f5c077696faf9b6fb757235 a8c154e89a773c45bd5a48661cbdb8b13994f6ad westline95 <westline.1995@gmail.com> 1747376560 +0700	commit: payment type error fix
+a8c154e89a773c45bd5a48661cbdb8b13994f6ad f650d033ae031d9a923f383c43506fe680de47b2 westline95 <westline.1995@gmail.com> 1747391652 +0700	commit: try association when create
+f650d033ae031d9a923f383c43506fe680de47b2 a52f4078e0d5b39934e9c8b7ffd79460d61425ff westline95 <westline.1995@gmail.com> 1747391947 +0700	commit: try association when create 2
+a52f4078e0d5b39934e9c8b7ffd79460d61425ff 3b2879a1445d11364d603a6d4ca55c7d05b221b6 westline95 <westline.1995@gmail.com> 1747392063 +0700	commit: try association when create 3
+3b2879a1445d11364d603a6d4ca55c7d05b221b6 d0e5b7c57a2c83be35e423bbaf1820cdf1e10ca6 westline95 <westline.1995@gmail.com> 1747393786 +0700	commit: fixing order item route
+d0e5b7c57a2c83be35e423bbaf1820cdf1e10ca6 732eb2cc283d64e50ecf8bbd26845aec0211c93c westline95 <westline.1995@gmail.com> 1747402613 +0700	commit: contorlling disc
+732eb2cc283d64e50ecf8bbd26845aec0211c93c d598e69931de074fcdda042a9099f59a581e12c8 westline95 <westline.1995@gmail.com> 1747456202 +0700	commit: adding receipt_date
+d598e69931de074fcdda042a9099f59a581e12c8 9339452f60ecd74fa7e6fc5661dbc7f4fc7d9494 westline95 <westline.1995@gmail.com> 1747457418 +0700	commit: updating discount to total_discount in order item
+9339452f60ecd74fa7e6fc5661dbc7f4fc7d9494 8926a7f43ea9361ab540bc242316449ee68158d6 westline95 <westline.1995@gmail.com> 1747460225 +0700	commit: updating invoice route
+8926a7f43ea9361ab540bc242316449ee68158d6 f87316b1583815bdc816cbc45ccc04f52a2dbf3f westline95 <westline.1995@gmail.com> 1747461606 +0700	commit: updating invoice route 2
+f87316b1583815bdc816cbc45ccc04f52a2dbf3f 193821535c9083acb469c4a2187cf99482806019 westline95 <westline.1995@gmail.com> 1747550459 +0700	commit: editing totdal_discount to discount_prod_rec order item
+193821535c9083acb469c4a2187cf99482806019 6f9a23d8f98c86917d52dbe66228fd2cbd25f2a3 westline95 <westline.1995@gmail.com> 1747575439 +0700	commit: adding delete order item by order id route
+6f9a23d8f98c86917d52dbe66228fd2cbd25f2a3 8bebe3d096c6c484d2ab0b43d08c5a529fd2032f westline95 <westline.1995@gmail.com> 1747717562 +0700	commit: adding payment_type in inv model
+8bebe3d096c6c484d2ab0b43d08c5a529fd2032f bd8f2641883e9a973c55326423eca1f02355fd37 westline95 <westline.1995@gmail.com> 1747720686 +0700	commit: adding invoice_id in order
+bd8f2641883e9a973c55326423eca1f02355fd37 bbcfbdd5911e26eb885978922dcf82149387359e westline95 <westline.1995@gmail.com> 1747720925 +0700	commit: update allownul invoice id in order model
+bbcfbdd5911e26eb885978922dcf82149387359e 18514913f198d1265a433bf632aeaba458e1ea25 westline95 <westline.1995@gmail.com> 1747751535 +0700	commit: add attr in invoice controller
+18514913f198d1265a433bf632aeaba458e1ea25 76598029920ec11fd18f7e774c1b2d6df01297a1 westline95 <westline.1995@gmail.com> 1747804601 +0700	commit: modified order_id type data in invoice
+76598029920ec11fd18f7e774c1b2d6df01297a1 7bbc11aae864b4e9b083467676077810dfb422ad westline95 <westline.1995@gmail.com> 1747809729 +0700	commit: add new route in sales route
+7bbc11aae864b4e9b083467676077810dfb422ad 02065cd45fb31e50438fe2052e2bfb94ff3d484d westline95 <westline.1995@gmail.com> 1747906261 +0700	commit: adding salesbycustunpaid route
+02065cd45fb31e50438fe2052e2bfb94ff3d484d b32fb542971f4469c456b3e8123258755583e273 westline95 <westline.1995@gmail.com> 1747909762 +0700	commit: fix insertmultipleinv controller
+b32fb542971f4469c456b3e8123258755583e273 ac3ea5e058327276b59b1974b9a80afb1a7ffaf2 westline95 <westline.1995@gmail.com> 1747934353 +0700	commit: add invsett and mailersett routing
+ac3ea5e058327276b59b1974b9a80afb1a7ffaf2 85e382b3a89e2216977926f107fa66e1f0788469 westline95 <westline.1995@gmail.com> 1747972094 +0700	commit: fixing inv sett and mailer to findone
+85e382b3a89e2216977926f107fa66e1f0788469 7bbddfb2b774ec4a9d60d6ba99a9b386d52ecd53 westline95 <westline.1995@gmail.com> 1747975568 +0700	commit: returning data when update action
+7bbddfb2b774ec4a9d60d6ba99a9b386d52ecd53 c3c11bb4391bfb16c8826c802a13ceac8571ce75 westline95 <westline.1995@gmail.com> 1747981690 +0700	commit: add req sales with order items
+c3c11bb4391bfb16c8826c802a13ceac8571ce75 2df4fa019a7b658bb5e78566d4d97bde44a60037 westline95 <westline.1995@gmail.com> 1747982202 +0700	commit: add req sales with order items by order id
+2df4fa019a7b658bb5e78566d4d97bde44a60037 d7c177be3f3f111c5edd9c6be7d78e00b2ae89c6 westline95 <westline.1995@gmail.com> 1747982774 +0700	commit: add req sales with order items by order id inc product
+d7c177be3f3f111c5edd9c6be7d78e00b2ae89c6 1e0706f4386c8a0b94fd55e12287a31ac961d0c7 westline95 <westline.1995@gmail.com> 1748061712 +0700	commit: adding association inv to order and add new order route
+1e0706f4386c8a0b94fd55e12287a31ac961d0c7 ea80039ead74308d4d165c1b764da179974745c5 westline95 <westline.1995@gmail.com> 1748062429 +0700	commit: fix salesbyonecustunpaid from findall to findone
+ea80039ead74308d4d165c1b764da179974745c5 928f58aedb1ce1839bd5f8138b8fe6c7313a2cf2 westline95 <westline.1995@gmail.com> 1748065002 +0700	commit: just response status 404
+928f58aedb1ce1839bd5f8138b8fe6c7313a2cf2 e1df377f20f98ead3582933aa14b0ca67a08aafd westline95 <westline.1995@gmail.com> 1748065300 +0700	commit: just response status 404
+e1df377f20f98ead3582933aa14b0ca67a08aafd 1cb20f1932ff0611988a2a91457a9fc25987859d westline95 <westline.1995@gmail.com> 1748145404 +0700	commit: adding invoice_due
+1cb20f1932ff0611988a2a91457a9fc25987859d 6dbac5de135fb2e6c5414a8590a0f97648939e5a westline95 <westline.1995@gmail.com> 1748495171 +0700	commit: adding getsalesandsum
+6dbac5de135fb2e6c5414a8590a0f97648939e5a e4241693097c2617c204c438a0501d92b5d3ff75 westline95 <westline.1995@gmail.com> 1748532512 +0700	commit: adding payment_ref
+e4241693097c2617c204c438a0501d92b5d3ff75 d6f1a8a3d0c1496de4532e49de23d3ce73341c6a westline95 <westline.1995@gmail.com> 1748783908 +0700	commit: adding user route,controller,model
+d6f1a8a3d0c1496de4532e49de23d3ce73341c6a 2310c2fb11e220e58abe6f778f0ff7b34064c52b westline95 <westline.1995@gmail.com> 1748784504 +0700	commit: fixing method for user login
+2310c2fb11e220e58abe6f778f0ff7b34064c52b 5e4ea3b7ba0bab5a6a7941bf0203ff0749cea401 westline95 <westline.1995@gmail.com> 1748789232 +0700	commit: adding token sett and auth api
+5e4ea3b7ba0bab5a6a7941bf0203ff0749cea401 647cb229018a957a66a04d2948b1eefba8a380e3 westline95 <westline.1995@gmail.com> 1749048012 +0700	commit: start persist
+647cb229018a957a66a04d2948b1eefba8a380e3 56d284a5012a47186376546759a24ec2b4ff2aea westline95 <westline.1995@gmail.com> 1749102582 +0700	commit: fixing bug refresh_token
+56d284a5012a47186376546759a24ec2b4ff2aea 7e04894795972733538ee8d63d7b09d6bcad71a3 westline95 <westline.1995@gmail.com> 1749195004 +0700	commit: adding handleUploadImg
+7e04894795972733538ee8d63d7b09d6bcad71a3 af6035a05e775923fd8c3e15d1eee9b8744557a6 westline95 <westline.1995@gmail.com> 1749195097 +0700	commit: adding handleUploadImgg
+af6035a05e775923fd8c3e15d1eee9b8744557a6 5fdf5aeea6352f98bf643044943cdf41e899facc westline95 <westline.1995@gmail.com> 1749198135 +0700	commit: fixing customer model
+5fdf5aeea6352f98bf643044943cdf41e899facc 9c39029de785d4a64ac69bc2b9f07d077b77f49a westline95 <westline.1995@gmail.com> 1749365803 +0700	commit: fix sales route by id to get and sales/by
+9c39029de785d4a64ac69bc2b9f07d077b77f49a 18f8b5f67e5d75e7872ee47c952aff17862240ff westline95 <westline.1995@gmail.com> 1749452974 +0700	commit: change route invoice by id to /inv/by
+18f8b5f67e5d75e7872ee47c952aff17862240ff 0487198ae5a97997293264eb97b192716393fd05 westline95 <westline.1995@gmail.com> 1749542115 +0700	commit: adding delivery model, controller, route first
+0487198ae5a97997293264eb97b192716393fd05 00ac8ef4ce4799dbcf5ebea0f7e720c8cc876217 westline95 <westline.1995@gmail.com> 1749544185 +0700	commit: param route delivery
+                                                                                                                                                                                             

@@ -17,14 +17,13 @@ const createDelivery = async (req, res) => {
         }
 
         // check delivery with order id if existed
-        const checkExistDelivery = await AllModel.OrdersModel.findOne({ where: {order_id: order_id} });
+        const checkExistDelivery = await AllModel.DeliveryModel.findOne({ where: {order_id: order_id} });
         if(checkExistDelivery){
             return res.status(409).json({ message: 'Delivery already exists for this order.' });
         }
 
         const delivery = await AllModel.DeliveryModel.create({
             order_id,
-            tracking_number,
             ship_date,
             delivery_status: 'pending',
             delivery_address
@@ -43,7 +42,7 @@ const createDelivery = async (req, res) => {
 const assignCourier = async (req, res) => {
     try {
         const { delivery_id } = req.params;
-        const { courier_id  } = req.body;
+        const { courier_id, tracking_number  } = req.body;
         
         // get delivery id
         const delivery = await AllModel.DeliveryModel.findByPk(delivery_id);
@@ -52,14 +51,15 @@ const assignCourier = async (req, res) => {
         // validation courier
         const courier = await AllModel.UsersModel.findByPk(courier_id);
         if (!courier || courier.role !== 'courier') {
-        return res.status(400).json({ message: 'Assigned user is not a valid courier.' });
+            return res.status(400).json({ message: 'Assigned user is not a valid courier.' });
         }
 
         // assign courier
         delivery.courier_id = courier_id;
+        delivery.tracking_number = tracking_number;
         await delivery.save();
 
-        res.json({ message: 'courir assigned.', delivery });
+        res.json({ message: 'courir assigned, tracking number created.', delivery });
 
     } catch(err) {
         res.status(500).json({err: "internal server error"});
