@@ -361,6 +361,11 @@ const InvoicesModel = sequelize.define("invoices",
             autoIncrement: true,
             allowNull: false,
         },
+        invoice_number:{
+            type:  Sequelize.STRING,
+            unique: true
+            // allowNull: false,
+        },
         customer_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
@@ -413,6 +418,24 @@ const InvoicesModel = sequelize.define("invoices",
         tableName: 'invoices',
     }
 );
+
+InvoicesModel.beforeCreate(async (inv, options) => {
+  const now = new Date();
+  const timestamp = Date.now();
+  const dateKey = now.toISOString().slice(0, 10);
+
+  const countToday = await InvoicesModel.count({
+    where: {
+      createdAt: {
+        [Sequelize.Op.gte]: new Date(`${dateKey}T00:00:00Z`),
+        [Sequelize.Op.lt]: new Date(`${dateKey}T23:59:59Z`),
+      }
+    }
+  });
+
+  const sequence = String(countToday + 1).padStart(3, '0');
+  inv.invoice_number = `3t${timestamp}${sequence}`;
+});
 
 const PaymentsModel = sequelize.define("payments", 
     {
