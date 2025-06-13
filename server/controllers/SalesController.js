@@ -30,11 +30,18 @@ const getAllSales = async (req, res) => {
 
 const insertSales = async (req, res) => {
     const { 
-        salesDate, custID, custName, custType, salesData, status, statusId, source, 
-        discount, grandTotal, note, totalPayment, remainingPayment, totalSales, 
+        salesDate, customer_id, custName, custType, salesData, status, statusId, source, 
+        discount, grandTotal, note, totalPayment, remainingPayment, total_sales, 
         paymentMethod, totalQty, paymentData, paid, orderType, orderTypeId
     } = req.body;
     try{
+        // update total sales in customer
+        const cust = await AllModel.CustomersModel.findByPk(customer_id);
+        if(cust){
+            cust.total_sales = total_sales;
+            await cust.save();
+        }
+       
         const newCust = await AllModel.OrdersModel.create(req.body, {
             include: [
                 {
@@ -143,6 +150,33 @@ const updateSales= async (req, res) => {
     }
 }
 
+const updateOrderStatus = async (req, res) => {
+    try{
+        const { order_status } = req.body;
+        const { order_id } = req.query.id;
+
+        const sales = await AllModel.OrdersModel.update(order_status, {
+            where:{order_id: order_id},
+            returning: true,
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
+        });
+
+        if(!sales){
+            res.status(404).json({error: `failed to updated sales`});
+        } 
+
+        res.status(201).json(sales);
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 const deleteSales = async (req, res) => {
     try{
         const delSales = await AllModel.OrdersModel.destroy({where:{order_id: req.query.id}});
@@ -225,7 +259,7 @@ const salesByOneCustUnpaid = async (req, res) => {
                 as: 'orders',
                 where: { 
                     payment_type: 'unpaid',
-                    order_status: {[sequelize.Op.not]: 'canceled'},
+                    order_status: {[Sequelize.Op.not]: 'canceled'},
                     invoice_id: null 
                 },
                 required: true
@@ -403,5 +437,6 @@ export default {
     salesWOrderItems,
     salesByOneCustUnpaid,
     getSalesAndSum,
-    updateSalesAddInv
+    updateSalesAddInv,
+    updateOrderStatus
 };
