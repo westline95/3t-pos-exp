@@ -363,8 +363,8 @@ const InvoicesModel = sequelize.define("invoices",
         },
         invoice_number:{
             type:  Sequelize.STRING,
-            unique: true
-            // allowNull: false,
+            unique: true,
+            allowNull: false,
         },
         customer_id: {
             type: Sequelize.INTEGER,
@@ -421,7 +421,7 @@ const InvoicesModel = sequelize.define("invoices",
 
 InvoicesModel.beforeCreate(async (inv, options) => {
   const now = new Date();
-  const timestamp = Date.now();
+  const timestamp = Date.now().toString(36);
   const dateKey = now.toISOString().slice(0, 10);
 
   const countToday = await InvoicesModel.count({
@@ -434,7 +434,7 @@ InvoicesModel.beforeCreate(async (inv, options) => {
   });
 
   const sequence = String(countToday + 1).padStart(3, '0');
-  inv.invoice_number = `3t${timestamp}${sequence}`;
+  inv.invoice_number = `INV-3T${timestamp}${sequence}`;
 });
 
 const PaymentsModel = sequelize.define("payments", 
@@ -584,7 +584,7 @@ const DeliveryModel = sequelize.define("delivery",
         }, 
         tracking_number: {
             type: Sequelize.STRING,
-            allowNull: true
+            unique: true
         },
         ship_date: {
             type: Sequelize.DATE,
@@ -617,6 +617,23 @@ const DeliveryModel = sequelize.define("delivery",
     }
 );
 
+DeliveryModel.beforeCreate(async (deliv, options) => {
+  const now = new Date();
+  const timestamp = Date.now().toString(36);
+  const dateKey = now.toISOString().slice(0, 10);
+
+  const countToday = await DeliveryModel.count({
+    where: {
+      createdAt: {
+        [Sequelize.Op.gte]: new Date(`${dateKey}T00:00:00Z`),
+        [Sequelize.Op.lt]: new Date(`${dateKey}T23:59:59Z`),
+      }
+    }
+  });
+
+  const sequence = String(countToday + 1).padStart(3, '0');
+  deliv.tracking_number = `TR-3T${timestamp}${sequence}`;
+});
 
 // assocations
 // one to many (categories - products)
