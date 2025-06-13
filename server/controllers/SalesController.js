@@ -77,6 +77,7 @@ const insertMultipleSales = async (req, res) => {
     }
 }
 
+// only one data
 const updateSalesAddInv= async (req, res) => {
      try{
         const { invoice_id } = req.body;
@@ -92,6 +93,28 @@ const updateSalesAddInv= async (req, res) => {
         await sales.save();
 
          res.json({ message: 'Update sales => invoice id column.', sales });
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+};
+
+const updateSalesAddInvoices = async (req, res) => {
+     try{
+        const { invoice_id } = req.body;
+        const { id } = req.query.id;
+
+        const sales = await AllModel.OrdersModel.update(invoice_id, {
+            where: {
+                order_id: id
+            }
+        });
+        
+        if(!sales){
+            return res.status(404).json({ message: 'not found or empty, Failed to update invoice_id in sales' });
+        } 
+
+        res.json({ message: 'Update sales => invoice id column.', sales });
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
@@ -438,5 +461,6 @@ export default {
     salesByOneCustUnpaid,
     getSalesAndSum,
     updateSalesAddInv,
+    updateSalesAddInvoices,
     updateOrderStatus
 };

@@ -12,6 +12,7 @@ SalesRoute.get("/sales/cust/unpaid", SalesController.salesByOneCustUnpaid);
 SalesRoute.post("/sales/write", SalesController.insertSales);
 SalesRoute.post("/sales/writes", SalesController.insertMultipleSales);
 SalesRoute.put("/sales", SalesController.updateSales);
+SalesRoute.put("/sales/invs", SalesController.updateSalesAddInvoices);
 SalesRoute.patch("/sales/:order_id", SalesController.updateSalesAddInv);
 SalesRoute.patch("/sales/update/status", SalesController.updateOrderStatus);
 SalesRoute.delete("/sales", SalesController.deleteSales);
