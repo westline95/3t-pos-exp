@@ -364,7 +364,6 @@ const InvoicesModel = sequelize.define("invoices",
         invoice_number:{
             type:  Sequelize.STRING,
             unique: true,
-            allowNull: false,
         },
         customer_id: {
             type: Sequelize.INTEGER,
