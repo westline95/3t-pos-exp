@@ -225,6 +225,7 @@ const salesByOneCustUnpaid = async (req, res) => {
                 as: 'orders',
                 where: { 
                     payment_type: 'unpaid',
+                    order_status: {[sequelize.Op.not]: 'canceled'},
                     invoice_id: null 
                 },
                 required: true
