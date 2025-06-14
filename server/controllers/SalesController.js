@@ -272,7 +272,7 @@ const salesByCustUnpaid = async (req, res) => {
     }
 }
 
-const salesByOneCustUnpaid = async (req, res) => {
+const salesByOneCustPayType = async (req, res) => {
     try{
          const countSales = await AllModel.CustomersModel.findOne({
             where: {customer_id: req.query.custid},
@@ -281,7 +281,7 @@ const salesByOneCustUnpaid = async (req, res) => {
                 model: AllModel.OrdersModel,
                 as: 'orders',
                 where: { 
-                    payment_type: 'unpaid',
+                    payment_type: req.query.paytype,
                     order_status: {[Sequelize.Op.not]: 'canceled'},
                     invoice_id: null 
                 },
@@ -458,7 +458,7 @@ export default {
     getSalesByID,
     salesByCustUnpaid,
     salesWOrderItems,
-    salesByOneCustUnpaid,
+    salesByOneCustPayType,
     getSalesAndSum,
     updateSalesAddInv,
     updateSalesAddInvoices,
