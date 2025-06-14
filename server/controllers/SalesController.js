@@ -18,7 +18,7 @@ const getAllSales = async (req, res) => {
                 {
                     model: AllModel.DeliveryModel,
                     as: 'delivery',
-                    required: true
+                    required: false
                 }
             ],
         });
@@ -323,7 +323,7 @@ const getSalesCust = async(req, res) => {
                 {
                     model: AllModel.DeliveryModel,
                     as: 'delivery',
-                    required: true
+                    required: false
                 },
                 
             ]
@@ -357,7 +357,7 @@ const getSalesByStatus = async(req, res) => {
                 {
                     model: AllModel.DeliveryModel,
                     as: 'delivery',
-                    required: true
+                    required: false
                 },
             ]
         })
@@ -391,7 +391,7 @@ const getSalesByID = async(req, res) => {
                 {
                     model: AllModel.DeliveryModel,
                     as: 'delivery',
-                    required: true
+                    required: false
                 },
             ]
         })
@@ -428,7 +428,7 @@ const salesWOrderItems = async (req, res) => {
                 {
                     model: AllModel.DeliveryModel,
                     as: 'delivery',
-                    required: true
+                    required: false
                 },
                 {
                     model: AllModel.CustomersModel,
