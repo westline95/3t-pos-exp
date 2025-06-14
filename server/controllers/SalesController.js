@@ -101,12 +101,10 @@ const updateSalesAddInv= async (req, res) => {
 
 const updateSalesAddInvoices = async (req, res) => {
      try{
-        const { invoice_id } = req.body;
-        const { id } = req.query.id;
 
-        const sales = await AllModel.OrdersModel.update(invoice_id, {
+        const sales = await AllModel.OrdersModel.update(req.body, {
             where: {
-                order_id: id
+                order_id: req.query.id
             }
         });
         
