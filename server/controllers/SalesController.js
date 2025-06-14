@@ -14,6 +14,11 @@ const getAllSales = async (req, res) => {
                     model: AllModel.OrderItemsModel,
                     as: 'order_items',
                     required: true
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                    required: true
                 }
             ],
         });
@@ -314,7 +319,13 @@ const getSalesCust = async(req, res) => {
                     model: AllModel.OrderItemsModel,
                     as: 'order_items',
                     required: true
-                }
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                    required: true
+                },
+                
             ]
         })
 
@@ -342,7 +353,12 @@ const getSalesByStatus = async(req, res) => {
                     model: AllModel.OrderItemsModel,
                     as: 'order_items',
                     required: true
-                }
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                    required: true
+                },
             ]
         })
 
@@ -364,13 +380,19 @@ const getSalesByID = async(req, res) => {
             include: [
                 {
                     model: AllModel.CustomersModel,
-                    as: 'customer'
+                    as: 'customer',
+                    required: true
                 },
                 {
                     model: AllModel.OrderItemsModel,
                     as: 'order_items',
                     required: true
-                }
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                    required: true
+                },
             ]
         })
 
@@ -402,7 +424,17 @@ const salesWOrderItems = async (req, res) => {
                             required: true,
                         }
                     ]
-                }
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                    required: true
+                },
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer',
+                    required: true
+                },
             ]
         });
         if(countSales){
