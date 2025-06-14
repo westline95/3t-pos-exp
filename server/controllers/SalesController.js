@@ -243,17 +243,6 @@ const countSalesByCust = async (req, res) => {
 const salesByCustUnpaid = async (req, res) => {
     // const name = req.query.name;
     try{
-        // const countSales = await AllModel.OrdersModel.findAll({
-        //     where:{
-        //         customer_id: req.query.id,
-        //         payment_type: req.query.type,
-        //         invoice_id: null
-        //     },
-        //     // attributes: [
-        //     //     [Sequelize.fn(`SUM`, `subtotal`), `subtotal`],
-        //     //     [Sequelize.fn(`SUM`, `grandtotal`), `grandtotal`]
-        //     // ],
-        // });
          const countSales = await AllModel.CustomersModel.findAll({
             include: [
                 {
@@ -287,6 +276,36 @@ const salesByOneCustPayType = async (req, res) => {
                     payment_type: req.query.paytype,
                     order_status: {[Sequelize.Op.not]: 'canceled'},
                     invoice_id: null 
+                },
+                required: true
+                }
+            ]
+        });
+        if(countSales){
+            res.json(countSales);
+        } else {
+            res.status(404).json({
+                error: 404, 
+                message: `sales data by cust id where unpaid and doesn't have invoice is not found!`
+            });
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+const salesByOneCustPayType2 = async (req, res) => {
+    try{
+         const countSales = await AllModel.CustomersModel.findOne({
+            where: {customer_id: req.query.custid},
+            include: [
+                {
+                model: AllModel.OrdersModel,
+                as: 'orders',
+                where: { 
+                    payment_type: req.query.paytype,
+                    order_status: {[Sequelize.Op.not]: 'canceled'},
                 },
                 required: true
                 }
@@ -489,6 +508,7 @@ export default {
     salesByCustUnpaid,
     salesWOrderItems,
     salesByOneCustPayType,
+    salesByOneCustPayType2,
     getSalesAndSum,
     updateSalesAddInv,
     updateSalesAddInvoices,
