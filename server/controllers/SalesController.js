@@ -307,7 +307,7 @@ const salesByOneCustPayType2 = async (req, res) => {
                     payment_type: req.query.paytype,
                     order_status: {[Sequelize.Op.not]: 'canceled'},
                     [Sequelize.Op.and]: [
-                        { invoice_id: {[Sequelize.Op.not]: null} }, 
+                        { invoice_id:  null }, 
                         { invoice_id: req.query.invid }
                     ],  
                 },
