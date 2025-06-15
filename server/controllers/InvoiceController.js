@@ -86,6 +86,8 @@ const updateInv= async (req, res) => {
     }
 }
 
+
+
 const deleteInv = async (req, res) => {
     try{
         const delInv = await AllModel.InvoicesModel.destroy({where:{invoice_id: req.query.id}});
