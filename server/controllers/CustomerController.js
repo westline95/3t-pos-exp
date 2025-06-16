@@ -3,7 +3,28 @@ import { Sequelize, where } from "sequelize";
 
 const getCustomers = async (req, res) => {
     try{
-        const allCust = await AllModel.CustomersModel.findAll();
+        const allCust = await AllModel.CustomersModel.findAll({
+            include: [
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoices'
+                },
+                {
+                    model: AllModel.PaymentsModel,
+                    as: 'payments'
+                },
+                {
+                    model: AllModel.OrdersModel,
+                    as: 'orders',
+                    include: [
+                        {
+                            model: AllModel.OrderItemsModel,
+                            as: 'order_items'
+                        }
+                    ]
+                },
+            ]
+        });
         if(allCust){
             res.json(allCust);
         } else {
