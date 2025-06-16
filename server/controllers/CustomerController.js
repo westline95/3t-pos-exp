@@ -7,7 +7,13 @@ const getCustomers = async (req, res) => {
             include: [
                 {
                     model: AllModel.InvoicesModel,
-                    as: 'invoices'
+                    as: 'invoices',
+                    include: [
+                        {
+                            model: AllModel.CustomersModel,
+                            as: 'customer'
+                        }
+                    ]
                 },
                 {
                     model: AllModel.PaymentsModel,
