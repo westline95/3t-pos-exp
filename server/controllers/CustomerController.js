@@ -45,6 +45,7 @@ const getCustomers = async (req, res) => {
 const getCustomersUnpaidInv = async (req, res) => {
     try{
         const allCust = await AllModel.CustomersModel.findAll({
+            where: { customer_id: req.query.custid },
             include: [
                 {
                     model: AllModel.InvoicesModel,
