@@ -158,7 +158,7 @@ const getInvByID = async(req, res) => {
             include: [
                 {
                     model: AllModel.CustomersModel,
-                    as: 'customer'
+                    as: 'customer',
                 },
             ]
         })

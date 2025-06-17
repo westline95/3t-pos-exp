@@ -42,6 +42,48 @@ const getCustomers = async (req, res) => {
     }
 }
 
+const getCustomersUnpaidInv = async (req, res) => {
+    try{
+        const allCust = await AllModel.CustomersModel.findAll({
+            include: [
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoices',
+                    where: { is_paid: false },
+                    include: [
+                        {
+                            model: AllModel.CustomersModel,
+                            as: 'customer'
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.PaymentsModel,
+                    as: 'payments'
+                },
+                {
+                    model: AllModel.OrdersModel,
+                    as: 'orders',
+                    include: [
+                        {
+                            model: AllModel.OrderItemsModel,
+                            as: 'order_items'
+                        }
+                    ]
+                },
+            ]
+        });
+        if(allCust){
+            res.json(allCust);
+        } else {
+            res.status(404).json({error: `get all customer not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 const insertCustomers = async (req, res) => {
     const { name, img, custType, custTypeId, email, phonenumber,
         debtLimit, totalSales, totalDebt, gender, dob,
@@ -182,5 +224,6 @@ export default {
     updateCust,  
     deleteCust,
     countCustByName,
-    getDebtData
+    getDebtData,
+    getCustomersUnpaidInv
 };

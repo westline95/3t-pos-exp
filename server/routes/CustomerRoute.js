@@ -11,5 +11,6 @@ CustomersRoute.post("/customers", CustomerController.insertMultipleCustomer);
 CustomersRoute.put("/customers", CustomerController.updateCust);
 CustomersRoute.delete("/customers", CustomerController.deleteCust);
 CustomersRoute.get("/customer/debt", CustomerController.getDebtData);
+CustomersRoute.get("/customer/unpaid-inv", CustomerController.getCustomersUnpaidInv);
 
 export default CustomersRoute;
