@@ -515,5 +515,4 @@ export default {
     updateSalesAddInv,
     updateSalesAddInvoices,
     updateOrderStatus,
-    updateOrderStatus2
 };
