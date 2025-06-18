@@ -180,8 +180,8 @@ const updateOrderStatus = async (req, res) => {
     try{
         const { order_status } = req.body;
 
-        const sales = await AllModel.OrdersModel.update(order_status, {
-            where:{order_id: req.query.id},
+        const sales = await AllModel.OrdersModel.update({order_status: order_status}, {
+            where: {order_id: req.query.id},
             returning: true,
             include: [
                 {
@@ -192,7 +192,7 @@ const updateOrderStatus = async (req, res) => {
         });
 
         if(!sales){
-            res.status(404).json({error: `failed to updated sales`});
+            res.status(404).json({erropatchr: `failed to updated sales`});
         } 
 
         res.status(201).json(sales);
@@ -514,5 +514,6 @@ export default {
     getSalesAndSum,
     updateSalesAddInv,
     updateSalesAddInvoices,
-    updateOrderStatus
+    updateOrderStatus,
+    updateOrderStatus2
 };
