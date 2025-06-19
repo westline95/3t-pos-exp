@@ -16,9 +16,12 @@ const getAllSales = async (req, res) => {
                     required: true
                 },
                 {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice',
+                },
+                {
                     model: AllModel.DeliveryModel,
                     as: 'delivery',
-                    required: false
                 }
             ],
         });
