@@ -816,16 +816,6 @@ OrdersGroupModel.belongsTo(InvoicesModel, {
     targetKey: 'invoice_id'
 });
 
-// // one to many (order group - order)
-OrdersGroupModel.hasMany(InvoicesModel, {
-    sourceKey: 'invoice_id',
-    foreignKey: 'invoice_id',
-});
-InvoicesModel.belongsTo(OrdersGroupModel, {
-    foreignKey: 'invoice_id',
-    targetKey: 'invoice_id'
-});
-
 
 export default {
     UsersModel,
