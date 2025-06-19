@@ -197,6 +197,10 @@ const updateOrderStatus = async (req, res) => {
                     model: AllModel.CustomersModel,
                     as: 'customer'
                 },
+                 {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice'
+                },
             ]
         });
 
