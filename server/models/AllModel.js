@@ -712,10 +712,10 @@ InvoicesModel.hasMany(OrdersModel, {
     sourceKey: 'invoice_id',
     foreignKey: 'invoice_id',
 });
-// OrdersModel.belongsToMany(InvoicesModel, {
-//     foreignKey: 'invoice_id',
-//     targetKey: 'invoice_id'
-// });
+OrdersModel.belongsTo(InvoicesModel, {
+    foreignKey: 'invoice_id',
+    targetKey: 'invoice_id'
+});
 
 // one to many (customers - invoices)
 CustomersModel.hasMany(ReceiptsModel, {
