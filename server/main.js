@@ -26,6 +26,7 @@ import InvSettRoute from "./routes/InvSettRoute.js";
 import MailerSettRoute from "./routes/MailerSettRoute.js";
 import UploadImgRoute from "./routes/UploadImgRoute.js";
 import DeliveryRoute from "./routes/DeliveryRoute.js";
+import OrderGroupRoute from "./routes/OrderGroupRoute.js";
 
 dotenv.config();
 
@@ -65,6 +66,7 @@ app.use(UploadImgRoute);
 // user CRUD
 app.use(UserRoute);
 
+app.use(OrderGroupRoute);
 // product CRUD
 app.use(ProductsRoute);
 

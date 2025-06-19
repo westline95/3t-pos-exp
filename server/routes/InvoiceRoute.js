@@ -11,6 +11,7 @@ InvoiceRoute.post("/inv/write", InvoiceController.insertInv);
 InvoiceRoute.post("/inv/writes", InvoiceController.insertMultipleInv);
 InvoiceRoute.put("/inv", InvoiceController.updateInv);
 InvoiceRoute.patch("/inv/payment", InvoiceController.updateInv);
+InvoiceRoute.patch("/inv/status", InvoiceController.updateInv);
 InvoiceRoute.delete("/inv", InvoiceController.deleteInv);
 InvoiceRoute.get("/inv/status", InvoiceController.getInvByStatus);
 

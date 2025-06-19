@@ -14,6 +14,17 @@ const getAllInv = async (req, res) => {
                     model: AllModel.PaymentsModel,
                     as: 'payments',
                 },
+                {
+                    model: AllModel.OrdersGroupModel,
+                    as: 'group',
+                    // required:false
+                    // include: [
+                    //     {
+                    //         model: AllModel.OrdersModel,
+                    //         as: 'orders'
+                    //     },
+                    // ]
+                },
             ]
         });
         if(allInv){

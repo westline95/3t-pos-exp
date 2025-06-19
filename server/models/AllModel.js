@@ -411,10 +411,37 @@ const InvoicesModel = sequelize.define("invoices",
         url: {
             type: Sequelize.STRING,
             allowNull: true,
+        },
+        status: {
+            type: Sequelize.STRING,
+            allowNull: false,
         }
     }, 
     {
         tableName: 'invoices',
+    }
+);
+
+
+const OrdersGroupModel = sequelize.define("orders_group", 
+    {
+        order_group_id:{
+            type:  Sequelize.INTEGER,
+            primaryKey:  true,
+            autoIncrement: true,
+            allowNull: false,
+        },
+         invoice_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+        order_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+    }, 
+    {
+        tableName: 'orders_group',
     }
 );
 
@@ -695,6 +722,15 @@ PaymentsModel.belongsTo(InvoicesModel, {
     targetKey: 'invoice_id'
 });
 
+// InvoicesModel.hasMany(OrdersGroupModel, {
+//     foreignKey: 'invoice_id',
+//     sourceKey: 'invoice_id',
+// });
+// OrdersGroupModel.belongsTo(InvoicesModel, {
+//     foreignKey: 'invoice_id',
+//     targetKey: 'invoice_id'
+// });
+
 // one to many (customers - invoices)
 CustomersModel.hasMany(InvoicesModel, {
     sourceKey: 'customer_id',
@@ -727,6 +763,17 @@ ReceiptsModel.belongsTo(CustomersModel, {
     targetKey: 'customer_id'
 });
 
+
+// // // one to many (order group - invoices)
+// InvoicesModel.hasMany(OrdersGroupModel, {
+//     sourceKey: 'invoice_id',
+//     foreignKey: 'invoice_id',
+// });
+// OrdersGroupModel.belongsTo(InvoicesModel, {
+//     foreignKey: 'invoice_id',
+//     targetKey: 'invoice_id'
+// });
+
 // one to one (invoices - receipts)
 InvoicesModel.hasOne(ReceiptsModel, {
     sourceKey: 'invoice_id',
@@ -749,6 +796,37 @@ DeliveryModel.belongsTo(OrdersModel,{
 
 
 
+// // one to many (order group - order)
+OrdersGroupModel.hasMany(OrdersModel, {
+    sourceKey: 'order_id',
+    foreignKey: 'order_id',
+});
+OrdersModel.belongsTo(OrdersGroupModel, {
+    foreignKey: 'order_id',
+    targetKey: 'order_id'
+});
+
+// // one to many (order group - order)
+InvoicesModel.hasMany(OrdersGroupModel, {
+    sourceKey: 'invoice_id',
+    foreignKey: 'invoice_id',
+});
+OrdersGroupModel.belongsTo(InvoicesModel, {
+    foreignKey: 'invoice_id',
+    targetKey: 'invoice_id'
+});
+
+// // one to many (order group - order)
+OrdersGroupModel.hasMany(InvoicesModel, {
+    sourceKey: 'invoice_id',
+    foreignKey: 'invoice_id',
+});
+InvoicesModel.belongsTo(OrdersGroupModel, {
+    foreignKey: 'invoice_id',
+    targetKey: 'invoice_id'
+});
+
+
 export default {
     UsersModel,
     CustomersModel,
@@ -764,5 +842,6 @@ export default {
     ReceiptsModel,
     invSettModel,
     mailerSettModel,
-    DeliveryModel
+    DeliveryModel,
+    OrdersGroupModel
 };
