@@ -18,6 +18,12 @@ const getAllSales = async (req, res) => {
                 {
                     model: AllModel.InvoicesModel,
                     as: 'invoice',
+                    include: [
+                       {
+                            model: AllModel.PaymentsModel,
+                            as: 'payments',
+                        }
+                    ]
                 },
                 {
                     model: AllModel.DeliveryModel,
