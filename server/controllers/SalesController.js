@@ -447,6 +447,7 @@ const salesWOrderItems = async (req, res) => {
     try{
          const countSales = await AllModel.OrdersModel.findAll({
             where: {order_id: req.query.id},
+            order: [["order_date", "ASC"]],
             include: [
                 {
                     model: AllModel.OrderItemsModel,
