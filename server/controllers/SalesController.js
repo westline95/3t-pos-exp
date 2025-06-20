@@ -5,7 +5,7 @@ import { Sequelize } from "sequelize";
 const getAllSales = async (req, res) => {
     try{
         const allSales = await AllModel.OrdersModel.findAll({
-            order:  [['createdAt', 'DESC']],
+            order:  [['createdAt', 'ASC']],
             include: [
                 {
                     model: AllModel.CustomersModel,

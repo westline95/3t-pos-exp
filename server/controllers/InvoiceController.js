@@ -158,8 +158,7 @@ const getInvByStatus = async(req, res) => {
 
 const getInvByID = async(req, res) => {
     try{
-        const getInv = await AllModel.InvoicesModel.findAll({
-            where: {invoice_id: req.query.id},
+        const getInv = await AllModel.InvoicesModel.findByPk(req.query.id,{
             include: [
                 {
                     model: AllModel.CustomersModel,
@@ -191,6 +190,7 @@ const getInvByStatusCustId = async(req, res) => {
                 is_paid: req.query.ispaid,
                 payment_type: req.query.type
             },
+            order:  [['invoice_date', 'ASC']],
             include: [
                 {
                     model: AllModel.CustomersModel,
