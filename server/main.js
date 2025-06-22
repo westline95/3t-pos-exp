@@ -27,6 +27,8 @@ import MailerSettRoute from "./routes/MailerSettRoute.js";
 import UploadImgRoute from "./routes/UploadImgRoute.js";
 import DeliveryRoute from "./routes/DeliveryRoute.js";
 import OrderGroupRoute from "./routes/OrderGroupRoute.js";
+import RORoute from "./routes/ReturnOrderRoute.js";
+import ROItemRoute from "./routes/ReturnOrderItemRoute.js";
 
 dotenv.config();
 
@@ -96,6 +98,10 @@ app.use(InvSettRoute);
 app.use(MailerSettRoute);
 // delivery CRUD
 app.use(DeliveryRoute);
+// return order CRUD
+app.use(RORoute);
+// return order item CRUD
+app.use(ROItemRoute);
 
 
 app.listen(port, () => console.log(`
