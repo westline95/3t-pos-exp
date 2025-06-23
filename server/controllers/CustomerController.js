@@ -55,7 +55,11 @@ const getCustomersUnpaidInv = async (req, res) => {
                         {
                             model: AllModel.CustomersModel,
                             as: 'customer'
-                        }
+                        },
+                        {
+                            model: AllModel.PaymentsModel,
+                            as: 'payments'
+                        },
                     ]
                 },
                 {
