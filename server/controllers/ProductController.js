@@ -44,18 +44,10 @@ const getProductsByCategory = async (req, res) => {
     }
 }
 
-
 const insertProducts = async (req, res) => {
     const { name, category, variant, unit, prodCost, sellPrice, status } = req.body;
-    try{
-        const newProduct = await AllModel.ProductsCatalogModel.create(req.body, {
-            include: [
-                {
-                    model: AllModel.CategoriesModel,
-                    as: 'category'
-                },
-            ]
-        });
+    try {
+        const newProduct = await AllModel.ProductsCatalogModel.create(req.body);
         
         if(newProduct){
             res.status(201).json(newProduct);
