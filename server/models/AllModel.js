@@ -190,10 +190,6 @@ const ProductsCatalogModel = sequelize.define("products",
             type: Sequelize.DECIMAL,
             allowNull:true
         },
-        status: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
         img: {
             type: Sequelize.STRING,
             allowNull:true
