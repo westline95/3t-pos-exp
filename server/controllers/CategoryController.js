@@ -66,7 +66,7 @@ const updateCategory = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
     try{
-        await AllModel.CategoriesModel.destroy({
+        const category = await AllModel.CategoriesModel.destroy({
             where:{category_id: req.query.id}
         });
         
