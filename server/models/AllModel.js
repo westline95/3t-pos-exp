@@ -125,10 +125,6 @@ const CategoriesModel = sequelize.define("categories",
         type: Sequelize.STRING,
         allowNull: true
       },
-      status: {
-        type: Sequelize.STRING,
-        allowNull: false
-      }
     },
     {
       tableName: "categories"
