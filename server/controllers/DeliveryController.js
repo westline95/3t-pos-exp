@@ -1,6 +1,6 @@
 import AllModel from "../models/AllModel.js";
 
-const validStatus = ['pending', 'loading', 'on the way', 'delivered', 'failed'];
+const validStatus = ['pending', 'on-load', 'in-delivery', 'delivered', 'canceled'];
 
 const createDelivery = async (req, res) => {
     try {
