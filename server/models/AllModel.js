@@ -625,7 +625,7 @@ const DeliveryModel = sequelize.define("delivery",
         },
         delivery_address: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: true
         },
         shipped_date: {
             type: Sequelize.DATE,
