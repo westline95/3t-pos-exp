@@ -98,7 +98,13 @@ const getAllDelivery = async (req, res) => {
             include: [
                 {
                     model: AllModel.OrdersModel,
-                    as: 'order'
+                    as: 'order',
+                    include: [
+                        {
+                            model: AllModel.CustomersModel,
+                            as: 'customer',
+                        }
+                    ]
                 }
             ]
         });
