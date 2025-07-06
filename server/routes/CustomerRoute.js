@@ -9,6 +9,7 @@ CustomersRoute.get("/customers/group", CustomerController.countCustByName);
 CustomersRoute.post("/customer/write", CustomerController.insertCustomers);
 CustomersRoute.post("/customers", CustomerController.insertMultipleCustomer);
 CustomersRoute.put("/customers", CustomerController.updateCust);
+CustomersRoute.patch("/customer/:customer_id/credit", CustomerController.updateCreditCust);
 CustomersRoute.delete("/customers", CustomerController.deleteCust);
 CustomersRoute.get("/customer/debt", CustomerController.getDebtData);
 CustomersRoute.get("/customer/unpaid-inv", CustomerController.getCustomersUnpaidInv);
