@@ -70,6 +70,11 @@ const CustomersModel = sequelize.define("customers",
             allowNull: true,
             defaultValue: 0.00
         },
+        credit: {
+            type: Sequelize.DECIMAL,
+            allowNull: true,
+            defaultValue: 0.00
+        },
         total_debt: {
             type: Sequelize.DECIMAL,
             allowNull: true,
