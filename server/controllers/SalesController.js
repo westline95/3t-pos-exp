@@ -198,7 +198,7 @@ const updateOrderStatus = async (req, res) => {
                     model: AllModel.CustomersModel,
                     as: 'customer'
                 },
-                 {
+                {
                     model: AllModel.InvoicesModel,
                     as: 'invoice'
                 },
@@ -359,6 +359,16 @@ const getSalesCust = async(req, res) => {
                     model: AllModel.DeliveryModel,
                     as: 'delivery',
                     required: false
+                },
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice',
+                    include: [
+                        {
+                            model: AllModel.PaymentsModel,
+                            as: 'payments'
+                        },
+                    ]
                 },
                 
             ]
