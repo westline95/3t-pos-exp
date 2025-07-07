@@ -10,6 +10,7 @@ SalesRoute.get("/sales/group", SalesController.countSalesByCust);
 SalesRoute.get("/sales/group/unpaid", SalesController.salesByCustUnpaid);
 SalesRoute.get("/sales/cust/paytype", SalesController.salesByOneCustPayType);
 SalesRoute.get("/sales/cust/paytype/v2", SalesController.salesByOneCustPayType2);
+SalesRoute.get("/sales/cust/available", SalesController.getSalesCustNotCanceled);
 SalesRoute.post("/sales/write", SalesController.insertSales);
 SalesRoute.post("/sales/writes", SalesController.insertMultipleSales);
 SalesRoute.put("/sales", SalesController.updateSales);

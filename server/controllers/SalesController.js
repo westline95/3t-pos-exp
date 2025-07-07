@@ -385,6 +385,53 @@ const getSalesCust = async(req, res) => {
     }
 }
 
+
+const getSalesCustNotCanceled = async(req, res) => {
+    try{
+        const getData = await AllModel.OrdersModel.findAll({
+            where: {
+                customer_id: req.query.id,
+                order_status: {[Sequelize.Op.not]: 'canceled'}
+            },
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+                {
+                    model: AllModel.OrderItemsModel,
+                    as: 'order_items',
+                    required: true
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                },
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice',
+                    include: [
+                        {
+                            model: AllModel.PaymentsModel,
+                            as: 'payments'
+                        },
+                    ]
+                },
+                
+            ]
+        })
+
+        if(getData){
+            res.json(getData);
+        } else {
+            res.status(404).json({error: `get customer data with ID and order status not canceled not found!`});
+        }
+    }
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 const getSalesByStatus = async(req, res) => {
     try{
         const getData = await AllModel.OrdersModel.findAll({
@@ -540,4 +587,5 @@ export default {
     updateSalesAddInv,
     updateSalesAddInvoices,
     updateOrderStatus,
+    getSalesCustNotCanceled
 };
