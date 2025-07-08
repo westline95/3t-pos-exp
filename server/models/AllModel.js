@@ -842,7 +842,6 @@ OrdersModel.belongsTo(InvoicesModel, {
 });
 
 
-
 // one to many (customers - invoices)
 CustomersModel.hasMany(ReceiptsModel, {
     sourceKey: 'customer_id',
@@ -883,8 +882,6 @@ DeliveryModel.belongsTo(OrdersModel,{
     foreignKey: 'order_id',
     targetKey: 'order_id'
 })
-
-
 
 // // one to many (order group - order)
 OrdersGroupModel.hasMany(OrdersModel, {
@@ -934,7 +931,6 @@ ROItemsModel.belongsTo(ProductsCatalogModel, {
     foreignKey: 'product_id',
     targetKey: 'product_id'
 })
-
 
 ROModel.hasMany(OrdersModel, {
     sourceKey: 'return_order_id',

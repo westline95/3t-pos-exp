@@ -33,12 +33,12 @@ const getAllSales = async (req, res) => {
                 {
                     model: AllModel.ROModel,
                     as: 'return_orders',
-                    include: [
-                        {
-                            model: AllModel.ROItemsModel,
-                            as: 'ro_item',
-                        },
-                    ]
+                    // include: [
+                    //     {
+                    //         model: AllModel.ROItemsModel,
+                    //         as: 'ro_item',
+                    //     },
+                    // ]
                 }
             ],
         });
