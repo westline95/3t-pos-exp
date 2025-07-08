@@ -420,7 +420,8 @@ const getSalesCustNotCanceled = async(req, res) => {
         const getData = await AllModel.OrdersModel.findAll({
             where: {
                 customer_id: req.query.id,
-                order_status: {[Sequelize.Op.not]: 'canceled'}
+                order_status: {[Sequelize.Op.not]: 'canceled'},
+                return_order_id: {[Sequelize.Op.or]: [null,'']}
             },
             include: [
                 {
