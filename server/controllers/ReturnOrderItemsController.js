@@ -39,7 +39,7 @@ const insertROItems = async (req, res) => {
     //     paymentMethod, totalQty, paymentData, paid, orderType, orderTypeId
     // } = req.body;
     try{
-        const newROItem = await AllModel.ROItemsModel.create(req.body);
+        const newROItem = await AllModel.ROItemsModel.bulkCreate(req.body);
         
         if(newROItem){
             res.status(201).json(newROItem);
