@@ -227,48 +227,23 @@ const updateOrderStatus = async (req, res) => {
 }
 
 const updateRO = async (req, res) => {
-    try{
+    try {
+        const { order_id } = req.params;
         const { return_order_id } = req.body;
+        
+        // get order id
+        const order = await AllModel.OrdersModel.findByPk(order_id);
+        if (!order) return res.status(404).json({ message: 'Order not found.' });
 
-        const sales = await AllModel.OrdersModel.update({return_order_id: return_order_id}, {
-            where: {order_id: req.query.id},
-            returning: true,
-            include: [
-                {
-                    model: AllModel.CustomersModel,
-                    as: 'customer'
-                },
-                {
-                    model: AllModel.InvoicesModel,
-                    as: 'invoice'
-                },
-                {
-                    model: AllModel.DeliveryModel,
-                    as: 'delivery',
-                },
-                {
-                    model: AllModel.ROModel,
-                    as: 'return_order',
-                    include: [
-                        {
-                            model: AllModel.ROItemsModel,
-                            as: 'return_order_item',
-                        },
-                    ]
-                }
-            ]
-        });
+        // assign roID
+        order.return_order_id = return_order_id;
+        await order.save();
 
-        if(!sales){
-            res.status(404).json({erropatchr: `failed to updated sales`});
-        } 
-
-        res.status(201).json(sales);
-    } 
-    catch(err) {
+        res.status(201).json(order);
+    } catch(err) {
         res.status(500).json({err: "internal server error"});
     }
-}
+};
 
 const deleteSales = async (req, res) => {
     try{
