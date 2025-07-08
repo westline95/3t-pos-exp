@@ -32,13 +32,13 @@ const getAllSales = async (req, res) => {
                 },
                 {
                     model: AllModel.ROModel,
-                    as: 'return_orders',
-                    // include: [
-                    //     {
-                    //         model: AllModel.ROItemsModel,
-                    //         as: 'ro_item',
-                    //     },
-                    // ]
+                    as: 'return_order',
+                    include: [
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'return_order_item',
+                        },
+                    ]
                 }
             ],
         });
@@ -49,7 +49,7 @@ const getAllSales = async (req, res) => {
         }
     } 
     catch(err) {
-        res.status(500).json({err: "internal server error"});
+        res.status(500).json({err: err});
     }
 }
 

@@ -17,6 +17,10 @@ const getAllRO = async (req, res) => {
                     include: [{
                         model: AllModel.OrderItemsModel,
                         as: 'order_items',
+                        include: [{
+                            model: AllModel.ProductsCatalogModel,
+                            as: 'product',
+                        }]
                     }]
                 },
             ],

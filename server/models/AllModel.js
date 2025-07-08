@@ -659,10 +659,6 @@ const ROModel = sequelize.define("return_orders",
             type: Sequelize.INTEGER,
             allowNull: false
         }, 
-        customer_id: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-        },
         return_date: {
             type: Sequelize.DATE,
             allowNull: false
@@ -810,15 +806,6 @@ PaymentsModel.belongsTo(InvoicesModel, {
     targetKey: 'invoice_id'
 });
 
-// InvoicesModel.hasMany(OrdersGroupModel, {
-//     foreignKey: 'invoice_id',
-//     sourceKey: 'invoice_id',
-// });
-// OrdersGroupModel.belongsTo(InvoicesModel, {
-//     foreignKey: 'invoice_id',
-//     targetKey: 'invoice_id'
-// });
-
 // one to many (customers - invoices)
 CustomersModel.hasMany(InvoicesModel, {
     sourceKey: 'customer_id',
@@ -852,16 +839,6 @@ ReceiptsModel.belongsTo(CustomersModel, {
     targetKey: 'customer_id'
 });
 
-
-// // // one to many (order group - invoices)
-// InvoicesModel.hasMany(OrdersGroupModel, {
-//     sourceKey: 'invoice_id',
-//     foreignKey: 'invoice_id',
-// });
-// OrdersGroupModel.belongsTo(InvoicesModel, {
-//     foreignKey: 'invoice_id',
-//     targetKey: 'invoice_id'
-// });
 
 // one to one (invoices - receipts)
 InvoicesModel.hasOne(ReceiptsModel, {
@@ -912,17 +889,7 @@ ROModel.belongsTo(CustomersModel, {
     targetKey: 'customer_id'
 });
 
-// one to many (orders - order items)
-ROModel.hasMany(ROItemsModel, {
-    sourceKey: 'return_order_id',
-    foreignKey: 'return_order_id',
-});
-ROItemsModel.belongsTo(ROModel, {
-    foreignKey: 'return_order_id',
-    targetKey: 'return_order_id',
-});
-
-// one to many (products - order-items)
+// one to many (products - RO-items)
 ProductsCatalogModel.hasMany(ROItemsModel, {
     sourceKey: 'product_id',
     foreignKey: 'product_id',
@@ -932,14 +899,38 @@ ROItemsModel.belongsTo(ProductsCatalogModel, {
     targetKey: 'product_id'
 })
 
-ROModel.hasMany(OrdersModel, {
+
+// one to many (Order - RO)
+OrdersModel.hasOne(ROModel, {
     sourceKey: 'return_order_id',
     foreignKey: 'return_order_id',
 });
-OrdersModel.belongsTo(ROModel, {
+ROModel.belongsTo(OrdersModel, {
     foreignKey: 'return_order_id',
     targetKey: 'return_order_id'
 });
+
+// one to many (RO - RO-item)
+ROItemsModel.hasMany(ROModel, {
+    sourceKey: 'return_order_id',
+    foreignKey: 'return_order_id',
+});
+ROModel.belongsTo(ROItemsModel, {
+    foreignKey: 'return_order_id',
+    targetKey: 'return_order_id',
+});
+
+// one to many (RO - RO-item)
+ROModel.hasMany(ROItemsModel, {
+    sourceKey: 'return_order_id',
+    foreignKey: 'return_order_id',
+});
+ROItemsModel.belongsTo(ROModel, {
+    foreignKey: 'return_order_id',
+    targetKey: 'return_order_id',
+});
+
+
 
 
 export default {

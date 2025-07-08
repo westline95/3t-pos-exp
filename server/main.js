@@ -53,7 +53,12 @@ app.use(cookieParser());
 
 // ROUTES
 app.get('/', (req, res) => res.send("HelloWorld"));
-
+// // return order CRUD
+// app.use(RORoute);
+// // return order item CRUD
+// app.use(ROItemRoute);
+// // sales CRUD
+// app.use(SalesRoute);
 // auth
 app.use(AuthRouter);
 // refresh
@@ -78,8 +83,6 @@ app.use(CategoryRoute);
 app.use(SubCategoryRoute);
 // customers CRUD
 app.use(CustomersRoute);
-// sales CRUD
-app.use(SalesRoute);
 // invoice CRUD
 app.use(InvoiceRoute);
 // status CRUD
@@ -102,6 +105,8 @@ app.use(DeliveryRoute);
 app.use(RORoute);
 // return order item CRUD
 app.use(ROItemRoute);
+// sales CRUD
+app.use(SalesRoute);
 
 
 app.listen(port, () => console.log(`

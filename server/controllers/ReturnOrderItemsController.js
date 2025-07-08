@@ -7,7 +7,13 @@ const getAllROItem = async (req, res) => {
             include: [
                 {
                     model: AllModel.ROModel,
-                    as: 'return_order'
+                    as: 'return_order',
+                    include: [
+                        {
+                            model: AllModel.CustomersModel,
+                            as: 'customer'
+                        }
+                    ]
                 },
                 {
                     model: AllModel.ProductsCatalogModel,
