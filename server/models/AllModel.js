@@ -841,14 +841,7 @@ OrdersModel.belongsTo(InvoicesModel, {
     targetKey: 'invoice_id'
 });
 
-ROModel.hasMany(OrdersModel, {
-    sourceKey: 'return_order_id',
-    foreignKey: 'return_order_id',
-});
-OrdersModel.belongsTo(ROModel, {
-    foreignKey: 'return_order_id',
-    targetKey: 'return_order_id'
-});
+
 
 // one to many (customers - invoices)
 CustomersModel.hasMany(ReceiptsModel, {
@@ -913,24 +906,23 @@ OrdersGroupModel.belongsTo(InvoicesModel, {
     targetKey: 'invoice_id'
 });
 
-// one to many (return_orders - order)
-OrdersModel.hasMany(ROModel, {
-    sourceKey: 'order_id',
-    foreignKey: 'order_id',
-});
-ROModel.belongsTo(OrdersModel, {
-    foreignKey: 'order_id',
-    targetKey: 'order_id'
-});
+// // one to many (return_orders - order)
+// OrdersModel.hasOne(ROModel, {
+//     sourceKey: 'order_id',
+//     foreignKey: 'order_id',
+// });
+// ROModel.belongsTo(OrdersModel, {
+//     foreignKey: 'order_id',
+//     targetKey: 'order_id'
+// });
 
-// one to many (customer - return_orders)
-CustomersModel.hasMany(ROModel, {
-    sourceKey: 'customer_id',
-    foreignKey: 'customer_id',
+ROModel.hasMany(OrdersModel, {
+    sourceKey: 'return_order_id',
+    foreignKey: 'return_order_id',
 });
-ROModel.belongsTo(CustomersModel, {
-    foreignKey: 'customer_id',
-    targetKey: 'customer_id'
+OrdersModel.belongsTo(ROModel, {
+    foreignKey: 'return_order_id',
+    targetKey: 'return_order_id'
 });
 
 // one to many (return_orders - return_order_items)
@@ -941,6 +933,16 @@ ROModel.hasMany(ROItemsModel, {
 ROItemsModel.belongsTo(ROModel, {
     foreignKey: 'return_order_id',
     targetKey: 'return_order_id'
+});
+
+// one to many (customer - return_orders)
+CustomersModel.hasMany(ROModel, {
+    sourceKey: 'customer_id',
+    foreignKey: 'customer_id',
+});
+ROModel.belongsTo(CustomersModel, {
+    foreignKey: 'customer_id',
+    targetKey: 'customer_id'
 });
 
 // one to many (return_order_items - product)
