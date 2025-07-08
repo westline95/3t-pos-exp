@@ -267,6 +267,10 @@ const OrdersModel = sequelize.define("orders",
             type: Sequelize.BOOLEAN,
             allowNull: false,
             defaultValue: false
+        },
+        return_order_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true,
         }
     }, 
     {
@@ -667,15 +671,18 @@ const ROModel = sequelize.define("return_orders",
             type: Sequelize.STRING,
             allowNull: false
         },
-        reason: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        refund_amount: {
+        refund_total: {
             type: Sequelize.DECIMAL,
             allowNull: false
         },
-        
+        return_method_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        return_method: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
     },
     {
         tableName: 'return_orders'
@@ -702,20 +709,21 @@ const ROItemsModel = sequelize.define("return_order_items",
             type: Sequelize.DECIMAL,
             allowNull: false
         },
-        sell_price: {
+        return_item_status: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        return_value: {
             type: Sequelize.DECIMAL,
             allowNull: false
         },
-        discount_prod_rec: {
-            type: Sequelize.DECIMAL,
-            allowNull: true
+        reason_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false
         },
-        item_status: {
+        reason_text: {
             type: Sequelize.STRING,
-            allowNull: true
-        },
-        refund_amount: {
-            type: Sequelize.DECIMAL,
+            allowNull: false
         },
     },
     {
@@ -831,6 +839,15 @@ InvoicesModel.hasMany(OrdersModel, {
 OrdersModel.belongsTo(InvoicesModel, {
     foreignKey: 'invoice_id',
     targetKey: 'invoice_id'
+});
+
+ROModel.hasMany(OrdersModel, {
+    sourceKey: 'return_order_id',
+    foreignKey: 'return_order_id',
+});
+OrdersModel.belongsTo(ROModel, {
+    foreignKey: 'return_order_id',
+    targetKey: 'return_order_id'
 });
 
 // one to many (customers - invoices)

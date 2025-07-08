@@ -29,6 +29,16 @@ const getAllSales = async (req, res) => {
                 {
                     model: AllModel.DeliveryModel,
                     as: 'delivery',
+                },
+                {
+                    model: AllModel.ROModel,
+                    as: 'return_orders',
+                    include: [
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'ro_item',
+                        },
+                    ]
                 }
             ],
         });
@@ -216,6 +226,50 @@ const updateOrderStatus = async (req, res) => {
     }
 }
 
+const updateRO = async (req, res) => {
+    try{
+        const { return_order_id } = req.body;
+
+        const sales = await AllModel.OrdersModel.update({return_order_id: return_order_id}, {
+            where: {order_id: req.query.id},
+            returning: true,
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice'
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                },
+                {
+                    model: AllModel.ROModel,
+                    as: 'return_orders',
+                    include: [
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'ro_item',
+                        },
+                    ]
+                }
+            ]
+        });
+
+        if(!sales){
+            res.status(404).json({erropatchr: `failed to updated sales`});
+        } 
+
+        res.status(201).json(sales);
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 const deleteSales = async (req, res) => {
     try{
         const delSales = await AllModel.OrdersModel.destroy({where:{order_id: req.query.id}});
@@ -259,10 +313,10 @@ const salesByCustUnpaid = async (req, res) => {
          const countSales = await AllModel.CustomersModel.findAll({
             include: [
                 {
-                model: AllModel.OrdersModel,
-                as: 'orders',
-                where: { payment_type: 'unpaid' },
-                required: true
+                    model: AllModel.OrdersModel,
+                    as: 'orders',
+                    where: { payment_type: 'unpaid' },
+                    required: true
                 }
             ]
         });
@@ -423,6 +477,16 @@ const getSalesCustNotCanceled = async(req, res) => {
                         },
                     ]
                 },
+                {
+                    model: AllModel.ROModel,
+                    as: 'return_orders',
+                    include: [
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'ro_item',
+                        },
+                    ]
+                }
                 
             ]
         })
@@ -534,6 +598,16 @@ const salesWOrderItems = async (req, res) => {
                     as: 'customer',
                     required: true
                 },
+                {
+                    model: AllModel.ROModel,
+                    as: 'return_orders',
+                    include: [
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'ro_item',
+                        },
+                    ]
+                }
             ]
         });
         if(countSales){
@@ -593,5 +667,6 @@ export default {
     updateSalesAddInv,
     updateSalesAddInvoices,
     updateOrderStatus,
-    getSalesCustNotCanceled
+    getSalesCustNotCanceled,
+    updateRO
 };

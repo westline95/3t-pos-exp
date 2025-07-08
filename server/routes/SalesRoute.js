@@ -18,6 +18,7 @@ SalesRoute.patch("/sales", SalesController.updateSales);
 SalesRoute.patch("/sales/invs", SalesController.updateSalesAddInvoices);
 SalesRoute.patch("/sales/:order_id", SalesController.updateSalesAddInv);
 SalesRoute.patch("/sales/update/status", SalesController.updateOrderStatus);
+SalesRoute.patch("/sales/update/ro", SalesController.updateRO);
 SalesRoute.delete("/sales", SalesController.deleteSales);
 SalesRoute.get("/sales/status", SalesController.getSalesByStatus);
 SalesRoute.get("/sales/order-items", SalesController.salesWOrderItems);
