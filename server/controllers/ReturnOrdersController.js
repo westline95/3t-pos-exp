@@ -23,6 +23,10 @@ const getAllRO = async (req, res) => {
                         }]
                     }]
                 },
+                {
+                    model: AllModel.ROItemsModel,
+                    as: 'return_order_item'
+                },
             ],
         });
         if(allRO){
