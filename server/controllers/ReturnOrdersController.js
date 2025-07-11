@@ -25,7 +25,7 @@ const getAllRO = async (req, res) => {
                 },
                 {
                     model: AllModel.ROItemsModel,
-                    as: 'return_order_item'
+                    as: 'return_order_items'
                 },
             ],
         });
