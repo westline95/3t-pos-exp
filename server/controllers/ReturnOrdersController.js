@@ -17,15 +17,17 @@ const getAllRO = async (req, res) => {
                     include: [{
                         model: AllModel.OrderItemsModel,
                         as: 'order_items',
-                        include: [{
-                            model: AllModel.ProductsCatalogModel,
-                            as: 'product',
-                        }]
+                        include: [
+                            {
+                                model: AllModel.ProductsCatalogModel,
+                                as: 'product',
+                            },
+                            {
+                                model: AllModel.ROItemsModel,
+                                as: 'return_order_item'
+                            },
+                        ]
                     }]
-                },
-                {
-                    model: AllModel.ROItemsModel,
-                    as: 'return_order_items'
                 },
             ],
         });

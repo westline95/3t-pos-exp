@@ -697,7 +697,7 @@ const ROItemsModel = sequelize.define("return_order_items",
             type: Sequelize.INTEGER,
             allowNull: false
         }, 
-        product_id: {
+        item_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
         },
@@ -886,13 +886,23 @@ ROModel.belongsTo(CustomersModel, {
 });
 
 // one to many (products - RO-items)
-ProductsCatalogModel.hasMany(ROItemsModel, {
-    sourceKey: 'product_id',
-    foreignKey: 'product_id',
+OrderItemsModel.hasMany(ROItemsModel, {
+    sourceKey: 'item_id',
+    foreignKey: 'item_id',
 });
-ROItemsModel.belongsTo(ProductsCatalogModel, {
-    foreignKey: 'product_id',
-    targetKey: 'product_id'
+ROItemsModel.belongsTo(OrderItemsModel, {
+    foreignKey: 'item_id',
+    targetKey: 'item_id'
+})
+
+// one to many (RO-items - products )
+ROItemsModel.hasMany(OrderItemsModel, {
+    sourceKey: 'item_id',
+    foreignKey: 'item_id',
+});
+OrderItemsModel.belongsTo(ROItemsModel, {
+    foreignKey: 'item_id',
+    targetKey: 'item_id'
 })
 
 
