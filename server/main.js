@@ -54,10 +54,10 @@ app.use(cookieParser());
 // ROUTES
 app.get('/', (req, res) => res.send("HelloWorld"));
 
-// return order CRUD
-app.use(RORoute);
-// return order item CRUD
-app.use(ROItemRoute);
+// // return order CRUD
+// app.use(RORoute);
+// // return order item CRUD
+// app.use(ROItemRoute);
 // // sales CRUD
 app.use(SalesRoute);
 // auth
@@ -102,10 +102,10 @@ app.use(InvSettRoute);
 app.use(MailerSettRoute);
 // delivery CRUD
 app.use(DeliveryRoute);
-// // return order CRUD
-// app.use(RORoute);
-// // return order item CRUD
-// app.use(ROItemRoute);
+// return order CRUD
+app.use(RORoute);
+// return order item CRUD
+app.use(ROItemRoute);
 // sales CRUD
 // app.use(SalesRoute);
 
