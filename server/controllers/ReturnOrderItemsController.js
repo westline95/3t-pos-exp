@@ -15,10 +15,6 @@ const getAllROItem = async (req, res) => {
                         }
                     ]
                 },
-                {
-                    model: AllModel.ProductsCatalogModel,
-                    as: 'product'
-                },
             ]
         });
         if(allROItems){
