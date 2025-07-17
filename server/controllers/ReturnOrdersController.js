@@ -74,7 +74,7 @@ const updateRO = async (req, res) => {
 
         const RO = await AllModel.ROModel.update(req.body, {
             where: {
-                return_order_id: req.query.id
+                return_order_id: req.query.ro_id
             }
         });
         
@@ -88,6 +88,52 @@ const updateRO = async (req, res) => {
         res.status(500).json({err: "internal server error"});
     }
 };
+
+// const updateFullRO = async (req, res) => {
+//      try{
+//         const { ro_data } = req.body;
+//         const { return_order_id } = req.params;
+//         const parsedToCheck = JSON.parse(ro_data);
+
+//         if(!parsedToCheck.ro_item || !parsedToCheck.ro){
+//             throw new Error('403, Data is not complete!');
+//         }
+
+//         // delete all return order items
+//         const ROItem = await AllModel.ROItemsModel.destroy({
+//             where: {
+//                 return_order_id: return_order_id
+//             }
+//         });
+        
+//         if(!ROItem){
+//             throw new Error('404, Not found');
+//         } 
+
+//         // insert ROItem
+//         const ROItemNew = await AllModel.ROItemsModel.create(JSON.stringify(parsedToCheck.ro_item));
+        
+//         if(!ROItemNew){
+//             throw new Error('403, Failed to insert new return order item!');
+//         } 
+
+//          // Update RO
+//         const RO = await AllModel.ROModel.update(JSON.stringify(parsedToCheck.ro), {
+//             where: {
+//                 return_order_id: return_order_id
+//             }
+//         });
+        
+//         if(!RO){
+//             throw new Error('403, Failed to update return order!');
+//         } 
+//         res.status(201).json({ message: 'Successfully update full return order', RO});
+
+//     } 
+//     catch(err) {
+//         res.status(500).json({err: err});
+//     }
+// };
 
 const updateROStatus = async (req, res) => {
     try{
@@ -423,6 +469,7 @@ export default {
     updateROStatus, 
     getROByOrderID,
     deleteRO,  
+    // updateFullRO
     // countSalesByCust,
     // getSalesCust,
     // getSalesByStatus,

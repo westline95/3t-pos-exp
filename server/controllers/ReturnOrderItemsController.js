@@ -94,20 +94,17 @@ const deleteROItem = async (req, res) => {
 
 const deleteROItemByRO = async (req, res) => {
     try{
-        if(ro) {
-            const delROI = await AllModel.ROItemsModel.destroy({
-                where:{
-                    ro_id: req.query.ro_id
-                }
-            });
-
-            if(delROI){
-                res.status(201).json(delROI);
-            } else {
-                res.status(404).json({error: `failed to delete order item by ro id!`});
+        const delROI = await AllModel.ROItemsModel.destroy({
+            where:{
+                ro_id: req.query.ro_id
             }
+        });
+
+        if(delROI){
+            res.status(201).json(delROI);
+        } else {
+            res.status(404).json({error: `failed to delete order item by ro id!`});
         }
-        
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
