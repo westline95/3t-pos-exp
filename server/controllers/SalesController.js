@@ -575,7 +575,7 @@ const salesWOrderItems = async (req, res) => {
                 },
                 {
                     model: AllModel.ROModel,
-                    as: 'return_orders',
+                    as: 'return_order',
                     include: [
                         {
                             model: AllModel.ROItemsModel,
