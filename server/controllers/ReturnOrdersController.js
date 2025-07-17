@@ -82,7 +82,7 @@ const updateRO = async (req, res) => {
             return res.status(404).json({ message: 'not found or empty, Failed to update return order' });
         } 
 
-        res.json(sales);
+        res.status(201).json(RO);
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
