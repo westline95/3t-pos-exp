@@ -173,6 +173,9 @@ const deleteRO = async (req, res) => {
     try{
         const delRO = await AllModel.ROModel.destroy({where:{return_order_id: req.query.id}});
         
+        if(!delRO){
+            res.status(404).json({err: 'Return order id is not found!'});
+        }
         res.status(201).json(delRO);
     } 
     catch(err) {
