@@ -560,6 +560,16 @@ const salesWOrderItems = async (req, res) => {
                             model: AllModel.ProductsCatalogModel,
                             as: 'product',
                             required: true,
+                        },
+                        {
+                            model: AllModel.ROModel,
+                            as: 'return_order',
+                            include: [
+                                {
+                                    model: AllModel.ROItemsModel,
+                                    as: 'return_order_item',
+                                },
+                            ]
                         }
                     ]
                 },
@@ -573,16 +583,7 @@ const salesWOrderItems = async (req, res) => {
                     as: 'customer',
                     required: true
                 },
-                {
-                    model: AllModel.ROModel,
-                    as: 'return_order',
-                    include: [
-                        {
-                            model: AllModel.ROItemsModel,
-                            as: 'return_order_item',
-                        },
-                    ]
-                }
+                
             ]
         });
         if(countSales){
