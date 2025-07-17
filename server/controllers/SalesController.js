@@ -579,7 +579,7 @@ const salesWOrderItems = async (req, res) => {
                     include: [
                         {
                             model: AllModel.ROItemsModel,
-                            as: 'ro_item',
+                            as: 'return_order_item',
                         },
                     ]
                 }
