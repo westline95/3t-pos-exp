@@ -96,7 +96,7 @@ const deleteROItemByRO = async (req, res) => {
     try{
         const delROI = await AllModel.ROItemsModel.destroy({
             where:{
-                ro_id: req.query.ro_id
+                return_order_id: req.query.ro_id
             }
         });
 
