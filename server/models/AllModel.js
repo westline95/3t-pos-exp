@@ -713,6 +713,10 @@ const ROItemsModel = sequelize.define("return_order_items",
             type: Sequelize.DECIMAL,
             allowNull: false
         },
+        reason_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
         reason: {
             type: Sequelize.STRING,
             allowNull: false
