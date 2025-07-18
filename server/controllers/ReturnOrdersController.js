@@ -378,7 +378,17 @@ const getROByOrderID = async(req, res) => {
             include: [
                 {
                     model: AllModel.CustomersModel,
-                    as: 'customer',
+                    as: 'customer'
+                },
+                {
+                    model: AllModel.ROItemsModel,
+                    as: 'return_order_items',
+                    include: [
+                        {
+                            model: AllModel.OrderItemsModel,
+                            as: 'order_item',
+                        }
+                    ]
                 },
                 {
                     model: AllModel.OrdersModel,
@@ -386,9 +396,16 @@ const getROByOrderID = async(req, res) => {
                     include: [{
                         model: AllModel.OrderItemsModel,
                         as: 'order_items',
+                        include: [
+                            {
+                                model: AllModel.ProductsCatalogModel,
+                                as: 'product',
+                            },
+                            
+                        ]
                     }]
                 },
-            ]
+            ],
         })
 
         if(getRO){

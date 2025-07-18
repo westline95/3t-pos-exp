@@ -12,6 +12,10 @@ const getAllROItem = async (req, res) => {
                         {
                             model: AllModel.CustomersModel,
                             as: 'customer'
+                        },
+                        {
+                            model: AllModel.ROModel,
+                            as: 'return_order',
                         }
                     ]
                 },
