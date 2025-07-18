@@ -12,6 +12,16 @@ const getAllRO = async (req, res) => {
                     as: 'customer'
                 },
                 {
+                    model: AllModel.ROItemsModel,
+                    as: 'return_order_items',
+                    include: [
+                        {
+                            model: AllModel.OrderItemsModel,
+                            as: 'order_item',
+                        }
+                    ]
+                },
+                {
                     model: AllModel.OrdersModel,
                     as: 'order',
                     include: [{
@@ -22,10 +32,7 @@ const getAllRO = async (req, res) => {
                                 model: AllModel.ProductsCatalogModel,
                                 as: 'product',
                             },
-                            {
-                                model: AllModel.ROItemsModel,
-                                as: 'return_order_item'
-                            },
+                            
                         ]
                     }]
                 },
