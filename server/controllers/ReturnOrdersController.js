@@ -18,6 +18,13 @@ const getAllRO = async (req, res) => {
                         {
                             model: AllModel.OrderItemsModel,
                             as: 'order_item',
+                            include: [
+                                {
+                                    model: AllModel.ProductsCatalogModel,
+                                    as: 'product',
+                                },
+                                
+                            ]
                         }
                     ]
                 },
@@ -387,6 +394,12 @@ const getROByOrderID = async(req, res) => {
                         {
                             model: AllModel.OrderItemsModel,
                             as: 'order_item',
+                            include: [
+                                {
+                                    model: AllModel.ProductsCatalogModel,
+                                    as: 'product',
+                                },    
+                            ]
                         }
                     ]
                 },
