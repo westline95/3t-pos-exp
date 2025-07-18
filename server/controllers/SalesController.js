@@ -574,6 +574,37 @@ const salesWOrderItems = async (req, res) => {
                     ]
                 },
                 {
+                    model: AllModel.OrdersCreditModel,
+                    as: 'orders_credit',
+                    include: [
+                        {
+                            model: AllModel.ROModel,
+                            as: 'return_order',
+                            include: [
+                                {
+                                    model: AllModel.ROItemsModel,
+                                    as: 'return_order_items',
+                                }
+                            ]
+                        },
+                        {
+                            model: AllModel.OrdersModel,
+                            as: 'order',
+                            include: [{
+                                model: AllModel.OrderItemsModel,
+                                as: 'order_items',
+                                include: [
+                                    {
+                                        model: AllModel.ProductsCatalogModel,
+                                        as: 'product',
+                                    },
+                                    
+                                ]
+                            }]
+                        },
+                    ]
+                },
+                {
                     model: AllModel.DeliveryModel,
                     as: 'delivery',
                     required: false

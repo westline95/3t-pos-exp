@@ -29,6 +29,7 @@ import DeliveryRoute from "./routes/DeliveryRoute.js";
 import OrderGroupRoute from "./routes/OrderGroupRoute.js";
 import RORoute from "./routes/ReturnOrderRoute.js";
 import ROItemRoute from "./routes/ReturnOrderItemRoute.js";
+import OrdersCreditRoute from "./routes/OrdersCreditRoute.js";
 
 dotenv.config();
 
@@ -56,10 +57,12 @@ app.get('/', (req, res) => res.send("HelloWorld"));
 
 // // return order CRUD
 // app.use(RORoute);
+// return order CRUD
+// app.use(OrdersCreditRoute);
 // // return order item CRUD
 // app.use(ROItemRoute);
 // // sales CRUD
-app.use(SalesRoute);
+// app.use(SalesRoute);
 // auth
 app.use(AuthRouter);
 // refresh
@@ -107,7 +110,9 @@ app.use(RORoute);
 // return order item CRUD
 app.use(ROItemRoute);
 // sales CRUD
-// app.use(SalesRoute);
+app.use(SalesRoute);
+// return order credit CRUD
+app.use(OrdersCreditRoute);
 
 
 app.listen(port, () => console.log(`

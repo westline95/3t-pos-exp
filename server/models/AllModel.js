@@ -727,6 +727,32 @@ const ROItemsModel = sequelize.define("return_order_items",
     }
 );
 
+const OrdersCreditModel = sequelize.define("orders_credits", 
+    {
+        order_credit_id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement:true,
+            allowNull: false
+        },
+        customer_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }, 
+        return_order_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },  
+        order_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true
+        },  
+    },
+    {
+        tableName: 'orders_credit'
+    }
+);
+
 DeliveryModel.beforeCreate(async (deliv, options) => {
   const now = new Date();
   const timestamp = Date.now().toString(36);
@@ -940,6 +966,45 @@ ROItemsModel.belongsTo(ROModel, {
     targetKey: 'return_order_id',
 });
 
+// one to many (orderCredit - customer)
+CustomersModel.hasMany(OrdersCreditModel, {
+    sourceKey: 'customer_id',
+    foreignKey: 'customer_id',
+});
+OrdersCreditModel.belongsTo(CustomersModel, {
+    foreignKey: 'customer_id',
+    targetKey: 'customer_id',
+});
+
+// one to many (orderCredit - RO)
+ROModel.hasMany(OrdersCreditModel, {
+    sourceKey: 'return_order_id',
+    foreignKey: 'return_order_id',
+});
+OrdersCreditModel.belongsTo(ROModel, {
+    foreignKey: 'return_order_id',
+    targetKey: 'return_order_id',
+});
+
+// one to many (order - orderCredit)
+OrdersModel.hasMany(OrdersCreditModel, {
+    sourceKey: 'order_id',
+    foreignKey: 'order_id',
+});
+OrdersCreditModel.belongsTo(OrdersModel, {
+    foreignKey: 'order_id',
+    targetKey: 'order_id',
+});
+
+// one to many (order - orderCredit)
+OrdersCreditModel.hasMany(OrdersModel, {
+    sourceKey: 'order_id',
+    foreignKey: 'order_id',
+});
+OrdersModel.belongsTo(OrdersCreditModel, {
+    foreignKey: 'order_id',
+    targetKey: 'order_id',
+});
 
 
 
@@ -961,5 +1026,6 @@ export default {
     DeliveryModel,
     OrdersGroupModel,
     ROItemsModel,
-    ROModel
+    ROModel,
+    OrdersCreditModel
 };

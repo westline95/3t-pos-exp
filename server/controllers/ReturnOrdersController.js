@@ -23,7 +23,6 @@ const getAllRO = async (req, res) => {
                                     model: AllModel.ProductsCatalogModel,
                                     as: 'product',
                                 },
-                                
                             ]
                         }
                     ]
