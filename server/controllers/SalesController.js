@@ -617,6 +617,10 @@ const salesWOrderItems = async (req, res) => {
                     ]
                 },
                 {
+                    model: AllModel.ROModel,
+                    as: 'return_order',
+                },
+                {
                     model: AllModel.DeliveryModel,
                     as: 'delivery',
                     required: false
