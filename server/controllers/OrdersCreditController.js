@@ -1,10 +1,62 @@
 import AllModel from "../models/AllModel.js";
 import { Sequelize } from "sequelize";
 
+const getAllOrdersCredit = async(req, res) => {
+    try{
+        const ordersCredit = await AllModel.OrdersCreditModel.findAll({
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+                {
+                    model: AllModel.ROModel,
+                    as: 'return_order',
+                    include: [
+                        {
+                            model: AllModel.CustomersModel,
+                            as: 'customer'
+                        },
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'return_order_items',
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.OrdersModel,
+                    as: 'order',
+                    include: [{
+                        model: AllModel.OrderItemsModel,
+                        as: 'order_items',
+                        include: [
+                            {
+                                model: AllModel.ProductsCatalogModel,
+                                as: 'product',
+                            },
+                            
+                        ]
+                    }]
+                },
+            ]
+        })
+
+        if(ordersCredit){
+            res.json(ordersCredit);
+        } else {
+            res.status(404).json({error: `get all orders credit`});
+        }
+    }
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+};
+
 const getOrderCreditByCust = async (req, res) => {
     try{
+        const { cust_id } = req.params;
         const allCreditByCust = await AllModel.OrdersCreditModel.findAll({
-            where: {customer_id: req.query.custid},
+            where: {customer_id: cust_id},
             include: [
                 {
                     model: AllModel.CustomersModel,
@@ -52,123 +104,178 @@ const getOrderCreditByCust = async (req, res) => {
     }
 }
 
-const insertROItems = async (req, res) => {
-    // const { 
-    //     salesDate, custID, custName, custType, salesData, status, statusId, source, 
-    //     discount, grandTotal, note, totalPayment, remainingPayment, totalSales, 
-    //     paymentMethod, totalQty, paymentData, paid, orderType, orderTypeId
-    // } = req.body;
+const getAvailableOrderCreditByCust = async (req, res) => {
     try{
-        const newROItem = await AllModel.ROItemsModel.bulkCreate(req.body);
-        
-        if(newROItem){
-            res.status(201).json(newROItem);
-        } else {
-            res.status(404).json({error: `failed to insert return order item!`});
-        }
-    } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
-    }
-}
-
-const updateROItem= async (req, res) => {
-    try{
-        const ROItem = await AllModel.ROItemsModel.update(req.body, 
-            {
-                where:{ro_item_id: req.query.id},
-                returning: true,
-                include: [
-                    {
-                        model: AllModel.ROModel,
-                        as: 'return_order'
-                    },
-                    {
-                        model: AllModel.ProductsCatalogModel,
-                        as: 'product'
-                    },
-                ],
-            });
-        
-        if(ROItem){
-            res.status(201).json(ROItem);
-        } else {
-            res.status(404).json({error: `failed to update order item!`});
-        }
-    } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
-    }
-}
-
-const deleteROItem = async (req, res) => {
-    try{
-        const delRO = await AllModel.ROItemsModel.destroy({where:{ro_item_id: req.query.id}});
-        
-        if(delRO){
-            res.status(201).json(delRO);
-        } else {
-            res.status(404).json({error: `failed to delete order item!`});
-        }
-    } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
-    }
-};
-
-const deleteROItemByRO = async (req, res) => {
-    try{
-        const delROI = await AllModel.ROItemsModel.destroy({
-            where:{
-                return_order_id: req.query.ro_id
-            }
-        });
-
-        if(delROI){
-            res.status(201).json(delROI);
-        } else {
-            res.status(404).json({error: `failed to delete order item by ro id!`});
-        }
-    } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
-    }
-};
-
-const getROItemByID = async(req, res) => {
-    try{
-        const getRO = await AllModel.ROItemsModel.findAll({
-            where: {return_order_id: req.query.id},
+        const { cust_id } = req.params;
+        const allCreditByCust = await AllModel.OrdersCreditModel.findAll({
+            where: {
+                customer_id: cust_id,
+                order_id: {
+                    [Sequelize.Op.or]: [null,'']
+                }
+            },
             include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
                 {
                     model: AllModel.ROModel,
                     as: 'return_order',
-                     include: [
+                    include: [
                         {
                             model: AllModel.CustomersModel,
                             as: 'customer'
+                        },
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'return_order_items',
                         }
                     ]
                 },
             ]
-        })
-
-        if(getRO){
-            res.json(getRO);
+        });
+        if(allCreditByCust){
+            res.json(allCreditByCust);
         } else {
-            res.status(404).json({error: `get return order item by return order ID is not found!`});
+            res.status(404).json({error: `get all order credits by customer is not found!`});
         }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
     }
+}
+
+const insertOrderCredit = async (req, res) => {
+    try{
+        const newOrderCredit = await AllModel.OrdersCreditModel.create(req.body);
+        
+        if(newOrderCredit){
+            res.status(201).json(newOrderCredit);
+        } else {
+            res.status(404).json({error: `failed to insert order credit!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+const updateMayorOrderCredit = async (req, res) => {
+    try{
+        const orderCredit = await AllModel.OrdersCreditModel.update(req.body, 
+            {
+                where:{order_credit_id: req.query.id},
+                returning: true,
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                    {
+                        model: AllModel.ROModel,
+                        as: 'return_order',
+                        include: [
+                            {
+                                model: AllModel.CustomersModel,
+                                as: 'customer'
+                            },
+                            {
+                                model: AllModel.ROItemsModel,
+                                as: 'return_order_items',
+                            }
+                        ]
+                    },
+                    {
+                        model: AllModel.OrdersModel,
+                        as: 'order',
+                        include: [{
+                            model: AllModel.OrderItemsModel,
+                            as: 'order_items',
+                            include: [
+                                {
+                                    model: AllModel.ProductsCatalogModel,
+                                    as: 'product',
+                                },
+                                
+                            ]
+                        }]
+                    },
+                ]
+            });
+        
+        if(orderCredit){
+            res.status(201).json(orderCredit);
+        } else {
+            res.status(404).json({error: `failed to update order credit!`});
+        }
+    } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
     }
 };
 
+const updateOrderIdOrderCredit = async (req, res) => {
+    try{
+        const { order_credit_id, order_id } = req.params;
+
+        const orderCredit = await AllModel.OrdersCreditModel.findByPk(order_credit_id);
+        
+        if(!orderCredit){
+            return res.status(404).json({ message: 'Order credit is not found.' });
+        } 
+
+        orderCredit.order_id = order_id;
+        await orderCredit.save();
+
+         res.json({ message: 'Update order credit => order id column.', orderCredit });
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+// const deleteOrderCredit = async (req, res) => {
+//     try{
+//         const delOrderCredit = await AllModel.OrdersCreditModel.destroy({where:{order_credit_id: req.query.id}});
+        
+//         if(delOrderCredit){
+//             res.status(201).json(delOrderCredit);
+//         } else {
+//             res.status(404).json({error: `failed to delete order credit!`});
+//         }
+//     } 
+//     catch(err) {
+//         res.status(500).json({err: "internal server error"});
+//     }
+// };
+
+// const deleteROItemByRO = async (req, res) => {
+//     try{
+//         const delROI = await AllModel.ROItemsModel.destroy({
+//             where:{
+//                 return_order_id: req.query.ro_id
+//             }
+//         });
+
+//         if(delROI){
+//             res.status(201).json(delROI);
+//         } else {
+//             res.status(404).json({error: `failed to delete order item by ro id!`});
+//         }
+//     } 
+//     catch(err) {
+//         res.status(500).json({err: "internal server error"});
+//     }
+// };
+
+
+
 export default {
+    getAllOrdersCredit,
     getOrderCreditByCust,
-    // getROItemByID, 
-    // deleteROItem,
-    // updateROItem, 
-    // insertROItems,
-    // deleteROItemByRO
+    insertOrderCredit,
+    updateMayorOrderCredit,
+    getAvailableOrderCreditByCust,
+    updateOrderIdOrderCredit
 };

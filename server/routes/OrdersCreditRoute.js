@@ -3,12 +3,11 @@ import OrdersCreditController from "../controllers/OrdersCreditController.js";
 
 const OrdersCreditRoute = express.Router();
 
-OrdersCreditRoute.get("/orders-credit", OrdersCreditController.getOrderCreditByCust);
-// RORoute.post("/ro", OrdersCreditController.insertRO);
-// RORoute.delete("/ro", OrdersCreditController.deleteRO);
-// RORoute.get("/ro/by", OrdersCreditController.getROByOrderID);
-// RORoute.put("/ro/update", OrdersCreditController.updateRO);
-// // RORoute.put("/ro/updates", OrdersCreditController.updateFullRO);
-// RORoute.patch("/ro/half-update", OrdersCreditController.updateROStatus);
+OrdersCreditRoute.get("/orders-credit", OrdersCreditController.getAllOrdersCredit);
+OrdersCreditRoute.get("/orders-credit/:cust_id", OrdersCreditController.getOrderCreditByCust);
+OrdersCreditRoute.get("/orders-credit/available/:cust_id", OrdersCreditController.getAvailableOrderCreditByCust);
+OrdersCreditRoute.post("/order-credit", OrdersCreditController.insertOrderCredit);
+OrdersCreditRoute.put("/order-credit", OrdersCreditController.updateMayorOrderCredit);
+OrdersCreditRoute.patch("/order-credit/:order_credit_id/:order_id", OrdersCreditController.updateOrderIdOrderCredit);
 
 export default OrdersCreditRoute;
