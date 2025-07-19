@@ -435,7 +435,11 @@ const getSalesCustNotCanceled = async(req, res) => {
                         {
                             model: AllModel.ProductsCatalogModel,
                             as: 'product',
-                        }
+                        },
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'return_order_item',
+                        },
                     ]
                 },
                 {
