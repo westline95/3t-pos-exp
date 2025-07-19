@@ -9,5 +9,7 @@ OrdersCreditRoute.get("/orders-credit/available/:cust_id", OrdersCreditControlle
 OrdersCreditRoute.post("/order-credit", OrdersCreditController.insertOrderCredit);
 OrdersCreditRoute.put("/order-credit", OrdersCreditController.updateMayorOrderCredit);
 OrdersCreditRoute.patch("/order-credit/:order_credit_id/:order_id", OrdersCreditController.updateOrderIdOrderCredit);
+OrdersCreditRoute.delete("/order-credit", OrdersCreditController.deleteOrderCredit);
+OrdersCreditRoute.delete("/order-credit/ro", OrdersCreditController.deleteOrderCreditByROId);
 
 export default OrdersCreditRoute;

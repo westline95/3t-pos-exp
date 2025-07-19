@@ -235,39 +235,39 @@ const updateOrderIdOrderCredit = async (req, res) => {
     }
 }
 
-// const deleteOrderCredit = async (req, res) => {
-//     try{
-//         const delOrderCredit = await AllModel.OrdersCreditModel.destroy({where:{order_credit_id: req.query.id}});
+const deleteOrderCredit = async (req, res) => {
+    try{
+        const delOrderCredit = await AllModel.OrdersCreditModel.destroy({where:{order_credit_id: req.query.id}});
         
-//         if(delOrderCredit){
-//             res.status(201).json(delOrderCredit);
-//         } else {
-//             res.status(404).json({error: `failed to delete order credit!`});
-//         }
-//     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
-//     }
-// };
+        if(delOrderCredit){
+            res.status(201).json(delOrderCredit);
+        } else {
+            res.status(404).json({error: `failed to delete order credit!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+};
 
-// const deleteROItemByRO = async (req, res) => {
-//     try{
-//         const delROI = await AllModel.ROItemsModel.destroy({
-//             where:{
-//                 return_order_id: req.query.ro_id
-//             }
-//         });
+const deleteOrderCreditByROId = async (req, res) => {
+    try{
+        const orderCredit = await AllModel.OrdersCreditModel.destroy({
+            where:{
+                return_order_id: req.query.ro_id
+            }
+        });
 
-//         if(delROI){
-//             res.status(201).json(delROI);
-//         } else {
-//             res.status(404).json({error: `failed to delete order item by ro id!`});
-//         }
-//     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
-//     }
-// };
+        if(orderCredit){
+            res.status(201).json(orderCredit);
+        } else {
+            res.status(404).json({error: `failed to delete order credit by ro id!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+};
 
 
 
@@ -277,5 +277,7 @@ export default {
     insertOrderCredit,
     updateMayorOrderCredit,
     getAvailableOrderCreditByCust,
-    updateOrderIdOrderCredit
+    updateOrderIdOrderCredit,
+    deleteOrderCredit,
+    deleteOrderCreditByROId
 };
