@@ -588,6 +588,12 @@ const salesWOrderItems = async (req, res) => {
                                         {
                                             model: AllModel.OrderItemsModel,
                                             as: 'order_item',
+                                            include: [
+                                                {
+                                                    model: AllModel.ProductsCatalogModel,
+                                                    as: 'product',
+                                                }
+                                            ]
                                         }
                                     ]
                                 }
