@@ -1,6 +1,6 @@
 import sequelize from "../config/Database.js";
 import AllModel from "../models/AllModel.js";
-import { Sequelize } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 
 const getAllSales = async (req, res) => {
     try{
@@ -414,6 +414,56 @@ const getSalesCust = async(req, res) => {
     }
 }
 
+const checkNextCustSales = async(req, res) => {
+    try{
+        const { id } = req.query;
+        const { order_date  } = req.body;
+        const parsedDate = JSON.stringify(order_date);
+        const getData = await AllModel.OrdersModel.findAll({
+            where: {
+                customer_id: id,
+                order_date: { [Op.gt]: new Date(parsedDate) }
+            },
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+                {
+                    model: AllModel.OrderItemsModel,
+                    as: 'order_items',
+                    required: true
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                    required: false
+                },
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice',
+                    include: [
+                        {
+                            model: AllModel.PaymentsModel,
+                            as: 'payments'
+                        },
+                    ]
+                },
+                
+            ]
+        })
+
+        if(getData){
+            res.json(getData);
+        } else {
+            res.status(404).json({error: `get customer data with ID not found!`});
+        }
+    }
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 
 const getSalesCustNotCanceled = async(req, res) => {
     try{
@@ -691,5 +741,6 @@ export default {
     updateSalesAddInvoices,
     updateOrderStatus,
     getSalesCustNotCanceled,
-    updateRO
+    updateRO, 
+    checkNextCustSales
 };
