@@ -416,13 +416,11 @@ const getSalesCust = async(req, res) => {
 
 const checkNextCustSales = async(req, res) => {
     try{
-        const { id } = req.query;
-        const { order_date  } = req.body;
-        const parsedDate = JSON.stringify(order_date);
+        const { id, order_date  } = req.query;
         const getData = await AllModel.OrdersModel.findAll({
             where: {
                 customer_id: id,
-                order_date: { [Op.gt]: new Date(parsedDate) }
+                order_date: { [Op.gt]: new Date(order_date) }
             },
             include: [
                 {
