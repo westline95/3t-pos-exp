@@ -30,21 +30,27 @@ const getAllRO = async (req, res) => {
                 {
                     model: AllModel.OrdersModel,
                     as: 'order',
-                    include: [{
-                        model: AllModel.OrderItemsModel,
-                        as: 'order_items',
-                        include: [
-                            {
-                                model: AllModel.ProductsCatalogModel,
-                                as: 'product',
-                            },
-                            {
-                                model: AllModel.ROItemsModel,
-                                as: 'return_order_item',
-                            }
-                            
-                        ]
-                    }]
+                    include: [
+                        {
+                            model: AllModel.OrderItemsModel,
+                            as: 'order_items',
+                            include: [
+                                {
+                                    model: AllModel.ProductsCatalogModel,
+                                    as: 'product',
+                                },
+                                {
+                                    model: AllModel.ROItemsModel,
+                                    as: 'return_order_item',
+                                }
+                                
+                            ]
+                        },
+                        {
+                            model: AllModel.InvoicesModel,
+                            as: 'invoice',
+                        }
+                    ]
                 },
             ],
         });
