@@ -422,6 +422,7 @@ const checkNextCustSales = async(req, res) => {
                 customer_id: id,
                 order_date: { [Op.gt]: new Date(order_date) }
             },
+            order: [["order_date", "ASC"]],
             include: [
                 {
                     model: AllModel.CustomersModel,
