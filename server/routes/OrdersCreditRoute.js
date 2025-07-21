@@ -5,6 +5,7 @@ const OrdersCreditRoute = express.Router();
 
 OrdersCreditRoute.get("/orders-credit", OrdersCreditController.getAllOrdersCredit);
 OrdersCreditRoute.get("/orders-credit/:cust_id", OrdersCreditController.getOrderCreditByCust);
+OrdersCreditRoute.get("/orders-credit/:ro_id", OrdersCreditController.getOrderCreditByRO);
 OrdersCreditRoute.get("/orders-credit/available/:cust_id", OrdersCreditController.getAvailableOrderCreditByCust);
 OrdersCreditRoute.post("/order-credit", OrdersCreditController.insertOrderCredit);
 OrdersCreditRoute.put("/order-credit", OrdersCreditController.updateMayorOrderCredit);
