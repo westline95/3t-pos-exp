@@ -1,4 +1,4 @@
-import { Sequelize, where } from "sequelize";
+import { Op, Sequelize, where } from "sequelize";
 // import PaymentModel from "../models/PaymentModel.js";
 import AllModel from "../models/AllModel.js";
 
@@ -194,7 +194,16 @@ const getInvByStatusCustId = async(req, res) => {
             include: [
                 {
                     model: AllModel.CustomersModel,
-                    as: 'customer'
+                    as: 'customer',
+                    include:[
+                        {
+                            model: AllModel.OrdersCreditModel,
+                            as: 'orders_credits',
+                            where:{
+                                order_id: { [Op.ne]: null}
+                            }
+                        }
+                    ]
                 },
             ]
         })

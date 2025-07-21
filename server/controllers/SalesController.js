@@ -323,14 +323,24 @@ const salesByOneCustPayType = async (req, res) => {
             where: {customer_id: req.query.custid},
             include: [
                 {
-                model: AllModel.OrdersModel,
-                as: 'orders',
-                where: { 
-                    payment_type: req.query.paytype,
-                    order_status: {[Sequelize.Op.not]: 'canceled'},
-                    invoice_id: null 
-                },
-                required: true
+                    model: AllModel.OrdersModel,
+                    as: 'orders',
+                    where: { 
+                        payment_type: req.query.paytype,
+                        order_status: {[Sequelize.Op.not]: 'canceled'},
+                        invoice_id: null 
+                    },
+                    required: true,
+                    include: [
+                        {
+                            model: AllModel.ROModel,
+                            as: 'return_order',
+                        },
+                        {
+                            model: AllModel.OrdersCreditModel,
+                            as: 'orders_credit',
+                        }
+                    ]
                 }
             ]
         });
