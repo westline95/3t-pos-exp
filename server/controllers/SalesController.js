@@ -67,16 +67,26 @@ const insertSales = async (req, res) => {
             await cust.save();
         }
        
-        const newCust = await AllModel.OrdersModel.create(req.body, {
+        const newSales = await AllModel.OrdersModel.create(req.body, {
             include: [
                 {
                     model: AllModel.CustomersModel,
-                    as: 'customer'
+                    as: 'customer',
+                    include: [
+                        {
+                            model: AllModel.OrdersCreditModel,
+                            as: 'orders_credits',
+                            where: { 
+                                order_id: {
+                                    [Sequelize.Op.or]: [null,req.query.invid] }
+                            }
+                        }
+                    ]
                 },
             ]
         });
         
-        res.status(201).json(newCust);
+        res.status(201).json(newSales);
     } 
     catch(err) {
         console.log(err)
