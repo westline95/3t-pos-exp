@@ -1,5 +1,5 @@
 import AllModel from "../models/AllModel.js";
-import { Sequelize } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 
 const getAllOrdersCredit = async(req, res) => {
     try{
@@ -110,9 +110,7 @@ const getAvailableOrderCreditByCust = async (req, res) => {
         const allCreditByCust = await AllModel.OrdersCreditModel.findAll({
             where: {
                 customer_id: cust_id,
-                order_id: {
-                    [Sequelize.Op.or]: [null,'']
-                }
+                order_id: null
             },
             include: [
                 {
