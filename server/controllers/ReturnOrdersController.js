@@ -98,7 +98,8 @@ const updateRO = async (req, res) => {
         const RO = await AllModel.ROModel.update(req.body, {
             where: {
                 return_order_id: req.query.ro_id
-            }
+            },
+            returning:true
         });
         
         if(!RO){
