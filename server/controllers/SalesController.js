@@ -68,6 +68,7 @@ const insertSales = async (req, res) => {
         }
        
         const newSales = await AllModel.OrdersModel.create(req.body, {
+            returning: true,
             include: [
                 {
                     model: AllModel.CustomersModel,
