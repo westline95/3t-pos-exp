@@ -339,6 +339,12 @@ const salesByOneCustPayType = async (req, res) => {
                         {
                             model: AllModel.OrdersCreditModel,
                             as: 'orders_credit',
+                            include: [
+                                {
+                                    model: AllModel.ROModel,
+                                    as: 'return_order',
+                                },
+                            ]
                         }
                     ]
                 }
