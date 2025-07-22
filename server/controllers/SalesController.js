@@ -157,7 +157,7 @@ const updateSalesAddInvoices = async (req, res) => {
 
 const updateSales= async (req, res) => {
     try{
-        const { order_type, ship_date, delivery_address } = req.body;
+        // const { order_type, ship_date, delivery_address } = req.body;
         const { order_id } = req.query.id;
 
         const sales = await AllModel.OrdersModel.update(req.body, {
@@ -176,16 +176,16 @@ const updateSales= async (req, res) => {
         } 
         
         // check order type first
-        if(order_type && order_type == 'delivery'){
+        if(req.body.order_type && req.body.order_type == 'delivery'){
             // check exist delivery
             const checkExistDelivery = await AllModel.DeliveryModel.findOne({where: {order_id: order_id}});
             if(!checkExistDelivery){
-                if(ship_date, delivery_address){
+                if(req.body.ship_date, req.body.delivery_address){
                     const delivery = await AllModel.DeliveryModel.create({
                         order_id,
-                        ship_date,
+                        ship_date: req.body.ship_date,
                         delivery_status: 'pending',
-                        delivery_address
+                        delivery_address: req.body.delivery_address
                     });
 
                     if(delivery){
