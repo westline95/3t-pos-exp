@@ -342,11 +342,7 @@ const deleteOrderCreditByROId = async (req, res) => {
             }
         });
 
-        if(orderCredit){
-            res.status(201).json(orderCredit);
-        } else {
-            res.status(404).json({error: `failed to delete order credit by ro id!`});
-        }
+        res.status(201).json(orderCredit);
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
