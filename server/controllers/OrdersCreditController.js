@@ -147,7 +147,7 @@ const getAvailableOrderCreditByCust = async (req, res) => {
 const getOrderCreditByRO = async (req, res) => {
     try{
         const { ro_id } = req.params;
-        const allCreditByRO = await AllModel.OrdersCreditModel.findAll({
+        const allCreditByRO = await AllModel.OrdersCreditModel.findOne({
             where: {
                 return_order_id: ro_id,
             },
@@ -171,8 +171,8 @@ const getOrderCreditByRO = async (req, res) => {
                     ]
                 },
                 {
-                    model: AllModel.CustomersModel,
-                    as: 'order'
+                    model: AllModel.OrdersModel,
+                    as: 'order',
                 },
             ]
         });
