@@ -187,6 +187,49 @@ const getOrderCreditByRO = async (req, res) => {
     }
 }
 
+const getOrderCreditByOrderID = async (req, res) => {
+    try{
+        const { order_id } = req.params;
+        const allCreditByOrder = await AllModel.OrdersCreditModel.findOne({
+            where: {
+                order_id: order_id,
+            },
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+                {
+                    model: AllModel.ROModel,
+                    as: 'return_order',
+                    include: [
+                        {
+                            model: AllModel.CustomersModel,
+                            as: 'customer'
+                        },
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'return_order_items',
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.OrdersModel,
+                    as: 'order',
+                },
+            ]
+        });
+        // if(allCreditByRO){
+            res.json(allCreditByOrder);
+        // } else {
+        //     res.status(404).json({error: `get all order credits by RO is not found!`});
+        // }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 const insertOrderCredit = async (req, res) => {
     try{
         const newOrderCredit = await AllModel.OrdersCreditModel.create(req.body);
@@ -321,5 +364,6 @@ export default {
     updateOrderIdOrderCredit,
     deleteOrderCredit,
     deleteOrderCreditByROId,
-    getOrderCreditByRO
+    getOrderCreditByRO,
+    getOrderCreditByOrderID
 };
