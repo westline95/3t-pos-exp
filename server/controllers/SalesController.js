@@ -39,7 +39,11 @@ const getAllSales = async (req, res) => {
                             as: 'return_order_item',
                         },
                     ]
-                }
+                },
+                {
+                    model: AllModel.OrdersCreditModel,
+                    as: 'orders_credit',
+                },
             ],
         });
         if(allSales){
