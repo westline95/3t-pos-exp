@@ -176,11 +176,11 @@ const getOrderCreditByRO = async (req, res) => {
                 },
             ]
         });
-        if(allCreditByRO){
+        // if(allCreditByRO){
             res.json(allCreditByRO);
-        } else {
-            res.status(404).json({error: `get all order credits by RO is not found!`});
-        }
+        // } else {
+        //     res.status(404).json({error: `get all order credits by RO is not found!`});
+        // }
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
