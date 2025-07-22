@@ -14,8 +14,8 @@ SalesRoute.get("/sales/cust/available", SalesController.getSalesCustNotCanceled)
 SalesRoute.get("/sales/next", SalesController.checkNextCustSales);
 SalesRoute.post("/sales/write", SalesController.insertSales);
 SalesRoute.post("/sales/writes", SalesController.insertMultipleSales);
-SalesRoute.put("/sales", SalesController.updateSales);
-SalesRoute.patch("/sales", SalesController.updateSales);
+SalesRoute.patch("/sales/update-minor/:order_id", SalesController.updateSales);
+SalesRoute.put("/sales", SalesController.updateSalesMayor);
 SalesRoute.patch("/sales/invs", SalesController.updateSalesAddInvoices);
 SalesRoute.patch("/sales/:order_id", SalesController.updateSalesAddInv);
 SalesRoute.patch("/sales/update/status", SalesController.updateOrderStatus);

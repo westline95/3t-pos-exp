@@ -158,6 +158,58 @@ const updateSalesAddInvoices = async (req, res) => {
 const updateSales= async (req, res) => {
     try{
         // const { order_type, ship_date, delivery_address } = req.body;
+        const { order_id } = req.params;
+
+        const sales = await AllModel.OrdersModel.update(req.body, {
+            where:{order_id: order_id},
+            returning: true,
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+            ]
+        });
+
+        if(!sales){
+            res.status(404).json({error: `failed to updated sales`});
+        } 
+        
+        // check order type first
+        if(req.body.order_type && req.body.order_type == 'delivery'){
+            // check exist delivery
+            const checkExistDelivery = await AllModel.DeliveryModel.findOne({where: {order_id: order_id}});
+            if(!checkExistDelivery){
+                if(req.body.ship_date, req.body.delivery_address){
+                    const delivery = await AllModel.DeliveryModel.create({
+                        order_id,
+                        ship_date: req.body.ship_date,
+                        delivery_status: 'pending',
+                        delivery_address: req.body.delivery_address
+                    });
+
+                    if(delivery){
+                        res.status(201).json(delivery);
+                    } else {
+                        res.status(404).json({error: `failed to create delivery`});
+                    }
+                }
+            } else {
+                return res.status(409).json({ message: 'Delivery already exists for this order.' });
+            }
+            
+        } else {
+            res.status(201).json(sales);
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+const updateSalesMayor= async (req, res) => {
+    try{
+        // const { order_type, ship_date, delivery_address } = req.body;
         const { order_id } = req.query.id;
 
         const sales = await AllModel.OrdersModel.update(req.body, {
@@ -768,5 +820,6 @@ export default {
     updateOrderStatus,
     getSalesCustNotCanceled,
     updateRO, 
-    checkNextCustSales
+    checkNextCustSales,
+    updateSalesMayor
 };
