@@ -10,7 +10,7 @@ OrdersCreditRoute.get("/orders-credit/ro/:ro_id", OrdersCreditController.getOrde
 OrdersCreditRoute.get("/orders-credit/available/:cust_id", OrdersCreditController.getAvailableOrderCreditByCust);
 OrdersCreditRoute.post("/order-credit", OrdersCreditController.insertOrderCredit);
 OrdersCreditRoute.put("/order-credit", OrdersCreditController.updateMayorOrderCredit);
-OrdersCreditRoute.patch("/order-credit/:order_credit_id/:order_id", OrdersCreditController.updateOrderIdOrderCredit);
+OrdersCreditRoute.patch("/order-credit/:order_credit_id", OrdersCreditController.updateOrderIdOrderCredit);
 OrdersCreditRoute.delete("/order-credit", OrdersCreditController.deleteOrderCredit);
 OrdersCreditRoute.delete("/order-credit/ro", OrdersCreditController.deleteOrderCreditByROId);
 

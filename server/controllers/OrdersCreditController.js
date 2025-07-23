@@ -301,7 +301,8 @@ const updateMayorOrderCredit = async (req, res) => {
 
 const updateOrderIdOrderCredit = async (req, res) => {
     try{
-        const { order_credit_id, order_id } = req.params;
+        const { order_credit_id } = req.params;
+        const { order_id  } = req.body;
 
         const orderCredit = await AllModel.OrdersCreditModel.findByPk(order_credit_id);
         
