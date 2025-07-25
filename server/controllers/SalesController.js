@@ -63,7 +63,7 @@ const validationDateSales = async (req, res) => {
             where: {
                 customer_id: req.query.custid,
                 order_date: {
-                    [Op.eq]: req.query.order_date, 
+                    [Op.eq]: req.body.order_date, 
                 }
             },
         });
@@ -699,7 +699,7 @@ const salesWOrderItems = async (req, res) => {
     try{
          const countSales = await AllModel.OrdersModel.findAll({
             where: {order_id: req.query.id},
-            order: [["order_date", "DESC"]],
+            order: [["createdAt", "ASC"]],
             include: [
                 {
                     model: AllModel.OrderItemsModel,
