@@ -160,6 +160,48 @@ const updateCreditCust= async (req, res) => {
     }
 }
 
+const updateOrderValue= async (req, res) => {
+    try{
+        const { customer_id, ordervalue } = req.params;
+        const { order_unpaid } = req.body;
+        
+        // get customer id
+        const cust = await AllModel.CustomersModel.findByPk(customer_id);
+        if (!cust) return res.status(404).json({ message: 'customer not found.' });
+
+        // assign data
+        cust.total_sales = ordervalue;
+        if(order_unpaid){
+            cust.total_debt = order_unpaid;
+        }
+        await cust.save();
+
+        res.json(cust);
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
+const updateDebt = async (req, res) => {
+    try{
+        const { customer_id, debtminus } = req.params;
+        
+        // get customer id
+        const cust = await AllModel.CustomersModel.findByPk(customer_id);
+        if (!cust) return res.status(404).json({ message: 'customer not found.' });
+
+        // assign data
+        cust.total_debt = debtminus;
+        await cust.save();
+
+        res.json(cust);
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 const deleteCust = async (req, res) => {
     try{
         const delCust = await AllModel.CustomersModel.destroy({
@@ -251,5 +293,7 @@ export default {
     countCustByName,
     getDebtData,
     getCustomersUnpaidInv,
-    updateCreditCust
+    updateCreditCust,
+    updateOrderValue,
+    updateDebt
 };
