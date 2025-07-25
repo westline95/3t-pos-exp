@@ -58,13 +58,13 @@ app.get('/', (req, res) => res.send("HelloWorld"));
 // // return order CRUD
 // app.use(RORoute);
 // return order CRUD
-app.use(OrdersCreditRoute);
+// app.use(OrdersCreditRoute);
 // // return order item CRUD
 // app.use(ROItemRoute);
 // app.use(OrdersCreditRoute);
 // app.use(InvoiceRoute);
 // // sales CRUD
-// app.use(SalesRoute);
+app.use(SalesRoute);
 // auth
 app.use(AuthRouter);
 // refresh
@@ -112,7 +112,7 @@ app.use(RORoute);
 // return order item CRUD
 app.use(ROItemRoute);
 // sales CRUD
-app.use(SalesRoute);
+// app.use(SalesRoute);
 // return order credit CRUD
 // app.use(OrdersCreditRoute);
 

@@ -57,6 +57,24 @@ const getAllSales = async (req, res) => {
     }
 }
 
+const validationDateSales = async (req, res) => {
+    try{
+        const allSales = await AllModel.OrdersModel.findAll({
+            where: {
+                customer_id: req.query.custid,
+                order_date: {
+                    [Op.eq]: req.query.order_date, 
+                }
+            },
+        });
+
+        res.json(allSales);
+    } 
+    catch(err) {
+        res.status(500).json({err: err});
+    }
+}
+
 const insertSales = async (req, res) => {
     const { 
         salesDate, customer_id, custName, custType, salesData, status, statusId, source, 
@@ -681,7 +699,7 @@ const salesWOrderItems = async (req, res) => {
     try{
          const countSales = await AllModel.OrdersModel.findAll({
             where: {order_id: req.query.id},
-            order: [["order_date", "ASC"]],
+            order: [["order_date", "DESC"]],
             include: [
                 {
                     model: AllModel.OrderItemsModel,
@@ -825,5 +843,6 @@ export default {
     getSalesCustNotCanceled,
     updateRO, 
     checkNextCustSales,
-    updateSalesMayor
+    updateSalesMayor,
+    validationDateSales
 };
