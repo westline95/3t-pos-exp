@@ -66,25 +66,21 @@ const getAllRO = async (req, res) => {
 }
 
 const insertRO = async (req, res) => {
-    // const { 
-    //     salesDate, customer_id, custName, custType, salesData, status, statusId, source, 
-    //     discount, grandTotal, note, totalPayment, remainingPayment, total_sales, 
-    //     paymentMethod, totalQty, paymentData, paid, orderType, orderTypeId
-    // } = req.body;
     try{
-        // update total sales in customer
-        // const cust = await AllModel.CustomersModel.findByPk(customer_id);
-        // if(cust){
-        //     cust.total_sales = total_sales;
-        //     await cust.save();
-        // }
-       
-        const newRO = await AllModel.ROModel.create(req.body);
-        
-        if(newRO){
-            res.status(201).json(newRO);
+        // check if already exist
+        const { order_id } = req.body;
+        const ro = await AllModel.ROModel.findOne({where: {order_id: order_id}});
+
+        if(ro){
+            res.status(403).json({error: `Return order already exist!`});
         } else {
-            res.status(404).json({error: `failed to insert return order!`});
+            const newRO = await AllModel.ROModel.create(req.body);
+            
+            if(newRO){
+                res.status(201).json(newRO);
+            } else {
+                res.status(500).json({error: `Error when create return order!`});
+            }
         }
     } 
     catch(err) {

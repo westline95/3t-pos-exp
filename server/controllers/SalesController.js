@@ -503,7 +503,7 @@ const checkNextCustSales = async(req, res) => {
         const getData = await AllModel.OrdersModel.findAll({
             where: {
                 customer_id: id,
-                order_date: { [Op.gt]: new Date(order_date) }
+                order_date: { [Op.gte]: new Date(order_date) }
             },
             order: [["order_date", "ASC"]],
             include: [
