@@ -133,11 +133,7 @@ const getAvailableOrderCreditByCust = async (req, res) => {
                 },
             ]
         });
-        if(allCreditByCust){
-            res.json(allCreditByCust);
-        } else {
-            res.status(404).json({error: `get all order credits by customer is not found!`});
-        }
+        res.json(allCreditByCust);
     } 
     catch(err) {
         res.status(500).json({err: "internal server error"});
