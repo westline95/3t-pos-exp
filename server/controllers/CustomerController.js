@@ -266,7 +266,7 @@ const getDebtData = async(req, res) => {
 
 const getCustomerByID = async(req, res) => {
     try{
-        const getData = await AllModel.CustomersModel.findAll({
+        const getData = await AllModel.CustomersModel.findOne({
             where: {customer_id: req.query.id}
         })
 
