@@ -114,7 +114,7 @@ app.use(ROItemRoute);
 // sales CRUD
 app.use(SalesRoute);
 // return order credit CRUD
-// app.use(OrdersCreditRoute);
+app.use(OrdersCreditRoute);
 
 
 app.listen(port, () => console.log(`

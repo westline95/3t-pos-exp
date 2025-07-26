@@ -133,6 +133,7 @@ const getAvailableOrderCreditByCust = async (req, res) => {
                 },
             ]
         });
+        
         res.json(allCreditByCust);
     } 
     catch(err) {
