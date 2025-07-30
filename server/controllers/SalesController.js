@@ -23,9 +23,6 @@ const getAllSales = async (req, res) => {
                        {
                             model: AllModel.PaymentsModel,
                             as: 'payments',
-                            attributes: [
-                                [Sequelize.fn('SUM', Sequelize.col('amount_paid')), 'paid_total']
-                            ],
                         }
                     ]
                 },
