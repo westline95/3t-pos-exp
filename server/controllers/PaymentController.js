@@ -78,6 +78,33 @@ const updatePayment= async (req, res) => {
         res.status(500).json({err: "internal server error"});
     }
 }
+const minorUpdatePayment= async (req, res) => {
+    try{
+        const payment = await AllModel.PaymentsModel.update(req.body, {
+            where:{payment_id: req.query.id},
+            returning: true,
+            include: [
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice'
+                },
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                }
+            ]
+        });
+        
+        if(payment){
+            res.status(201).json(payment);
+        } else {
+            res.status(404).json({error: `failed  to update payment!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
 
 const deletePayment = async (req, res) => {
     try{
@@ -224,6 +251,7 @@ export default {
     getAllPayment,
     insertPayment,
     updatePayment,
+    minorUpdatePayment,
     deletePayment,
     getPaymentByID,
     getPaymentByInvId
