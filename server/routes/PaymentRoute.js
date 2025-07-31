@@ -9,5 +9,6 @@ PaymentRoute.put("/payment/update", PaymentController.updatePayment);
 PaymentRoute.patch("/payment/minor-update", PaymentController.minorUpdatePayment);
 PaymentRoute.delete("/payment/del", PaymentController.deletePayment);
 PaymentRoute.get("/payment/inv", PaymentController.getPaymentByInvId);
+PaymentRoute.get("/payment/cust/nullish", PaymentController.getPaymentByCustId);
 PaymentRoute.get("/payment", PaymentController.getPaymentByID)
 export default PaymentRoute;

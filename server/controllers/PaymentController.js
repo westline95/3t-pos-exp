@@ -201,6 +201,32 @@ const getPaymentByInvId = async(req, res) => {
     }
 }
 
+const getPaymentByCustId = async(req, res) => {
+    try{
+        const getData = await AllModel.PaymentsModel.findAll({
+            where: {
+                customer_id: req.query.custid,
+                invoice_id: null
+            },
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                }
+            ]
+        })
+
+        if(getData){
+            res.json(getData);
+        } else {
+            res.status(404).json({error: `get payment by cust id and invoice null is not found!`});
+        }
+    }
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 // const getSalesByStatus = async(req, res) => {
 //     try{
 //         const getData = await SalesModel.findAll({
@@ -254,5 +280,6 @@ export default {
     minorUpdatePayment,
     deletePayment,
     getPaymentByID,
-    getPaymentByInvId
+    getPaymentByInvId,
+    getPaymentByCustId
 };
