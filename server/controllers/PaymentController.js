@@ -216,11 +216,7 @@ const getPaymentByCustId = async(req, res) => {
             ]
         })
 
-        if(getData){
-            res.json(getData);
-        } else {
-            res.status(404).json({error: `get payment by cust id and invoice null is not found!`});
-        }
+        res.json(getData);
     }
     catch(err) {
         res.status(500).json({err: "internal server error"});
