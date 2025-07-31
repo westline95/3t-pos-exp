@@ -481,7 +481,7 @@ const PaymentsModel = sequelize.define("payments",
         },
         invoice_id: {
             type: Sequelize.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
         payment_date: {
             type: Sequelize.DATE,
