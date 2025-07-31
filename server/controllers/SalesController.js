@@ -314,7 +314,7 @@ const updateOrderStatus = async (req, res) => {
 const updateRO = async (req, res) => {
     try {
         const { order_id } = req.params;
-        const { return_order_id } = req.body;
+        const { return_order_id, order_discount } = req.body;
         
         // get order id
         const order = await AllModel.OrdersModel.findByPk(order_id);
@@ -322,6 +322,10 @@ const updateRO = async (req, res) => {
 
         // assign roID
         order.return_order_id = return_order_id;
+        
+        if(order_discount){
+            order.order_discount = order_discount;
+        }
         await order.save();
 
         res.status(201).json(order);
