@@ -334,6 +334,14 @@ const deleteOrderCredit = async (req, res) => {
 
 const deleteOrderCreditByROId = async (req, res) => {
     try{
+        const orderCreditFind = await AllModel.OrdersCreditModel.findOne({where: {
+            return_order_id: req.query.ro_id
+        }});
+
+        if(!orderCreditFind){
+            return res.status(404).json({message: "404"});
+        }
+
         const orderCredit = await AllModel.OrdersCreditModel.destroy({
             where:{
                 return_order_id: req.query.ro_id
