@@ -339,7 +339,7 @@ const deleteOrderCreditByROId = async (req, res) => {
         }});
 
         if(!orderCreditFind){
-            return res.status(404).json({message: "404"});
+            return res.status(201).json(orderCreditFind);
         }
 
         const orderCredit = await AllModel.OrdersCreditModel.destroy({
