@@ -12,6 +12,7 @@ CustomersRoute.put("/customers", CustomerController.updateCust);
 CustomersRoute.patch("/customer/:customer_id/credit", CustomerController.updateCreditCust);
 CustomersRoute.patch("/customer/sales/:customer_id/:ordervalue", CustomerController.updateOrderValue);
 CustomersRoute.patch("/customer/debt/:customer_id/:debtminus", CustomerController.updateDebt);
+CustomersRoute.patch("/customer/sales-debt/:customer_id/:total_debt/:total_sales", CustomerController.updateSalesDebt);
 CustomersRoute.delete("/customers", CustomerController.deleteCust);
 CustomersRoute.get("/customer/debt", CustomerController.getDebtData);
 CustomersRoute.get("/customer/detail/total-sales", CustomerController.getDetailedSales);
