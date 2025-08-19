@@ -333,8 +333,8 @@ const getDetailedCust = async(req, res) => {
             attributes: [
                 'customer_id',
                 'name',
-                [Sequelize.fn("sum", Sequelize.col("orders.grandtotal")), "total_sales_grandtotal"],
-                [Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")), "total_refund"],
+                [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders.grandtotal")),0), "total_sales_grandtotal"],
+                [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")),0), "total_refund"],
             ],
             include: [{
                 model: AllModel.OrdersModel,
@@ -349,6 +349,7 @@ const getDetailedCust = async(req, res) => {
                         model: AllModel.ROModel,
                          as: 'return_order',
                         attributes:[],
+                        // required: false
                     }
                 ]
             }],
@@ -381,7 +382,7 @@ const getDetailedCust = async(req, res) => {
             attributes: [
                 // 'customer_id',
                 // 'name',
-                [Sequelize.fn("sum", Sequelize.col("invoice.remaining_payment")), "sisa"],
+                [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("invoice.remaining_payment")),0), "sisa"],
             ],
             include: [
                 {
@@ -404,8 +405,8 @@ const getDetailedCust = async(req, res) => {
             attributes: [
                 'customer_id',
                 'name',
-                [Sequelize.fn("sum", Sequelize.col("orders.grandtotal")), "total_debt_grandtotal"],
-                [Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")), "total_refund"],
+                [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders.grandtotal")),0), "total_debt_grandtotal"],
+                [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")),0), "total_refund"],
                 // [Sequelize.fn("sum", Sequelize.literal("DISTINCT payments.amount_paid")), "total_payment"],
             ],
             include: [
