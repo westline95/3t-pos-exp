@@ -204,8 +204,7 @@ const updateDebt = async (req, res) => {
 
 const updateSalesDebt = async (req, res) => {
     try{
-        const { customer_id } = req.params;
-        const { total_debt, total_sales } = req.body;
+        const { customer_id, total_debt, total_sales } = req.params;
         
         // get customer id
         const cust = await AllModel.CustomersModel.findByPk(customer_id);
