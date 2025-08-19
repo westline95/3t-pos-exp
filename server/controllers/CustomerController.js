@@ -454,8 +454,14 @@ const getDetailedCust = async(req, res) => {
         });
 
         if(getTotalSales && getAllAmount && getPartialOrder){
-            getAllAmount[0].setDataValue('partial_sisa',getPartialOrder[0]);
-            res.json({sales: getTotalSales[0], debt: getAllAmount[0]});
+            const sales = getTotalSales.length > 0 ? getTotalSales : null;
+            const debt = getAllAmount.length > 0 ? getAllAmount : null;
+
+            if(debt){
+                debt[0].setDataValue('partial_sisa',getPartialOrder[0]);
+            }
+
+            res.json({sales: sales, debt: debt});
         } else {
             res.status(404).json({error: `get all total customer not found!`});
         }
