@@ -291,7 +291,6 @@ const getDetailedSales = async(req, res) => {
             attributes: [
                 'customer_id',
                 'name',
-                // [Sequelize.fn("sum", Sequelize.col("orders.subtotal")), "total_sales_subtotal"],
                 [Sequelize.fn("sum", Sequelize.col("orders.grandtotal")), "total_sales_grandtotal"],
                 [Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")), "total_refund"],
             ],
@@ -325,22 +324,51 @@ const getDetailedSales = async(req, res) => {
     }
 }
 
-const getDetailedDebt = async(req, res) => {
-
+const getDetailedCust = async(req, res) => {
     try {
-        const totalPayment = await AllModel.PaymentsModel.sum('amount_paid', {
-            where: { customer_id: req.query.custid }
-        });
-
-        const getCompletedOrder = await AllModel.OrdersModel.sum('grandtotal',{
+        const getTotalSales = await AllModel.CustomersModel.findAll({
             where: {
                 customer_id: req.query.custid,
-                payment_type: 'lunas',
-                order_status: {
-                    [Op.ne]: 'canceled'
-                }
             },
+            attributes: [
+                'customer_id',
+                'name',
+                [Sequelize.fn("sum", Sequelize.col("orders.grandtotal")), "total_sales_grandtotal"],
+                [Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")), "total_refund"],
+            ],
+            include: [{
+                model: AllModel.OrdersModel,
+                where: {
+                    order_status: {
+                        [Op.ne]: 'canceled'
+                    }
+                },
+                attributes:[],
+                include: [
+                    {
+                        model: AllModel.ROModel,
+                         as: 'return_order',
+                        attributes:[],
+                    }
+                ]
+            }],
+            group: ['customers.customer_id']
         });
+
+
+        // const totalPayment = await AllModel.PaymentsModel.sum('amount_paid', {
+        //     where: { customer_id: req.query.custid }
+        // });
+
+        // const getCompletedOrder = await AllModel.OrdersModel.sum('grandtotal',{
+        //     where: {
+        //         customer_id: req.query.custid,
+        //         payment_type: 'lunas',
+        //         order_status: {
+        //             [Op.ne]: 'canceled'
+        //         }
+        //     },
+        // });
         
         const getPartialOrder = await AllModel.OrdersModel.findAll({
             where: {
@@ -376,7 +404,6 @@ const getDetailedDebt = async(req, res) => {
             attributes: [
                 'customer_id',
                 'name',
-                // [Sequelize.fn("sum", Sequelize.col("orders.subtotal")), "total_debt_subtotal"],
                 [Sequelize.fn("sum", Sequelize.col("orders.grandtotal")), "total_debt_grandtotal"],
                 [Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")), "total_refund"],
                 // [Sequelize.fn("sum", Sequelize.literal("DISTINCT payments.amount_paid")), "total_payment"],
@@ -401,21 +428,13 @@ const getDetailedDebt = async(req, res) => {
                         }
                     ]
                 },
-                // {
-                //     model: AllModel.PaymentsModel,
-                //     attributes:[]
-                // }
             ],
             group: ['customers.customer_id']
         });
 
-        if(totalPayment && getCompletedOrder && getAllAmount && getPartialOrder){
-            const partialRemain = getPartialOrder[0];
-            // getAllAmount[0].setDataValue('total_paid', totalPayment);
-            // getAllAmount[0].setDataValue('total_lunas', getCompletedOrder);
+        if(getTotalSales && getAllAmount && getPartialOrder){
             getAllAmount[0].setDataValue('partial_sisa',getPartialOrder[0]);
-            // getAllAmount[0].setDataValue
-            res.json(getAllAmount);
+            res.json({sales: getTotalSales[0], debt: getAllAmount[0]});
         } else {
             res.status(404).json({error: `get all total customer not found!`});
         }
@@ -439,5 +458,5 @@ export default {
     updateOrderValue,
     updateDebt,
     getDetailedSales,
-    getDetailedDebt
+    getDetailedCust
 };
