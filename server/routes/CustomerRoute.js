@@ -14,6 +14,8 @@ CustomersRoute.patch("/customer/sales/:customer_id/:ordervalue", CustomerControl
 CustomersRoute.patch("/customer/debt/:customer_id/:debtminus", CustomerController.updateDebt);
 CustomersRoute.delete("/customers", CustomerController.deleteCust);
 CustomersRoute.get("/customer/debt", CustomerController.getDebtData);
+CustomersRoute.get("/customer/detail/total-sales", CustomerController.getDetailedSales);
+CustomersRoute.get("/customer/detail/total-debt", CustomerController.getDetailedDebt);
 CustomersRoute.get("/customer/unpaid-inv", CustomerController.getCustomersUnpaidInv);
 
 export default CustomersRoute;

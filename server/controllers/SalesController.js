@@ -379,7 +379,7 @@ const salesByCustUnpaid = async (req, res) => {
                 {
                     model: AllModel.OrdersModel,
                     as: 'orders',
-                    where: { payment_type: 'unpaid' },
+                    where: { payment_type: 'belum bayar' },
                     required: true
                 }
             ]

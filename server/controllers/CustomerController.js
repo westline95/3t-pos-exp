@@ -1,5 +1,5 @@
 import AllModel from "../models/AllModel.js";
-import { Sequelize, where } from "sequelize";
+import { Op, Sequelize, where } from "sequelize";
 
 const getCustomers = async (req, res) => {
     try{
@@ -281,7 +281,149 @@ const getCustomerByID = async(req, res) => {
     }
 }
 
+const getDetailedSales = async(req, res) => {
 
+    try {
+        const getAllAmount = await AllModel.CustomersModel.findAll({
+            where: {
+                customer_id: req.query.custid,
+            },
+            attributes: [
+                'customer_id',
+                'name',
+                // [Sequelize.fn("sum", Sequelize.col("orders.subtotal")), "total_sales_subtotal"],
+                [Sequelize.fn("sum", Sequelize.col("orders.grandtotal")), "total_sales_grandtotal"],
+                [Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")), "total_refund"],
+            ],
+            include: [{
+                model: AllModel.OrdersModel,
+                where: {
+                    order_status: {
+                        [Op.ne]: 'canceled'
+                    }
+                },
+                attributes:[],
+                include: [
+                    {
+                        model: AllModel.ROModel,
+                         as: 'return_order',
+                        attributes:[],
+                    }
+                ]
+            }],
+            group: ['customers.customer_id']
+        });
+    
+        if(getAllAmount){
+            res.json(getAllAmount);
+        } else {
+            res.status(404).json({error: `get all total customer not found!`});
+        }
+    }
+     catch(err) {
+        res.status(500).json({err: err});
+    }
+}
+
+const getDetailedDebt = async(req, res) => {
+
+    try {
+        const totalPayment = await AllModel.PaymentsModel.sum('amount_paid', {
+            where: { customer_id: req.query.custid }
+        });
+
+        const getCompletedOrder = await AllModel.OrdersModel.sum('grandtotal',{
+            where: {
+                customer_id: req.query.custid,
+                payment_type: 'lunas',
+                order_status: {
+                    [Op.ne]: 'canceled'
+                }
+            },
+        });
+        
+        const getPartialOrder = await AllModel.OrdersModel.findAll({
+            where: {
+                customer_id: req.query.custid,
+                payment_type: 'sebagian',
+                order_status: {
+                    [Op.ne]: 'canceled'
+                }
+            },
+            attributes: [
+                // 'customer_id',
+                // 'name',
+                [Sequelize.fn("sum", Sequelize.col("invoice.remaining_payment")), "sisa"],
+            ],
+            include: [
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice',
+                    where: {
+                        is_paid: false
+                    },
+                    attributes:[],
+                }
+            ],
+            group: ['orders.customer_id']
+            
+        });
+
+        const getAllAmount = await AllModel.CustomersModel.findAll({
+            where: {
+                customer_id: req.query.custid,
+            },
+            attributes: [
+                'customer_id',
+                'name',
+                // [Sequelize.fn("sum", Sequelize.col("orders.subtotal")), "total_debt_subtotal"],
+                [Sequelize.fn("sum", Sequelize.col("orders.grandtotal")), "total_debt_grandtotal"],
+                [Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")), "total_refund"],
+                // [Sequelize.fn("sum", Sequelize.literal("DISTINCT payments.amount_paid")), "total_payment"],
+            ],
+            include: [
+                {
+                    model: AllModel.OrdersModel,
+                    where: {
+                        payment_type: {
+                            [Op.eq]: 'bayar nanti',
+                        },
+                        order_status: {
+                            [Op.ne]: 'canceled'
+                        }
+                    },
+                    attributes:[],
+                    include: [
+                        {
+                            model: AllModel.ROModel,
+                            as: 'return_order',
+                            attributes:[],
+                        }
+                    ]
+                },
+                // {
+                //     model: AllModel.PaymentsModel,
+                //     attributes:[]
+                // }
+            ],
+            group: ['customers.customer_id']
+        });
+
+        if(totalPayment && getCompletedOrder && getAllAmount && getPartialOrder){
+            const partialRemain = getPartialOrder[0];
+            // getAllAmount[0].setDataValue('total_paid', totalPayment);
+            // getAllAmount[0].setDataValue('total_lunas', getCompletedOrder);
+            getAllAmount[0].setDataValue('partial_sisa',getPartialOrder[0]);
+            // getAllAmount[0].setDataValue
+            res.json(getAllAmount);
+        } else {
+            res.status(404).json({error: `get all total customer not found!`});
+        }
+    }
+     catch(err) {
+        res.status(500).json({err: err});
+    }
+}
 
 export default {
     getCustomers, 
@@ -295,5 +437,7 @@ export default {
     getCustomersUnpaidInv,
     updateCreditCust,
     updateOrderValue,
-    updateDebt
+    updateDebt,
+    getDetailedSales,
+    getDetailedDebt
 };
