@@ -526,7 +526,7 @@ const checkNextCustSales = async(req, res) => {
             where: {
                 customer_id: id,
                 order_date: { [Op.gte]: new Date(order_date) },
-                order_status: 'canceled'
+                order_status: {[Op.eq]: 'pending'}
             },
             order: [["order_date", "ASC"]],
             include: [
