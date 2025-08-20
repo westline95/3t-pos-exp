@@ -377,9 +377,9 @@ const getDetailedCust = async(req, res) => {
         });
 
 
-        // const totalPayment = await AllModel.PaymentsModel.sum('amount_paid', {
-        //     where: { customer_id: req.query.custid }
-        // });
+        const totalPayment = await AllModel.PaymentsModel.sum('amount_paid', {
+            where: { customer_id: req.query.custid }
+        });
 
         // const getCompletedOrder = await AllModel.OrdersModel.sum('grandtotal',{
         //     where: {
@@ -438,6 +438,9 @@ const getDetailedCust = async(req, res) => {
                         },
                         order_status: {
                             [Op.ne]: 'canceled'
+                        },
+                        invoice_id: {
+                            [Op.eq]: null
                         }
                     },
                     attributes:[],
@@ -453,12 +456,59 @@ const getDetailedCust = async(req, res) => {
             group: ['customers.customer_id']
         });
 
-        if(getTotalSales && getAllAmount && getPartialOrder){
+        const getOrderBBInvoiced = await AllModel.CustomersModel.findAll({
+            where: {
+                customer_id: req.query.custid,
+            },
+            attributes: [
+                // [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders.grandtotal")),0), "total_debt_grandtotal"],
+                // [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")),0), "total_refund"],
+                [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->invoice.remaining_payment")),0), "sisa_hutang"],
+            ],
+            include: [
+                {
+                    model: AllModel.OrdersModel,
+                    where: {
+                        payment_type: {
+                            [Op.eq]: 'bayar nanti',
+                        },
+                        order_status: {
+                            [Op.ne]: 'canceled'
+                        },
+                        invoice_id: {
+                            [Op.ne]: null
+                        }
+                    },
+                    attributes:[],
+                    include: [
+                        {
+                            model: AllModel.InvoicesModel,
+                            as: 'invoice',
+                            where: {
+                                is_paid: false
+                            },
+                            attributes:[],
+                        }
+                    ],
+                },
+            ],
+            group: ['customers.customer_id']
+        });
+
+        if(getTotalSales && getAllAmount && getPartialOrder && getOrderBBInvoiced){
             const sales = getTotalSales.length > 0 ? getTotalSales : null;
-            const debt = getAllAmount.length > 0 ? getAllAmount : null;
+            let debt = getAllAmount.length > 0 ? getAllAmount : null;
 
             if(debt){
                 debt[0].setDataValue('partial_sisa',getPartialOrder[0]);
+                debt[0].setDataValue('hutang_invoice',getOrderBBInvoiced[0]);
+            } else {
+                debt = [];
+                let obj = {
+                    partial_sisa: getPartialOrder[0] ? {...getPartialOrder[0]} : null,
+                    hutang_invoice: getOrderBBInvoiced[0] ? getOrderBBInvoiced[0] : null
+                };
+                debt.push(obj);
             }
 
             res.json({sales: sales, debt: debt});
