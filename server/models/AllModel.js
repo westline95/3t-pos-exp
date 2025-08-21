@@ -271,6 +271,10 @@ const OrdersModel = sequelize.define("orders",
         return_order_id: {
             type: Sequelize.INTEGER,
             allowNull: true,
+        },
+        receipt_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true,
         }
     }, 
     {
