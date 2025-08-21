@@ -657,52 +657,30 @@ const forFilteredRO = async(req, res) => {
         const getData = await AllModel.OrdersModel.findAll({
             where: {
                 customer_id: req.query.id,
-                order_status: {[Sequelize.Op.not]: 'canceled'},
-                return_order_id: null
+                order_status: {[Op.ne]: 'canceled'},
+                return_order_id: {
+                    [Op.eq]: null
+                }
             },
             include: [
                 {
                     model: AllModel.CustomersModel,
-                    as: 'customer'
                 },
                 {
                     model: AllModel.OrderItemsModel,
-                    as: 'order_items',
                     required: true,
                     include: [
                         {
                             model: AllModel.ProductsCatalogModel,
-                            as: 'product',
                         },
                     ]
                 },
                 {
                     model: AllModel.DeliveryModel,
-                    as: 'delivery',
                 },
                 {
                     model: AllModel.InvoicesModel,
-                    as: 'invoice',
-                    where:{
-                        is_paid: false
-                    },
-                    include: [
-                        {
-                            model: AllModel.PaymentsModel,
-                            as: 'payments'
-                        },
-                    ]
                 },
-                {
-                    model: AllModel.ROModel,
-                    as: 'return_order',
-                    include: [
-                        {
-                            model: AllModel.ROItemsModel,
-                            as: 'return_order_item',
-                        },
-                    ]
-                }
                 
             ]
         })
