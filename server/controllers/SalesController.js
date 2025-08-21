@@ -652,6 +652,72 @@ const getSalesCustNotCanceled = async(req, res) => {
     }
 }
 
+const forFilteredRO = async(req, res) => {
+    try{
+        const getData = await AllModel.OrdersModel.findAll({
+            where: {
+                customer_id: req.query.id,
+                order_status: {[Sequelize.Op.not]: 'canceled'},
+                return_order_id: null
+            },
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+                {
+                    model: AllModel.OrderItemsModel,
+                    as: 'order_items',
+                    required: true,
+                    include: [
+                        {
+                            model: AllModel.ProductsCatalogModel,
+                            as: 'product',
+                        },
+                    ]
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                },
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice',
+                    where:{
+                        is_paid: false
+                    },
+                    include: [
+                        {
+                            model: AllModel.PaymentsModel,
+                            as: 'payments'
+                        },
+                    ]
+                },
+                {
+                    model: AllModel.ROModel,
+                    as: 'return_order',
+                    include: [
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'return_order_item',
+                        },
+                    ]
+                }
+                
+            ]
+        })
+
+        if(getData){
+            res.json(getData);
+        } else {
+            res.status(404).json({error: `get customer data with ID and order status not canceled not found!`});
+        }
+    }
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 const getSalesByStatus = async(req, res) => {
     try{
         const getData = await AllModel.OrdersModel.findAll({
@@ -870,5 +936,6 @@ export default {
     checkNextCustSales,
     updateSalesMayor,
     validationDateSales,
-    updateSalesReceipt
+    updateSalesReceipt,
+    forFilteredRO
 };

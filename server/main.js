@@ -65,7 +65,7 @@ app.use(CustomersRoute);
 // app.use(OrdersCreditRoute);
 // app.use(InvoiceRoute);
 // // sales CRUD
-// app.use(SalesRoute);
+app.use(SalesRoute);
 // auth
 app.use(AuthRouter);
 // refresh
