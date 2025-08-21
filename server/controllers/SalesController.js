@@ -157,6 +157,26 @@ const updateSalesAddInv= async (req, res) => {
     }
 };
 
+const updateSalesReceipt = async (req, res) => {
+     try{
+        const { receipt_id } = req.body;
+
+       const sales = await AllModel.OrdersModel.update({receipt_id: receipt_id, is_complete: true, order_status: 'completed'}, {
+            where: {order_id: req.query.id},
+            returning: true,
+        });
+
+        if(!sales){
+            res.status(404).json({err: `failed to update sales=>receipt`});
+        } 
+
+        res.status(201).json(sales);
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+};
+
 const updateSalesAddInvoices = async (req, res) => {
      try{
 
@@ -849,5 +869,6 @@ export default {
     updateRO, 
     checkNextCustSales,
     updateSalesMayor,
-    validationDateSales
+    validationDateSales,
+    updateSalesReceipt
 };

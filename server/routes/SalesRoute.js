@@ -17,6 +17,7 @@ SalesRoute.post("/sales/writes", SalesController.insertMultipleSales);
 SalesRoute.patch("/sales/update-minor/:order_id", SalesController.updateSales);
 SalesRoute.put("/sales", SalesController.updateSalesMayor);
 SalesRoute.patch("/sales/invs", SalesController.updateSalesAddInvoices);
+SalesRoute.patch("/sales/receipt", SalesController.updateSalesReceipt);
 SalesRoute.patch("/sales/:order_id", SalesController.updateSalesAddInv);
 SalesRoute.patch("/sales/update/status", SalesController.updateOrderStatus);
 SalesRoute.patch("/sales/update/ro/:order_id", SalesController.updateRO);
