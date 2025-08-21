@@ -492,7 +492,7 @@ const getDetailedCust = async(req, res) => {
                 'customer_id',
                 'name',
                 [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders.grandtotal")),0), "total_debt_grandtotal"],
-                // [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")),0), "total_refund"],
+                [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")),0), "total_refund"],
                 // [Sequelize.fn("sum", Sequelize.literal("DISTINCT payments.amount_paid")), "total_payment"],
             ],
             include: [
@@ -510,6 +510,16 @@ const getDetailedCust = async(req, res) => {
                         }
                     },
                     attributes:[],
+                    include: [
+                        {
+                            model: AllModel.ROModel,
+                            where: {
+                                return_method_id: 2
+                            },
+                            required: true,
+                            attributes:[],
+                        }
+                    ],
                 },
             ],
             group: ['customers.customer_id']
