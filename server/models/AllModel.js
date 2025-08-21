@@ -421,7 +421,7 @@ const InvoicesModel = sequelize.define("invoices",
             allowNull: true,
         },
         status: {
-            type: Sequelize.STRING,
+            type: Sequelize.INTEGER,
             allowNull: false,
         }
     }, 

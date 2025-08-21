@@ -67,7 +67,7 @@ const insertMultipleInv = async (req, res) => {
     }
 }
 
-const updateInv= async (req, res) => {
+const updateInv = async (req, res) => {
     try{
         const inv = await AllModel.InvoicesModel.update(req.body, {
             where:{invoice_id: req.query.id},
