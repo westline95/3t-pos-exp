@@ -283,9 +283,9 @@ const updateSalesMayor= async (req, res) => {
 
 const updateOrderStatus = async (req, res) => {
     try{
-        const { order_status } = req.body;
+        const { order_status, is_complete } = req.body;
 
-        const sales = await AllModel.OrdersModel.update({order_status: order_status}, {
+        const sales = await AllModel.OrdersModel.update({order_status: order_status, is_complete: is_complete}, {
             where: {order_id: req.query.id},
             returning: true,
             include: [

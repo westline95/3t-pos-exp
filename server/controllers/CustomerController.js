@@ -354,42 +354,108 @@ const getDetailedCust = async(req, res) => {
                 'customer_id',
                 'name',
                 [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders.grandtotal")),0), "total_sales_grandtotal"],
-                [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")),0), "total_refund"],
+                // [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")),0), "total_refund"],
+                // [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->return_order->orders_credit")),0), "total_refund"],
             ],
-            include: [{
-                model: AllModel.OrdersModel,
-                where: {
-                    order_status: {
-                        [Op.ne]: 'canceled'
-                    }
+            include: [
+                {
+                    model: AllModel.OrdersModel,
+                    where: {
+                        order_status: {
+                            [Op.ne]: 'canceled'
+                        }
+                    },
+                    attributes:[],
+                    // include: [
+                    //     {
+                    //         model: AllModel.ROModel,
+                    //         as: 'return_order',
+                    //         attributes:[],
+                    //         where:{
+                    //             return_method_id: 2
+                    //         },                            
+                    //     }
+                    // ]
                 },
-                attributes:[],
-                include: [
-                    {
-                        model: AllModel.ROModel,
-                         as: 'return_order',
-                        attributes:[],
-                        // required: false
-                    }
-                ]
-            }],
+                // {
+                //     model: AllModel.OrdersCreditModel,
+                //     // as: 'order',
+                //     attributes:[],
+                //     where:{
+                //         order_id: {
+                //             [Op.ne]: null
+                //         }
+                //     }
+                // }
+            ],
             group: ['customers.customer_id']
         });
 
 
-        const totalPayment = await AllModel.PaymentsModel.sum('amount_paid', {
-            where: { customer_id: req.query.custid }
+        const getOrderCreditAvail = await AllModel.ROModel.findOne({
+            attributes: [
+                // 'customer_id',
+                [Sequelize.fn("COALESCE",Sequelize.fn("SUM", Sequelize.col("refund_total")),0), "total"],
+                
+            ],
+            include: [
+                {
+                model: AllModel.OrdersCreditModel,
+                required: true,
+                attributes: [],
+                include: [
+                    {
+                    model: AllModel.OrdersModel,
+                    required: true,
+                    attributes: [],
+                    where: {
+                        customer_id: req.query.custid, // atau gunakan BigInt jika perlu
+                        order_status: {
+                            [Op.ne]: 'canceled'
+                        }
+                    }
+                    }
+                ]
+                }
+            ],
+            raw: true,
+            subQuery:false
         });
 
-        // const getCompletedOrder = await AllModel.OrdersModel.sum('grandtotal',{
-        //     where: {
-        //         customer_id: req.query.custid,
-        //         payment_type: 'lunas',
-        //         order_status: {
-        //             [Op.ne]: 'canceled'
-        //         }
-        //     },
-        // });
+        const getOrderCreditNotComplete = await AllModel.ROModel.findOne({
+            attributes: [
+                // 'customer_id',
+                [Sequelize.fn("COALESCE",Sequelize.fn("SUM", Sequelize.col("refund_total")),0), "total"],
+                
+            ],
+            include: [
+                {
+                model: AllModel.OrdersCreditModel,
+                required: true,
+                attributes: [],
+                include: [
+                    {
+                    model: AllModel.OrdersModel,
+                    required: true,
+                    attributes: [],
+                    where: {
+                        customer_id: req.query.custid, // atau gunakan BigInt jika perlu
+                        is_complete: false
+                    }
+                    }
+                ]
+                }
+            ],
+            raw: true,
+            subQuery:false
+        });
+
+        const totalRefund = await AllModel.ROModel.sum('refund_total', {
+            where: { 
+                customer_id: req.query.custid,
+                return_method_id: 2
+            }
+        });
         
         const getPartialOrder = await AllModel.OrdersModel.findAll({
             where: {
@@ -426,7 +492,7 @@ const getDetailedCust = async(req, res) => {
                 'customer_id',
                 'name',
                 [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders.grandtotal")),0), "total_debt_grandtotal"],
-                [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")),0), "total_refund"],
+                // [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")),0), "total_refund"],
                 // [Sequelize.fn("sum", Sequelize.literal("DISTINCT payments.amount_paid")), "total_payment"],
             ],
             include: [
@@ -444,13 +510,6 @@ const getDetailedCust = async(req, res) => {
                         }
                     },
                     attributes:[],
-                    include: [
-                        {
-                            model: AllModel.ROModel,
-                            as: 'return_order',
-                            attributes:[],
-                        }
-                    ]
                 },
             ],
             group: ['customers.customer_id']
@@ -495,26 +554,45 @@ const getDetailedCust = async(req, res) => {
             group: ['customers.customer_id']
         });
 
-        if(getTotalSales && getAllAmount && getPartialOrder && getOrderBBInvoiced){
-            const sales = getTotalSales.length > 0 ? getTotalSales : null;
+        // if(getTotalSales && getAllAmount && getPartialOrder && getOrderBBInvoiced && ){
+            let sales = getTotalSales.length > 0 ? getTotalSales : null;
             let debt = getAllAmount.length > 0 ? getAllAmount : null;
 
+            // sales[0].setDataValue('availableRO', getROWAvailNextOrder[0]);
+            if(sales){
+                sales[0].setDataValue('return_refund', totalRefund ? totalRefund : 0);
+                sales[0].setDataValue('orders_credit_uncanceled', getOrderCreditAvail);
+            } else {
+                sales = [];
+                let obj = {
+                    return_refund: totalRefund ? totalRefund : 0,
+                    orders_credit_uncanceled: getOrderCreditAvail
+                }
+                sales.push(obj);
+            }
+            
             if(debt){
+                // debt[0].setDataValue('availableRO', getROWAvailNextOrder[0]);
                 debt[0].setDataValue('partial_sisa',getPartialOrder[0]);
                 debt[0].setDataValue('hutang_invoice',getOrderBBInvoiced[0]);
+                // debt[0].setDataValue('return_refund', totalRefund ? totalRefund : 0);
+                debt[0].setDataValue('orders_credit_uncomplete', getOrderCreditNotComplete);
+                // debt[0].setDataValue('total_refund', totalRefund);
             } else {
                 debt = [];
                 let obj = {
                     partial_sisa: getPartialOrder[0] ? {...getPartialOrder[0]} : null,
-                    hutang_invoice: getOrderBBInvoiced[0] ? getOrderBBInvoiced[0] : null
+                    hutang_invoice: getOrderBBInvoiced[0] ? getOrderBBInvoiced[0] : null,
+                    orders_credit_uncomplete: getOrderCreditNotComplete
                 };
                 debt.push(obj);
             }
 
             res.json({sales: sales, debt: debt});
-        } else {
-            res.status(404).json({error: `get all total customer not found!`});
-        }
+            // res.json(getOrderCreditNotComplete);
+        // } else {
+        //     res.status(404).json({error: `get all total customer not found!`});
+        // }
     }
      catch(err) {
         res.status(500).json({err: err});
