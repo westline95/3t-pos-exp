@@ -11,7 +11,13 @@ const getAllReceipt = async (req, res) => {
             include: [
                 {
                     model: AllModel.InvoicesModel,
-                    as: 'invoice'
+                    as: 'invoice',
+                    include: [
+                        {
+                            model: AllModel.PaymentsModel,
+                            as: 'payments'
+                        }
+                    ]
                 },
                 {
                     model: AllModel.CustomersModel,
