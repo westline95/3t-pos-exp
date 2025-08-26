@@ -453,7 +453,10 @@ const getDetailedCust = async(req, res) => {
         const totalRefund = await AllModel.ROModel.sum('refund_total', {
             where: { 
                 customer_id: req.query.custid,
-                return_method_id: 2
+                return_method_id: 2,
+                status: {
+                    [Op.ne]: 'batal'
+                }
             }
         });
         
@@ -492,7 +495,7 @@ const getDetailedCust = async(req, res) => {
                 'customer_id',
                 'name',
                 [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders.grandtotal")),0), "total_debt_grandtotal"],
-                [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("orders->return_order.refund_total")),0), "total_refund"],
+                // [Sequelize.fn("COALESCE", Sequelize.fn("sum", Sequelize.col("return_orders.refund_total")),0), "total_refund"],
                 // [Sequelize.fn("sum", Sequelize.literal("DISTINCT payments.amount_paid")), "total_payment"],
             ],
             include: [
@@ -507,19 +510,13 @@ const getDetailedCust = async(req, res) => {
                         },
                         invoice_id: {
                             [Op.eq]: null
+                        },
+                        return_order_id: {
+                            [Op.eq]: null
                         }
                     },
                     attributes:[],
-                    include: [
-                        {
-                            model: AllModel.ROModel,
-                            where: {
-                                return_method_id: 2
-                            },
-                            required: true,
-                            attributes:[],
-                        }
-                    ],
+                   
                 },
             ],
             group: ['customers.customer_id']
@@ -585,12 +582,13 @@ const getDetailedCust = async(req, res) => {
                 // debt[0].setDataValue('availableRO', getROWAvailNextOrder[0]);
                 debt[0].setDataValue('partial_sisa',getPartialOrder[0]);
                 debt[0].setDataValue('hutang_invoice',getOrderBBInvoiced[0]);
-                // debt[0].setDataValue('return_refund', totalRefund ? totalRefund : 0);
+                debt[0].setDataValue('return_refund', totalRefund ? totalRefund : 0);
                 debt[0].setDataValue('orders_credit_uncomplete', getOrderCreditNotComplete);
                 // debt[0].setDataValue('total_refund', totalRefund);
             } else {
                 debt = [];
                 let obj = {
+                    return_refund: totalRefund ? totalRefund : 0,
                     partial_sisa: getPartialOrder[0] ? {...getPartialOrder[0]} : null,
                     hutang_invoice: getOrderBBInvoiced[0] ? getOrderBBInvoiced[0] : null,
                     orders_credit_uncomplete: getOrderCreditNotComplete
@@ -599,7 +597,7 @@ const getDetailedCust = async(req, res) => {
             }
 
             res.json({sales: sales, debt: debt});
-            // res.json(getOrderCreditNotComplete);
+            // res.json(getAllAmount);
         // } else {
         //     res.status(404).json({error: `get all total customer not found!`});
         // }
