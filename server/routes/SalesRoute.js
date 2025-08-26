@@ -25,6 +25,7 @@ SalesRoute.patch("/sales/update/ro/:order_id", SalesController.updateRO);
 SalesRoute.delete("/sales", SalesController.deleteSales);
 SalesRoute.get("/sales/status", SalesController.getSalesByStatus);
 SalesRoute.get("/sales/order-items", SalesController.salesWOrderItems);
+SalesRoute.get("/sales/by/receipt", SalesController.salesByReceipt);
 SalesRoute.get("/sales/summary", SalesController.getSalesAndSum);
 SalesRoute.get("/sales/validation", SalesController.validationDateSales);
 

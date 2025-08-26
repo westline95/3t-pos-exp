@@ -57,7 +57,7 @@ app.get('/', (req, res) => res.send("HelloWorld"));
 
 // // return order CRUD
 // app.use(RORoute);
-app.use(CustomersRoute);
+// app.use(CustomersRoute);
 // return order CRUD
 // app.use(OrdersCreditRoute);
 // // return order item CRUD
@@ -65,7 +65,7 @@ app.use(CustomersRoute);
 // app.use(OrdersCreditRoute);
 // app.use(InvoiceRoute);
 // // sales CRUD
-app.use(SalesRoute);
+// app.use(SalesRoute);
 // auth
 app.use(AuthRouter);
 // refresh

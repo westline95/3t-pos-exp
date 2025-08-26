@@ -863,6 +863,105 @@ const salesWOrderItems = async (req, res) => {
     }
 }
 
+const salesByReceipt = async (req, res) => {
+    try{
+         const countSales = await AllModel.OrdersModel.findAll({
+            where: {receipt_id: req.query.id},
+            order: [["createdAt", "ASC"]],
+            include: [
+                {
+                    model: AllModel.OrderItemsModel,
+                    as: 'order_items',
+                    required: true,
+                    include: [
+                        {
+                            model: AllModel.ProductsCatalogModel,
+                            as: 'product',
+                            required: true,
+                        },
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'return_order_item',
+                            include: [
+                                {
+                                    model: AllModel.ROModel,
+                                    as: 'return_order',
+                                },
+                            ]
+                        },
+                    ]
+                },
+                {
+                    model: AllModel.OrdersCreditModel,
+                    as: 'orders_credit',
+                    include: [
+                        {
+                            model: AllModel.ROModel,
+                            as: 'return_order',
+                            include: [
+                                {
+                                    model: AllModel.ROItemsModel,
+                                    as: 'return_order_items',
+                                    include: [
+                                        {
+                                            model: AllModel.OrderItemsModel,
+                                            as: 'order_item',
+                                            include: [
+                                                {
+                                                    model: AllModel.ProductsCatalogModel,
+                                                    as: 'product',
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            model: AllModel.OrdersModel,
+                            as: 'order',
+                            include: [{
+                                model: AllModel.OrderItemsModel,
+                                as: 'order_items',
+                                include: [
+                                    {
+                                        model: AllModel.ProductsCatalogModel,
+                                        as: 'product',
+                                    },
+                                    
+                                ]
+                            }]
+                        },
+                    ]
+                },
+                {
+                    model: AllModel.ROModel,
+                    as: 'return_order',
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                    required: false
+                },
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer',
+                    required: true
+                },
+                
+            ]
+        });
+        if(countSales){
+            res.json(countSales);
+        } else {
+            res.status(404).json({error: `sales data with order items is not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: "internal server error"});
+    }
+}
+
 const getSalesAndSum = async(req, res) => {
     try{
         const getData = await AllModel.OrdersModel.findAll({
@@ -915,5 +1014,6 @@ export default {
     updateSalesMayor,
     validationDateSales,
     updateSalesReceipt,
-    forFilteredRO
+    forFilteredRO,
+    salesByReceipt
 };
