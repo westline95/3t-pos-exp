@@ -170,7 +170,6 @@ const getInvByID = async(req, res) => {
                 },
                 {
                     model: AllModel.ReceiptsModel,
-                    as: 'receipt',
                 },
             ]
         })
