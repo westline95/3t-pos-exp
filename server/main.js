@@ -63,7 +63,7 @@ app.get('/', (req, res) => res.send("HelloWorld"));
 // // return order item CRUD
 // app.use(ROItemRoute);
 // app.use(OrdersCreditRoute);
-// app.use(InvoiceRoute);
+app.use(InvoiceRoute);
 // // sales CRUD
 // app.use(SalesRoute);
 // auth

@@ -14,6 +14,10 @@ const getAllInv = async (req, res) => {
                     model: AllModel.PaymentsModel,
                     as: 'payments',
                 },
+                {
+                    model: AllModel.ReceiptsModel,
+                    as: 'receipt',
+                },
                 
             ]
         });
