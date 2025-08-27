@@ -50,7 +50,12 @@ const getCustomersUnpaidInv = async (req, res) => {
                 {
                     model: AllModel.InvoicesModel,
                     as: 'invoices',
-                    where: { is_paid: false },
+                    where: { 
+                        is_paid: false,
+                        status: {
+                            [Op.ne]: 0
+                        }
+                    },
                     include: [
                         {
                             model: AllModel.CustomersModel,
