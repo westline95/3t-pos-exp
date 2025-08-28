@@ -43,7 +43,7 @@ const insertPayment = async (req, res) => {
         const currentPaid = await AllModel.PaymentsModel.sum('amount_paid', {where: {
             invoice_id: req.body.invoice_id
         }});
-        const newTotalPaid = (currentPaid || 0) + req.body.amount_paid;
+        const newTotalPaid = (currentPaid || 0) + Number(req.body.amount_paid);
 
         const payment = await AllModel.PaymentsModel.create(
             req.body, { transaction: t}
@@ -69,7 +69,7 @@ const insertPayment = async (req, res) => {
             modelInv.is_paid = true;
             modelInv.remaining_payment = 0;
         } else {
-            modelInv.remaining_payment = (Number(invoice.remaining_payment) - Number(req.body.amount_paid));
+            modelInv.remaining_payment = (Number(invoice.amount_due) - Number(newTotalPaid));
         }
 
         await invoice.update(modelInv, { transaction: t });
@@ -173,7 +173,7 @@ const updatePayment = async (req, res) => {
         const currentPaid = await AllModel.PaymentsModel.sum('amount_paid', {where: {
             invoice_id: req.body.invoice_id
         }});
-        const newTotalPaid = (currentPaid || 0) + req.body.amount_paid;
+        const newTotalPaid = (currentPaid || 0) + Number(req.body.amount_paid);
 
         await payment.update(
             req.body,
@@ -200,7 +200,7 @@ const updatePayment = async (req, res) => {
             modelInv.remaining_payment = 0;
         } else {
             modelInv.is_paid = false;
-            modelInv.remaining_payment = (Number(invoice.remaining_payment) - Number(req.body.amount_paid));
+            modelInv.remaining_payment = (Number(invoice.amount_due) - Number(newTotalPaid));
         }
 
         await invoice.update(modelInv, { transaction: t });
