@@ -1,3 +1,4 @@
+import sequelize from "../config/Database.js";
 import AllModel from "../models/AllModel.js";
 import { Sequelize } from "sequelize";
 
@@ -33,17 +34,52 @@ const getAllPayment = async (req, res) => {
 }
 
 const insertPayment = async (req, res) => {
+    const t = await sequelize.transaction();
+    
     try{
-        const newPayment = await AllModel.PaymentsModel.create(req.body);
+        const invoice = await AllModel.InvoicesModel.findByPk(req.body.invoice_id);
+        if(!invoice) return res.status(404).json({message: 'Invoice not found!'});
+
+        const currentPaid = await AllModel.PaymentsModel.sum('amount_paid', {where: {
+            invoice_id: req.body.invoice_id
+        }});
+        const newTotalPaid = (currentPaid || 0) + req.body.amount_paid;
         
-        if(newPayment){
-            res.status(201).json(newPayment);
+        let newPaymentModel = {...req.body};
+        if(newTotalPaid > invoice.amount_due){
+            newPaymentModel.change = Math.abs(Number(newTotalPaid) - Number(invoice.amount_due));
         } else {
-            res.status(404).json({error: `failed to insert payment!`});
+            newPaymentModel.change = 0;
         }
+
+        const payment = await AllModel.PaymentsModel.create(
+            newPaymentModel, { transaction: t}
+        );
+        
+        // update invoice
+        let modelInv = {
+            is_paid: false,
+            status: 1
+        }
+        if(newTotalPaid === Number(invoice.amount_due)){
+            modelInv.is_paid = true;
+            modelInv.remaining_payment = 0;
+        }
+        else if(newTotalPaid >= Number(invoice.amount_due)){
+            modelInv.is_paid = true;
+            modelInv.remaining_payment = 0;
+        } else {
+            modelInv.remaining_payment = (Number(invoice.remaining_payment) - Number(req.body.amount_paid));
+        }
+
+        await invoice.update(modelInv, { transaction: t });
+
+        await t.commit();
+        res.status(201).json({data: {payment, invoice}});
     } 
     catch(err) {
-        res.status(500).json({err: "internal server error"});
+        await t.rollback();
+        res.status(500).json({err: err.message});
     }
 }
 
