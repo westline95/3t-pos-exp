@@ -173,7 +173,7 @@ const updatePayment = async (req, res) => {
         const currentPaid = await AllModel.PaymentsModel.sum('amount_paid', {where: {
             invoice_id: req.body.invoice_id
         }});
-        const newTotalPaid = (currentPaid || 0) + Number(req.body.amount_paid);
+        const newTotalPaid = currentPaid ? ((currentPaid - Number(payment.amount_paid)) + Number(req.body.amount_paid)) : Number(req.body.amount_paid);
 
         await payment.update(
             req.body,
