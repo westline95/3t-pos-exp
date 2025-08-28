@@ -161,7 +161,7 @@ const updatePayment = async (req, res) => {
         const invoice = await AllModel.InvoicesModel.findByPk(req.body.invoice_id);
         if(!invoice) return res.status(404).json({message: 'Invoice not found!'});
         
-        const payment = await AllModel.InvoicesModel.findByPk(req.query.id);
+        const payment = await AllModel.PaymentsModel.findByPk(req.query.id);
         if(!payment) return res.status(404).json({message: 'Payment not found!'});
 
         const currentPaid = await AllModel.PaymentsModel.sum('amount_paid', {where: {
