@@ -207,6 +207,8 @@ const updatePayment = async (req, res) => {
 
         // create receipt if is_paid = true
         let receipt;
+        let orderStatus = {order_status: modelInv.is_paid ? 'completed' : 'pending'};
+        
         if(!invoice.receipt && modelInv.is_paid){
             receipt = await AllModel.ReceiptsModel.create({
                 customer_id: req.body.customer_id,
@@ -216,6 +218,10 @@ const updatePayment = async (req, res) => {
                 url: null,
                 receipt_date: new Date(),
             }, {transaction: t});
+        } else if(invoice.receipt && !modelInv.is_paid){
+            // update receipt 
+            await AllModel.ReceiptsModel.destroy(invoice.receipt.receipt_id, {transaction: t});
+            orderUpdate.receipt_id = null;
         }
 
         // update order status
@@ -227,7 +233,6 @@ const updatePayment = async (req, res) => {
 
         if(!orders) return res.status(404).json({message: 'Orders not found!'});
 
-        let orderStatus = {order_status: modelInv.is_paid ? 'completed' : 'pending'};
         await AllModel.OrdersModel.update(orderStatus, {
             where: {
                 order_id: getOrderIds
