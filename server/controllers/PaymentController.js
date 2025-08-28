@@ -1,6 +1,6 @@
 import sequelize from "../config/Database.js";
 import AllModel from "../models/AllModel.js";
-import { Sequelize } from "sequelize";
+import { Sequelize, where } from "sequelize";
 
 const getAllPayment = async (req, res) => {
     try{
@@ -160,14 +160,18 @@ const updatePayment = async (req, res) => {
     try{
         const invoice = await AllModel.InvoicesModel.findByPk(req.body.invoice_id);
         if(!invoice) return res.status(404).json({message: 'Invoice not found!'});
+        
+        const payment = await AllModel.InvoicesModel.findByPk(req.query.id);
+        if(!payment) return res.status(404).json({message: 'Payment not found!'});
 
         const currentPaid = await AllModel.PaymentsModel.sum('amount_paid', {where: {
             invoice_id: req.body.invoice_id
         }});
         const newTotalPaid = (currentPaid || 0) + req.body.amount_paid;
 
-        const payment = await AllModel.PaymentsModel.update(
-            req.body, { transaction: t}
+        await payment.update(
+            req.body,
+            { transaction: t}
         );
         
         let change = 0;
