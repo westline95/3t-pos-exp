@@ -158,7 +158,13 @@ const updatePayment = async (req, res) => {
     const t = await sequelize.transaction();
     
     try{
-        const invoice = await AllModel.InvoicesModel.findByPk(req.body.invoice_id);
+        const invoice = await AllModel.InvoicesModel.findByPk(req.body.invoice_id,{
+            include: [
+                {
+                    model: AllModel.ReceiptsModel
+                }
+            ]
+        });
         if(!invoice) return res.status(404).json({message: 'Invoice not found!'});
         
         const payment = await AllModel.PaymentsModel.findByPk(req.query.id);
@@ -201,7 +207,7 @@ const updatePayment = async (req, res) => {
 
         // create receipt if is_paid = true
         let receipt;
-        if(modelInv.is_paid){
+        if(!invoice.receipt && modelInv.is_paid){
             receipt = await AllModel.ReceiptsModel.create({
                 customer_id: req.body.customer_id,
                 invoice_id: req.body.invoice_id,
