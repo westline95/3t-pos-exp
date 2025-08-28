@@ -220,7 +220,7 @@ const updatePayment = async (req, res) => {
             }, {transaction: t});
         } else if(invoice.receipt && !modelInv.is_paid){
             // update receipt 
-            await AllModel.ReceiptsModel.destroy(invoice.receipt.receipt_id, {transaction: t});
+            await AllModel.ReceiptsModel.destroy({where: {invoice_id: req.body.invoice_id}}, {transaction: t});
             orderUpdate.receipt_id = null;
         }
 
@@ -331,7 +331,7 @@ const deletePayment = async (req, res) => {
 
         // update receipt 
         if(invoice.receipt && !modelInv.is_paid){
-            await AllModel.ReceiptsModel.destroy(invoice.receipt.receipt_id, {transaction: t});
+            await AllModel.ReceiptsModel.destroy({where:{invoice_id: payment.invoice_id}}, {transaction: t});
             orderUpdate.receipt_id = null;
         }
 
