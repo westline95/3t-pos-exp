@@ -207,7 +207,7 @@ const updatePayment = async (req, res) => {
 
         // create receipt if is_paid = true
         let receipt;
-        let orderStatus = {order_status: modelInv.is_paid ? 'completed' : 'pending'};
+        let orderUpdate = {order_status: modelInv.is_paid ? 'completed' : 'pending'};
         
         if(!invoice.receipt && modelInv.is_paid){
             receipt = await AllModel.ReceiptsModel.create({
@@ -233,7 +233,7 @@ const updatePayment = async (req, res) => {
 
         if(!orders) return res.status(404).json({message: 'Orders not found!'});
 
-        await AllModel.OrdersModel.update(orderStatus, {
+        await AllModel.OrdersModel.update(orderUpdate, {
             where: {
                 order_id: getOrderIds
             }
