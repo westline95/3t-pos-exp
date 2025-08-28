@@ -314,7 +314,7 @@ const deletePayment = async (req, res) => {
         const currentPaid = Number(payment.amount_paid);
         
         // update invoice
-        let modelInv;
+        let modelInv = {};
         if(Number(invoice.remaining_payment) === 0){
             modelInv.remaining_payment = currentPaid;
         } else {
@@ -325,7 +325,7 @@ const deletePayment = async (req, res) => {
         if(Number(modelInv.remaining_payment) == 0) modelInv.is_paid = true;
         else modelInv.is_paid = false;
 
-        if(modelInv) await invoice.update(modelInv, { transaction: t });
+        if(Object.keys(modelInv).length > 0) await invoice.update(modelInv, { transaction: t });
         
         let orderUpdate = {order_status: modelInv.is_paid ? 'completed' : 'pending'};
 
