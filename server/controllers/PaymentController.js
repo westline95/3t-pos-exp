@@ -349,9 +349,12 @@ const deletePayment = async (req, res) => {
                 order_id: getOrderIds
             }
         }, {transaction: t});
+        
+        // finally delete payment
+        await payment.destroy({transaction:t});
 
         await t.commit();
-        res.status(201).json({data: {payment, invoice}});
+        res.status(201).json({data: {invoice}});
     } 
     catch(err) {
         await t.rollback();
