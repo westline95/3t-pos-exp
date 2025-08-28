@@ -45,11 +45,11 @@ const insertPayment = async (req, res) => {
         }});
         const newTotalPaid = (currentPaid || 0) + req.body.amount_paid;
         
-        let newPaymentModel = {...req.body};
+        let change = 0;
         if(newTotalPaid > invoice.amount_due){
-            newPaymentModel.change = Math.abs(Number(newTotalPaid) - Number(invoice.amount_due));
+            change = Math.abs(Number(newTotalPaid) - Number(invoice.amount_due));
         } else {
-            newPaymentModel.change = 0;
+            change = 0;
         }
 
         const payment = await AllModel.PaymentsModel.create(
@@ -74,8 +74,25 @@ const insertPayment = async (req, res) => {
 
         await invoice.update(modelInv, { transaction: t });
 
+        // create receipt if is_paid = true
+        let receipt;
+        if(modelInv.is_paid){
+            receipt = await AllModel.ReceiptsModel.create({
+                customer_id: req.body.customer_id,
+                invoice_id: req.body.invoice_id,
+                total_payment: newTotalPaid,
+                change: change,
+                url: null,
+                receipt_date: new Date(),
+            }, {transaction: t});
+        }
+
         await t.commit();
-        res.status(201).json({data: {payment, invoice}});
+        if(receipt){
+            res.status(201).json({data: {payment, invoice, receipt}});
+        } else {
+            res.status(201).json({data: {payment, invoice}});
+        }
     } 
     catch(err) {
         await t.rollback();
