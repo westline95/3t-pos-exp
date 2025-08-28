@@ -44,6 +44,10 @@ const insertPayment = async (req, res) => {
             invoice_id: req.body.invoice_id
         }});
         const newTotalPaid = (currentPaid || 0) + req.body.amount_paid;
+
+        const payment = await AllModel.PaymentsModel.create(
+            req.body, { transaction: t}
+        );
         
         let change = 0;
         if(newTotalPaid > invoice.amount_due){
@@ -51,10 +55,6 @@ const insertPayment = async (req, res) => {
         } else {
             change = 0;
         }
-
-        const payment = await AllModel.PaymentsModel.create(
-            newPaymentModel, { transaction: t}
-        );
         
         // update invoice
         let modelInv = {
