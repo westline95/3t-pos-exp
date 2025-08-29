@@ -75,46 +75,137 @@ const validationDateSales = async (req, res) => {
     }
 }
 
+// const insertSales = async (req, res) => {
+//     const { 
+//         salesDate, customer_id, custName, custType, salesData, status, statusId, source, 
+//         discount, grandTotal, note, totalPayment, remainingPayment, total_sales, 
+//         paymentMethod, totalQty, paymentData, paid, orderType, orderTypeId
+//     } = req.body;
+//     try{
+//         // update total sales in customer
+//         const cust = await AllModel.CustomersModel.findByPk(customer_id);
+//         if(cust){
+//             cust.total_sales = total_sales;
+//             await cust.save();
+//         }
+       
+//         const newSales = await AllModel.OrdersModel.create(req.body, {
+//             returning: true,
+//             include: [
+//                 {
+//                     model: AllModel.CustomersModel,
+//                     as: 'customer',
+//                     include: [
+//                         {
+//                             model: AllModel.OrdersCreditModel,
+//                             as: 'orders_credits',
+//                             where: { 
+//                                 order_id: {
+//                                     [Sequelize.Op.or]: [null,req.query.invid] }
+//                             }
+//                         }
+//                     ]
+//                 },
+//             ]
+//         });
+        
+//         res.status(201).json(newSales);
+//     } 
+//     catch(err) {
+//         console.log(err)
+
+//         res.status(500).json({err: "internal server error"});
+//     }
+// }
+
 const insertSales = async (req, res) => {
+    const t = await sequelize.transaction();
     const { 
-        salesDate, customer_id, custName, custType, salesData, status, statusId, source, 
-        discount, grandTotal, note, totalPayment, remainingPayment, total_sales, 
-        paymentMethod, totalQty, paymentData, paid, orderType, orderTypeId
+        sales, order_items, delivery
     } = req.body;
     try{
-        // update total sales in customer
-        const cust = await AllModel.CustomersModel.findByPk(customer_id);
-        if(cust){
-            cust.total_sales = total_sales;
-            await cust.save();
-        }
-       
-        const newSales = await AllModel.OrdersModel.create(req.body, {
-            returning: true,
+
+        const newSales = await AllModel.OrdersModel.create(sales, {
+            returning: true
+        }, {transaction: t});
+
+        if(!newSales) return res.status(404).json({ message: 'error when get order_id' });
+
+        order_items.map(e => {
+            e.order_id = newSales.order_id;
+        })
+
+        await AllModel.OrderItemsModel.bulkCreate(order_items, {transaction:t})
+
+        let deliveryData = {};
+        if(newSales.order_type == 'delivery' && delivery.courier_id !== "" || delivery.courier_id){
+            let deliveryModel = {
+                order_id: newSales.order_id,
+                courier_id: delivery.courier_id,
+                courier_name: delivery.courier_name,
+                delivery_address: delivery.delivery_address,
+                ship_date: new Date(delivery.ship_date),
+                elivery_status: 'pending',
+            }
+    
+            // check delivery with order id if existed
+            const checkExistDelivery = await AllModel.DeliveryModel.findOne({ where: {order_id: newSales.order_id}});
+            if(checkExistDelivery){
+                return res.status(404).json({ message: 'Delivery already exists for this order.' });
+            }
+    
+            deliveryData = await AllModel.DeliveryModel.create(deliveryModel, {returning:true}, {transaction:t});
+        } 
+
+        // check order credit
+        const allCreditByCust = await AllModel.OrdersCreditModel.findAll({
+            where: {
+                customer_id: sales.customer_id,
+                order_id: null
+            },
             include: [
                 {
                     model: AllModel.CustomersModel,
-                    as: 'customer',
+                    as: 'customer'
+                },
+                {
+                    model: AllModel.ROModel,
+                    as: 'return_order',
                     include: [
                         {
-                            model: AllModel.OrdersCreditModel,
-                            as: 'orders_credits',
-                            where: { 
-                                order_id: {
-                                    [Sequelize.Op.or]: [null,req.query.invid] }
-                            }
+                            model: AllModel.CustomersModel,
+                            as: 'customer'
+                        },
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'return_order_items',
                         }
                     ]
                 },
             ]
         });
+
+        if(allCreditByCust && allCreditByCust.length > 0){
+            const orderCredit = await AllModel.OrdersCreditModel.findByPk(allCreditByCust[0].order_credit_id);
+            
+            if(!orderCredit){
+                return res.status(404).json({ message: 'Order credit is not found.' });
+            } 
+    
+            orderCredit.order_id = newSales.order_id;
+            await orderCredit.save({transaction:t});
+        }
         
-        res.status(201).json(newSales);
+        await t.commit();
+        if(Object.keys(deliveryData).length > 0){
+            res.status(201).json({order: newSales, order_credit: allCreditByCust, delivery: deliveryData});
+        } else {
+            res.status(201).json({order: newSales, order_credit: allCreditByCust});
+        }
     } 
     catch(err) {
-        console.log(err)
-
-        res.status(500).json({err: "internal server error"});
+        await t.rollback();
+        res.status(500).json({err: err});
     }
 }
 
