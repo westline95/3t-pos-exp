@@ -1,6 +1,7 @@
 import { Op, Sequelize, where } from "sequelize";
 // import PaymentModel from "../models/PaymentModel.js";
 import AllModel from "../models/AllModel.js";
+import sequelize from "../config/Database.js";
 
 const getAllInv = async (req, res) => {
     try{
@@ -32,27 +33,87 @@ const getAllInv = async (req, res) => {
     }
 }
 
+// const insertInv = async (req, res) => {
+//     const { custID, custName, salesRef, amount,
+//         paid, dueDate, amountDue, status } = req.body;
+//     try{
+//         const newInv = await AllModel.InvoicesModel.create(req.body,{
+//             include: [
+//                 {
+//                     model: AllModel.CustomersModel,
+//                     as: 'customer'
+//                 },
+//             ]
+//         });
+        
+//         if(newInv){
+//             res.status(201).json(newInv);
+//         } else {
+//             res.status(404).json({error: `failed to insert invoice!`});
+//         }
+//     } 
+//     catch(err) {
+//         res.status(500).json({err: "internal server error"});
+//     }
+// }
 const insertInv = async (req, res) => {
-    const { custID, custName, salesRef, amount,
-        paid, dueDate, amountDue, status } = req.body;
+    const t = await sequelize.transaction();
+    const { invoiceData,  paidData } = req.body;
+    
     try{
-        const newInv = await AllModel.InvoicesModel.create(req.body,{
+        const newInv = await AllModel.InvoicesModel.create(invoiceData ,{
             include: [
                 {
                     model: AllModel.CustomersModel,
                     as: 'customer'
                 },
             ]
-        });
-        
-        if(newInv){
-            res.status(201).json(newInv);
-        } else {
-            res.status(404).json({error: `failed to insert invoice!`});
+        },{transaction: t});
+
+        // update order => inv
+        const orderIDs = JSON.parse(newInv.order_id);
+
+        await AllModel.OrdersModel.update({invoice_id: newInv.invoice_id}, {
+            where: {
+                order_id: orderIDs
+            }
+        },{transaction: t});
+
+
+        if(paidData){
+            // check if paidData is not null => insert payment
+            let paymentModel = {
+                customer_id: newInv.customer_id,
+                invoice_id: newInv.invoice_id,
+                payment_date: paidData.payment_date,
+                amount_paid: paidData.amountOrigin,
+                payment_method: paidData.payment_method,
+                payment_ref: paidData.payment_ref,
+                note: paidData.note 
+            };
+
+            await AllModel.PaymentsModel.create(paymentModel, {transaction: t});
         }
+
+        if(newInv.is_paid){
+            // create receipt
+            let receiptModel = {
+                customer_id: newInv.customer_id,
+                invoice_id: newInv.invoice_id,
+                total_payment: paidData.amountOrigin,
+                change: paidData.change,
+                receipt_date: new Date()
+            };
+
+            await AllModel.ReceiptsModel.create(receiptModel, {transaction: t});
+        }
+
+        await t.commit();
+        
     } 
     catch(err) {
-        res.status(500).json({err: "internal server error"});
+        await t.rollback();
+        res.status(500).json({err: err});
     }
 }
 
