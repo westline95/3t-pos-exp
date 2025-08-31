@@ -121,7 +121,7 @@ const validationDateSales = async (req, res) => {
 const insertSales = async (req, res) => {
     const t = await sequelize.transaction();
     const { 
-        sales, order_items, delivery
+        sales, order_items, delivery, paidData
     } = req.body;
     try{
 
@@ -185,8 +185,18 @@ const insertSales = async (req, res) => {
             ]
         });
 
+        let orderCredit;
         if(allCreditByCust && allCreditByCust.length > 0){
-            const orderCredit = await AllModel.OrdersCreditModel.findByPk(allCreditByCust[0].order_credit_id);
+            orderCredit = await AllModel.OrdersCreditModel.findByPk(allCreditByCust[0].order_credit_id,
+                {
+                    include: [
+                        {
+                            model: AllModel.ROModel,
+                            as: 'return_order',
+                        }
+                    ]
+                }
+            );
             
             if(!orderCredit){
                 return res.status(404).json({ message: 'Order credit is not found.' });
@@ -195,12 +205,108 @@ const insertSales = async (req, res) => {
             orderCredit.order_id = newSales.order_id;
             await orderCredit.save({transaction:t});
         }
-        
+
+        let checkInvBB = false;
+        let inv, receipt, updatedOrder = null;
+        // invoicing handle (lunas && sebagian)
+        if(newSales.payment_type == "lunas" || newSales.payment_type == "sebagian") {
+            const invDate = new Date();
+            const invDue = (invDate.getDate() + 7);
+
+            let modelInv = {
+                customer_id: newSales.customer_id,
+                order_id: JSON.stringify([newSales.order_id]),
+                invoice_date: invDate,
+                invoice_due: invDue,
+                subtotal: newSales.subtotal + (orderCredit ? Number(orderCredit.return_order.refund_total) : 0),
+                amount_due: newSales.grandtotal + (orderCredit ? Number(orderCredit.return_order.refund_total) : 0),
+                total_discount: Number(newSales.order_discount),
+                // is_paid: true,
+                // remaining_payment: 0,
+                payment_type: newSales.payment_type,
+                status: 1
+            };
+            if(newSales.payment_type == "lunas"){
+                modelInv.is_paid = true;
+                modelInv.remaining_payment = 0;
+            } else {
+                modelInv.is_paid = false;
+                modelInv.remaining_payment = (newSales.grandtotal + (orderCredit ? Number(orderCredit.return_order.refund_total) : 0)) - (paidData ? Number(paidData.amountOrigin):0);
+            }
+
+            // create invoice
+            inv = await AllModel.InvoicesModel.create(modelInv, {
+                returning: true
+            },{transaction: t});
+
+            updatedOrder = await AllModel.OrdersModel.findByPk(newSales.order_id);
+            if(!updatedOrder){
+                return res.status(404).json({ message: 'Order is not found.' });
+            } 
+
+            updatedOrder.invoice_id = inv.invoice_id;
+            updatedOrder.save({transaction:t});
+
+            // handle payment
+             if(!paidData){
+                return res.status(404).json({ message: 'Payment data not found' });
+            }
+
+            let paymentModel = {
+                customer_id: inv.customer_id,
+                invoice_id: inv.invoice_id,
+                payment_date: paidData.payment_date,
+                amount_paid: paidData.amountOrigin,
+                payment_method: paidData.payment_method,
+                payment_ref: paidData.payment_ref,
+                note: paidData.note 
+            };
+
+            // save payment
+            await AllModel.PaymentsModel.create(paymentModel, {transaction: t});
+
+            // handle receipt if is_paid true
+            if(inv.is_paid){
+                let receiptModel = {
+                    customer_id: inv.customer_id,
+                    invoice_id: inv.invoice_id,
+                    total_payment: Number(paidData.amountOrigin),
+                    change: Number(paidData.change),
+                    receipt_date: new Date()
+                }
+
+                receipt = await AllModel.ReceiptsModel.create(receiptModel, {returning: true} ,{transaction: t});
+
+                // update order => receipt_id 
+                updatedOrder.receipt_id = receipt.receipt_id;
+                updatedOrder.save({transaction:t});
+            }
+            checkInvBB = false;
+        } else {
+            // control mergeinv by user confirmation in front end 
+            // if yes => join order to available invoice then update invoice and order:invoice_id
+            // if no do nothing
+            checkInvBB = true;
+        }
+
         await t.commit();
         if(Object.keys(deliveryData).length > 0){
-            res.status(201).json({order: newSales, order_credit: allCreditByCust, delivery: deliveryData});
+            res.status(201).json({
+                order: updatedOrder ? updatedOrder : newSales, 
+                order_credit: allCreditByCust, 
+                delivery: deliveryData,
+                invoice: inv,
+                receipt: receipt,
+                checkInv: checkInvBB
+            });
         } else {
-            res.status(201).json({order: newSales, order_credit: allCreditByCust});
+            res.status(201).json({
+                order: updatedOrder ? updatedOrder : newSales, 
+                order_credit: allCreditByCust,
+                invoice: inv,
+                receipt: receipt,
+                checkInv: checkInvBB
+            });
         }
     } 
     catch(err) {

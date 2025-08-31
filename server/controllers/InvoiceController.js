@@ -59,7 +59,7 @@ const getAllInv = async (req, res) => {
 const insertInv = async (req, res) => {
     const t = await sequelize.transaction();
     const { invoiceData,  paidData } = req.body;
-    
+
     try{
         const newInv = await AllModel.InvoicesModel.create(invoiceData ,{
             include: [
@@ -80,33 +80,33 @@ const insertInv = async (req, res) => {
         },{transaction: t});
 
 
-        if(paidData){
-            // check if paidData is not null => insert payment
-            let paymentModel = {
-                customer_id: newInv.customer_id,
-                invoice_id: newInv.invoice_id,
-                payment_date: paidData.payment_date,
-                amount_paid: paidData.amountOrigin,
-                payment_method: paidData.payment_method,
-                payment_ref: paidData.payment_ref,
-                note: paidData.note 
-            };
+        // if(paidData){
+        //     // check if paidData is not null => insert payment
+        //     let paymentModel = {
+        //         customer_id: newInv.customer_id,
+        //         invoice_id: newInv.invoice_id,
+        //         payment_date: paidData.payment_date,
+        //         amount_paid: paidData.amountOrigin,
+        //         payment_method: paidData.payment_method,
+        //         payment_ref: paidData.payment_ref,
+        //         note: paidData.note 
+        //     };
 
-            await AllModel.PaymentsModel.create(paymentModel, {transaction: t});
-        }
+        //     await AllModel.PaymentsModel.create(paymentModel, {transaction: t});
+        // }
 
-        if(newInv.is_paid){
-            // create receipt
-            let receiptModel = {
-                customer_id: newInv.customer_id,
-                invoice_id: newInv.invoice_id,
-                total_payment: paidData.amountOrigin,
-                change: paidData.change,
-                receipt_date: new Date()
-            };
+        // if(newInv.is_paid){
+        //     // create receipt
+        //     let receiptModel = {
+        //         customer_id: newInv.customer_id,
+        //         invoice_id: newInv.invoice_id,
+        //         total_payment: paidData.amountOrigin,
+        //         change: paidData.change,
+        //         receipt_date: new Date()
+        //     };
 
-            await AllModel.ReceiptsModel.create(receiptModel, {transaction: t});
-        }
+        //     await AllModel.ReceiptsModel.create(receiptModel, {transaction: t});
+        // }
 
         await t.commit();
         
