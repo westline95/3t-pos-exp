@@ -211,7 +211,7 @@ const insertSales = async (req, res) => {
         // invoicing handle (lunas && sebagian)
         if(newSales.payment_type == "lunas" || newSales.payment_type == "sebagian") {
             const invDate = new Date();
-            const invDue = (invDate.getDate() + 7);
+            const invDue = new Date().setDate(invDate.getDate() + 7);
 
             let modelInv = {
                 customer_id: newSales.customer_id,
