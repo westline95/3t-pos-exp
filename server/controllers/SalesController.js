@@ -239,12 +239,18 @@ const insertSales = async (req, res) => {
                 returning: true
             },{transaction: t});
 
-            updatedOrder = await AllModel.OrdersModel.findByPk(newSales.order_id);
+            await AllModel.OrdersModel.findByPk(newSales.order_id);
             if(!updatedOrder){
                 return res.status(404).json({ message: 'Order is not found.' });
             } 
 
-            updatedOrder.invoice_id = inv.invoice_id;
+            updatedOrder = await AllModel.OrdersModel.update({invoice_id: inv.invoice_id}, {
+                where:{
+                    order_id: newSales.order_id
+                },
+                returning: true
+            }, {transaction: t})
+            // updatedOrder.invoice_id = inv.invoice_id;
             // updatedOrder.save({transaction:t});
 
             // handle payment
@@ -256,7 +262,7 @@ const insertSales = async (req, res) => {
                 customer_id: inv.customer_id,
                 invoice_id: inv.invoice_id,
                 payment_date: paidData.payment_date,
-                amount_paid: Number(paidData.amountOrigin),
+                amount_paid: paidData.amountOrigin,
                 payment_method: paidData.payment_method,
                 payment_ref: paidData.payment_ref,
                 note: paidData.note 
@@ -278,9 +284,13 @@ const insertSales = async (req, res) => {
                 receipt = await AllModel.ReceiptsModel.create(receiptModel, {returning: true} ,{transaction: t});
 
                 // update order => receipt_id 
-                updatedOrder.receipt_id = receipt.receipt_id;
+                updatedOrder = await AllModel.OrdersModel.update({receipt_id: receipt.receipt_id}, {
+                    where:{
+                        order_id: newSales.order_id
+                    },
+                    returning: true
+                }, {transaction: t})
             }
-            updatedOrder.save({transaction:t});
             checkInvBB = false;
         } else {
             // control mergeinv by user confirmation in front end 
