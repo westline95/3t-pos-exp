@@ -239,8 +239,8 @@ const insertSales = async (req, res) => {
                 returning: true
             },{transaction: t});
 
-            await AllModel.OrdersModel.findByPk(newSales.order_id);
-            if(!updatedOrder){
+            const checkOrder = await AllModel.OrdersModel.findByPk(newSales.order_id);
+            if(!checkOrder){
                 return res.status(404).json({ message: 'Order is not found.' });
             } 
 
