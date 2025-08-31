@@ -303,7 +303,7 @@ const insertSales = async (req, res) => {
         if(Object.keys(deliveryData).length > 0){
             res.status(201).json({
                 customer_id: newSales.customer_id,
-                order: updatedOrder ? updatedOrder[1] : newSales, 
+                order: updatedOrder ? updatedOrder[1][0] : newSales, 
                 order_credit: allCreditByCust, 
                 delivery: deliveryData,
                 invoice: inv,
@@ -313,7 +313,7 @@ const insertSales = async (req, res) => {
         } else {
             res.status(201).json({
                 customer_id: newSales.customer_id,
-                order: updatedOrder ? updatedOrder[1] : newSales, 
+                order: updatedOrder ? updatedOrder[1][0] : newSales, 
                 order_credit: allCreditByCust,
                 invoice: inv,
                 receipt: receipt,
