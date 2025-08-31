@@ -245,7 +245,7 @@ const insertSales = async (req, res) => {
             } 
 
             updatedOrder.invoice_id = inv.invoice_id;
-            updatedOrder.save({transaction:t});
+            // updatedOrder.save({transaction:t});
 
             // handle payment
              if(!paidData){
@@ -256,7 +256,7 @@ const insertSales = async (req, res) => {
                 customer_id: inv.customer_id,
                 invoice_id: inv.invoice_id,
                 payment_date: paidData.payment_date,
-                amount_paid: paidData.amountOrigin,
+                amount_paid: Number(paidData.amountOrigin),
                 payment_method: paidData.payment_method,
                 payment_ref: paidData.payment_ref,
                 note: paidData.note 
@@ -279,8 +279,8 @@ const insertSales = async (req, res) => {
 
                 // update order => receipt_id 
                 updatedOrder.receipt_id = receipt.receipt_id;
-                updatedOrder.save({transaction:t});
             }
+            updatedOrder.save({transaction:t});
             checkInvBB = false;
         } else {
             // control mergeinv by user confirmation in front end 
