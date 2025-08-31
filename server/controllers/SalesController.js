@@ -302,6 +302,7 @@ const insertSales = async (req, res) => {
         await t.commit();
         if(Object.keys(deliveryData).length > 0){
             res.status(201).json({
+                customer_id: newSales.customer_id,
                 order: updatedOrder ? updatedOrder[1] : newSales, 
                 order_credit: allCreditByCust, 
                 delivery: deliveryData,
@@ -311,6 +312,7 @@ const insertSales = async (req, res) => {
             });
         } else {
             res.status(201).json({
+                customer_id: newSales.customer_id,
                 order: updatedOrder ? updatedOrder[1] : newSales, 
                 order_credit: allCreditByCust,
                 invoice: inv,
