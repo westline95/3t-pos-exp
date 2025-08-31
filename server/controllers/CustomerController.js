@@ -585,6 +585,7 @@ const getDetailedCust = async(req, res) => {
             
             if(debt){
                 // debt[0].setDataValue('availableRO', getROWAvailNextOrder[0]);
+                
                 debt[0].setDataValue('partial_sisa',getPartialOrder[0]);
                 debt[0].setDataValue('hutang_invoice',getOrderBBInvoiced[0]);
                 debt[0].setDataValue('return_refund', totalRefund ? totalRefund : 0);
@@ -594,18 +595,14 @@ const getDetailedCust = async(req, res) => {
                 debt = [];
                 let obj = {
                     return_refund: totalRefund ? totalRefund : 0,
-                    partial_sisa: getPartialOrder[0] ? {...getPartialOrder[0]} : null,
+                    partial_sisa: getPartialOrder[0] ? getPartialOrder[0] : null,
                     hutang_invoice: getOrderBBInvoiced[0] ? getOrderBBInvoiced[0] : null,
                     orders_credit_uncomplete: getOrderCreditNotComplete
                 };
                 debt.push(obj);
             }
 
-            res.json({sales: sales, debt: debt});
-            // res.json(getAllAmount);
-        // } else {
-        //     res.status(404).json({error: `get all total customer not found!`});
-        // }
+        res.json({sales: sales, debt: debt});
     }
      catch(err) {
         res.status(500).json({err: err});

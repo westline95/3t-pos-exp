@@ -8,6 +8,7 @@ import { Sequelize } from "sequelize";
 const getAllReceipt = async (req, res) => {
     try{
         const allReceipt = await AllModel.ReceiptsModel.findAll({
+            order:  [['createdAt', 'DESC']],
             include: [
                 {
                     model: AllModel.InvoicesModel,
