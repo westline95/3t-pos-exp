@@ -1,4 +1,3 @@
-import { error } from "console";
 import AllModel from "../models/AllModel.js";
 import { Sequelize } from "sequelize";
 
@@ -100,11 +99,11 @@ const updateProduct = async (req, res) => {
         if(product){
             res.status(201).json(product);
         } else {
-            res.status(404).json({error: error});
+            res.status(404).json({error: `failed to update product!`});
         }
     } 
     catch(err) {
-        res.status(500).json({err: "internal server error"});
+        res.status(500).json({err: err});
     }
 }
 

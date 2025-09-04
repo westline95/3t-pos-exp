@@ -62,6 +62,7 @@ const insertInv = async (req, res) => {
 
     try{
         const newInv = await AllModel.InvoicesModel.create(invoiceData ,{
+            returning: true,
             include: [
                 {
                     model: AllModel.CustomersModel,
