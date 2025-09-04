@@ -58,7 +58,8 @@ const getAllInv = async (req, res) => {
 // }
 const insertInv = async (req, res) => {
     const t = await sequelize.transaction();
-    const { invoiceData,  paidData } = req.body;
+    // const { invoiceData,  paidData } = req.body;
+    const invoiceData = req.body;
 
     try{
         const newInv = await AllModel.InvoicesModel.create(invoiceData ,{
