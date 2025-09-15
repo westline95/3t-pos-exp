@@ -796,6 +796,10 @@ const EmployeesModel = sequelize.define("employees", {
         type: Sequelize.DECIMAL,
         allowNull: false
     },
+    img: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
 })
 
 const SalarySettingModel = sequelize.define("salary_setting", {
