@@ -1135,7 +1135,8 @@ OrdersModel.belongsTo(OrdersCreditModel, {
     targetKey: 'order_id',
 });
 
-EmployeesModel.hasOne(SalarySettingModel, {
+// one to many (employee - salarySetting)
+EmployeesModel.hasMany(SalarySettingModel, {
     sourceKey: 'employee_id',
     foreignKey: 'employee_id',
 });
@@ -1145,6 +1146,7 @@ SalarySettingModel.belongsTo(EmployeesModel, {
     targetKey: 'employee_id',
 });
 
+// one to many (department - departmentHistory)
 DepartmentModel.hasMany(DepartmentHistoryModel, {
     sourceKey: 'department_id',
     foreignKey: 'department_id',
@@ -1153,6 +1155,17 @@ DepartmentModel.hasMany(DepartmentHistoryModel, {
 DepartmentHistoryModel.belongsTo(DepartmentModel, {
     foreignKey: 'department_id',
     targetKey: 'department_id',
+});
+
+// one to many (employee - departmentHistory)
+EmployeesModel.hasMany(DepartmentHistoryModel,{
+    sourceKey: 'employee_id',
+    foreignKey: 'employee_id',
+});
+
+DepartmentHistoryModel.belongsTo(EmployeesModel, {
+    foreignKey: 'employee_id',
+    targetKey: 'employee_id',
 });
 
 
