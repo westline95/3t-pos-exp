@@ -757,6 +757,118 @@ const OrdersCreditModel = sequelize.define("orders_credits",
     }
 );
 
+const EmployeesModel = sequelize.define("employees", {
+    employee_id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    dob: {
+        type: Sequelize.DATE,
+        allowNull: true
+    },
+    phonenumber: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    is_active: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+    },
+    address: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+    hired_date: {
+        type: Sequelize.DATE,
+        allowNull: false
+    },
+})
+
+const SalarySettingModel = sequelize.define("salary_setting", {
+    salary_setting_id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    employee_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    salary_type: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    salary_amount: {
+        type: Sequelize.DECIMAL,
+        allowNull: false
+    },
+    start_date: {
+        type: Sequelize.DATE,
+        allowNull: false
+    },
+    end_date: {
+        type: Sequelize.DATE,
+        allowNull: false
+    },
+    status_uang_rokok: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+    },
+    now_active: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+    },
+});
+
+const DepartmentModel = sequelize.define("department", {
+    department_id:{
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    department_name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+});
+
+const DepartmentHistoryModel =sequelize.define("department_history", {
+    department_history_id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    employee_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    department_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    date: {
+        type: Sequelize.DATE,
+        allowNull: false
+    },
+    now_active: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+    },
+     position: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+});
+
 DeliveryModel.beforeCreate(async (deliv, options) => {
   const now = new Date();
   const timestamp = Date.now().toString(36);
@@ -1005,11 +1117,31 @@ OrdersCreditModel.hasMany(OrdersModel, {
     sourceKey: 'order_id',
     foreignKey: 'order_id',
 });
+
 OrdersModel.belongsTo(OrdersCreditModel, {
     foreignKey: 'order_id',
     targetKey: 'order_id',
 });
 
+EmployeesModel.hasOne(SalarySettingModel, {
+    sourceKey: 'employee_id',
+    foreignKey: 'employee_id',
+});
+
+SalarySettingModel.belongsTo(EmployeesModel, {
+    foreignKey: 'employee_id',
+    targetKey: 'employee_id',
+});
+
+DepartmentModel.hasMany(DepartmentHistoryModel, {
+    sourceKey: 'department_id',
+    foreignKey: 'department_id',
+});
+
+DepartmentHistoryModel.belongsTo(DepartmentModel, {
+    foreignKey: 'department_id',
+    targetKey: 'department_id',
+});
 
 
 export default {
@@ -1031,5 +1163,9 @@ export default {
     OrdersGroupModel,
     ROItemsModel,
     ROModel,
-    OrdersCreditModel
+    OrdersCreditModel,
+    EmployeesModel,
+    SalarySettingModel,
+    DepartmentModel,
+    DepartmentHistoryModel
 };

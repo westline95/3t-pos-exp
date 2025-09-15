@@ -30,6 +30,9 @@ import OrderGroupRoute from "./routes/OrderGroupRoute.js";
 import RORoute from "./routes/ReturnOrderRoute.js";
 import ROItemRoute from "./routes/ReturnOrderItemRoute.js";
 import OrdersCreditRoute from "./routes/OrdersCreditRoute.js";
+import EmployeeRoute from "./routes/EmployeeRoute.js";
+import DepartmentsRoute from "./routes/DepartmentsRoute.js";
+import SalarySettingRoute from "./routes/SalarySettingRoute.js";
 
 dotenv.config();
 
@@ -137,7 +140,13 @@ app.use(ROItemRoute);
 // sales CRUD
 app.use(SalesRoute);
 // return order credit CRUD
-app.use(OrdersCreditRoute);
+app.use(OrdersCreditRoute)
+// employee CRUD
+app.use(EmployeeRoute);
+// return departments CRUD
+app.use(DepartmentsRoute);
+// return salary setting CRUD
+app.use(SalarySettingRoute);
 
 
 app.listen(port, () => console.log(`
