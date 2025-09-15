@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import sequelize from "../config/Database.js";
 import AllModel from "../models/AllModel.js";
 
@@ -21,7 +22,25 @@ const insertEmployee = async(req, res) => {
 
 const getAllEmployees = async(req, res) => {
     try{
-       const employees = await AllModel.EmployeesModel.findAll();
+       const employees = await AllModel.EmployeesModel.findAll({
+            include: [
+                {
+                    model: AllModel.SalarySettingModel,
+                    where: {
+                        now_active: true
+                    }
+                }, 
+                {
+                    model: AllModel.DepartmentHistoryModel,
+                    where: {
+                        now_active: true
+                    },
+                    include: [{
+                        model: AllModel.DepartmentModel,
+                    }]
+                },
+            ]
+       });
        res.status(201).json(employees);
     }
     catch(err) {
@@ -35,7 +54,24 @@ const getEmployee = async(req, res) => {
         const employees = await AllModel.EmployeesModel.findAll({
             where: {
                 employee_id: employee_id
-            }
+            },
+            include: [
+                {
+                    model: AllModel.SalarySettingModel,
+                    where: {
+                        now_active: true
+                    }
+                }, 
+                {
+                    model: AllModel.DepartmentHistoryModel,
+                    where: {
+                        now_active: true
+                    },
+                    include: [{
+                        model: AllModel.DepartmentModel,
+                    }]
+                },
+            ]
         });
        res.status(201).json(employees);
     }
@@ -59,7 +95,25 @@ const updateEmployee = async(req, res) => {
         const employeeData = await AllModel.EmployeesModel.update(employee, {
             where: {
                 employee_id: employee_id
-            }, returning: true
+            }, 
+            returning: true,
+            include: [
+                {
+                    model: AllModel.SalarySettingModel,
+                    where: {
+                        now_active: true
+                    }
+                }, 
+                {
+                    model: AllModel.DepartmentHistoryModel,
+                    where: {
+                        now_active: true
+                    },
+                    include: [{
+                        model: AllModel.DepartmentModel,
+                    }]
+                },
+            ]
         }, {transaction: t});
 
         await t.commit();
@@ -86,7 +140,25 @@ const updateMinorEmployee = async(req, res) => {
         const employeeData = await AllModel.EmployeesModel.update(employee, {
             where: {
                 employee_id: employee_id
-            }, returning: true
+            }, 
+            returning: true,
+            include: [
+                {
+                    model: AllModel.SalarySettingModel,
+                    where: {
+                        now_active: true
+                    }
+                }, 
+                {
+                    model: AllModel.DepartmentHistoryModel,
+                    where: {
+                        now_active: true
+                    },
+                    include: [{
+                        model: AllModel.DepartmentModel,
+                    }]
+                },
+            ]
         }, {transaction: t});
 
         await t.commit();
