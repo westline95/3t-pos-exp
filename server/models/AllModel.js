@@ -788,6 +788,14 @@ const EmployeesModel = sequelize.define("employees", {
         type: Sequelize.DATE,
         allowNull: false
     },
+    gender: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+    debt_limit: {
+        type: Sequelize.DECIMAL,
+        allowNull: false
+    },
 })
 
 const SalarySettingModel = sequelize.define("salary_setting", {
