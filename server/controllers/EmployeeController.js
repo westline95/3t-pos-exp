@@ -29,14 +29,17 @@ const getAllEmployees = async(req, res) => {
                     where: {
                         now_active: true
                     },
+                    required: false
                 }, 
                 {
                     model: AllModel.DepartmentHistoryModel,
                     where: {
                         now_active: true
                     },
+                    required: false,
                     include: [{
                         model: AllModel.DepartmentModel,
+                        required: false
                     }]
                 },
             ]
@@ -60,15 +63,18 @@ const getEmployee = async(req, res) => {
                     model: AllModel.SalarySettingModel,
                     where: {
                         now_active: true
-                    }
+                    },
+                    required: false
                 }, 
                 {
                     model: AllModel.DepartmentHistoryModel,
                     where: {
                         now_active: true
                     },
+                    required: false,
                     include: [{
                         model: AllModel.DepartmentModel,
+                        required: false
                     }]
                 },
             ]
