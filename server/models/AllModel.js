@@ -800,9 +800,13 @@ const EmployeesModel = sequelize.define("employees", {
         type: Sequelize.STRING,
         allowNull: true
     },
-})
+}, 
+{
+    tableName: 'employees'
+}
+)
 
-const SalarySettingModel = sequelize.define("salary_setting", {
+const SalarySettingModel = sequelize.define("salary_settings", {
     salary_setting_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -837,7 +841,7 @@ const SalarySettingModel = sequelize.define("salary_setting", {
         type: Sequelize.BOOLEAN,
         allowNull: false
     },
-});
+}, { tableName: 'salary_setting'});
 
 const DepartmentModel = sequelize.define("department", {
     department_id:{
@@ -850,7 +854,7 @@ const DepartmentModel = sequelize.define("department", {
         type: Sequelize.STRING,
         allowNull: false
     },
-});
+}, { tableName: 'department'});
 
 const DepartmentHistoryModel =sequelize.define("department_history", {
     department_history_id: {
@@ -879,7 +883,7 @@ const DepartmentHistoryModel =sequelize.define("department_history", {
         type: Sequelize.STRING,
         allowNull: false
     }
-});
+},{tableName: 'department_history'});
 
 DeliveryModel.beforeCreate(async (deliv, options) => {
   const now = new Date();

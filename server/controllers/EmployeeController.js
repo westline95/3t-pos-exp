@@ -28,15 +28,18 @@ const getAllEmployees = async(req, res) => {
                     model: AllModel.SalarySettingModel,
                     where: {
                         now_active: true
-                    }
+                    },
+                    required: true
                 }, 
                 {
                     model: AllModel.DepartmentHistoryModel,
                     where: {
                         now_active: true
                     },
+                    required: true,
                     include: [{
                         model: AllModel.DepartmentModel,
+                        required: true
                     }]
                 },
             ]

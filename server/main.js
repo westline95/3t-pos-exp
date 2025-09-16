@@ -89,6 +89,9 @@ app.use(CustomersRoute);
 // app.use(ROItemRoute);
 // app.use(OrdersCreditRoute);
 app.use(InvoiceRoute);
+app.use(EmployeeRoute);
+app.use(DepartmentsRoute);
+app.use(SalarySettingRoute);
 // // sales CRUD
 // app.use(SalesRoute);
 // auth
