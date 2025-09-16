@@ -29,17 +29,14 @@ const getAllEmployees = async(req, res) => {
                     where: {
                         now_active: true
                     },
-                    required: true
                 }, 
                 {
                     model: AllModel.DepartmentHistoryModel,
                     where: {
                         now_active: true
                     },
-                    required: true,
                     include: [{
                         model: AllModel.DepartmentModel,
-                        required: true
                     }]
                 },
             ]
