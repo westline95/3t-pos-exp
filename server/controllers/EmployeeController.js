@@ -5,14 +5,19 @@ import AllModel from "../models/AllModel.js";
 
 const insertEmployee = async(req, res) => {
     const t = await sequelize.transaction();
-    const { employee } = req.body;
+    const { employee, department_history } = req.body;
     try {
         const employeeData = await AllModel.EmployeesModel.create(employee, {
             returning: true,
         },{transaction: t});
 
+        department_history.employee_id = employeeData.employee_id;
+
+        // insert to department history
+        const dh = await AllModel.DepartmentHistoryModel.create(department_history,{transaction:t});
+
         await t.commit();
-        res.status(201).json(employeeData);
+        res.status(201).json({employee: employeeData, department_history: dh});
     }
     catch(err) {
         await t.rollback();
