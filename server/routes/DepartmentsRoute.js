@@ -8,7 +8,7 @@ DepartmentsRoute.post("/department", DepartmentsController.insertDepartment);
 DepartmentsRoute.get("/department/all", DepartmentsController.getAllDepartment);
 DepartmentsRoute.put("/department/update", DepartmentsController.updateDepartment);
 DepartmentsRoute.patch("/department/minor-update", DepartmentsController.updateMinorDepartment);
-DepartmentsRoute.delete("/department/del", DepartmentsController.deleteDepartment);
+DepartmentsRoute.delete("/department/del/:department_id", DepartmentsController.deleteDepartment);
 
 // Department History
 DepartmentsRoute.post("/department-history", DepartmentsController.insertDepartmentHistory);

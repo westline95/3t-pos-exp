@@ -29,6 +29,7 @@ const getAllEmployees = async(req, res) => {
                     where: {
                         now_active: true
                     },
+                    limit: 1,
                     required: false
                 }, 
                 {
@@ -36,6 +37,7 @@ const getAllEmployees = async(req, res) => {
                     where: {
                         now_active: true
                     },
+                    limit: 1,
                     required: false,
                     include: [{
                         model: AllModel.DepartmentModel,
