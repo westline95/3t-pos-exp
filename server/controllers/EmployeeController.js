@@ -9,12 +9,13 @@ const insertEmployee = async(req, res) => {
     try {
         const employeeData = await AllModel.EmployeesModel.create(employee, {
             returning: true,
-        },{transaction: t});
+            transaction: t
+        });
 
         department_history.employee_id = employeeData.employee_id;
 
         // insert to department history
-        const dh = await AllModel.DepartmentHistoryModel.create(department_history,{transaction:t});
+        const dh = await AllModel.DepartmentHistoryModel.create(department_history,{transaction: t});
 
         await t.commit();
         res.status(201).json({employee: employeeData, department_history: dh});
@@ -96,7 +97,7 @@ const getEmployee = async(req, res) => {
 const updateEmployee = async(req, res) => {
     const t = await sequelize.transaction();
     const employee_id = req.query.id;
-    const { employee } = req.body;
+    const { employee, department_history_id, department_history, exist } = req.body;
 
     try{
         // check employeeid
@@ -110,27 +111,34 @@ const updateEmployee = async(req, res) => {
                 employee_id: employee_id
             }, 
             returning: true,
-            include: [
-                {
-                    model: AllModel.SalarySettingModel,
-                    where: {
-                        now_active: true
-                    }
-                }, 
-                {
-                    model: AllModel.DepartmentHistoryModel,
-                    where: {
-                        now_active: true
-                    },
-                    include: [{
-                        model: AllModel.DepartmentModel,
-                    }]
+            transaction: t
+        });
+
+        // check dh
+        const checkDH = await AllModel.DepartmentHistoryModel.findByPk(department_history_id);
+        if(!checkDH) return res.status(404).json({err: "Department history is not found"})
+
+        let dh;
+        if(exist){
+            // just update
+            dh = await AllModel.DepartmentHistoryModel.update(department_history, {
+                where: {
+                    department_history_id: department_history_id
                 },
-            ]
-        }, {transaction: t});
+                returning: true,
+                transaction: t
+            })
+        } else {
+            // non active the old one and create new data
+            checkDH.now_active = false;
+            dh = await AllModel.DepartmentHistoryModel.create(department_history,{
+                returning: true, 
+                transaction:t
+            })
+        }
 
         await t.commit();
-        res.status(201).json(employeeData);
+        res.status(201).json({employee: employeeData, department_history: dh});
     }
     catch(err) {
         await t.rollback();
