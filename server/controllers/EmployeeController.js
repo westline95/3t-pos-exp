@@ -202,7 +202,7 @@ const deleteEmployee = async(req, res) => {
 
         if(!checkEmployee) return res.status(404).json({err: "Employee id is not found"});
 
-        await AllModel.EmployeesModel.destroy({
+        const deletedEmployee = await AllModel.EmployeesModel.destroy({
             where: {
                 employee_id: employee_id
             },
@@ -210,6 +210,7 @@ const deleteEmployee = async(req, res) => {
         });
 
         await t.commit();
+        res.status(201).json(deletedEmployee);
     }
     catch(err) {
         await t.rollback();

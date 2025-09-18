@@ -91,8 +91,9 @@ const deleteDepartment = async(req, res) => {
         if(!checkID) return res.status(404).json({message: "Department id is not found"});
 
         const deletedDepartment = await AllModel.DepartmentModel.destroy({where: {
-            department_id: department_id
-        }}, {transaction: t});
+            department_id: department_id,
+            transaction: t
+        }});
 
         await t.commit();
         res.status(201).json(deletedDepartment);
