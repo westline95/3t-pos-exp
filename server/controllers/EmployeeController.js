@@ -131,6 +131,7 @@ const updateEmployee = async(req, res) => {
         } else {
             // non active the old one and create new data
             checkDH.now_active = false;
+            checkDH.save({transaction:t});
             dh = await AllModel.DepartmentHistoryModel.create(department_history,{
                 returning: true, 
                 transaction:t
