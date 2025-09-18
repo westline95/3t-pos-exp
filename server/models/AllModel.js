@@ -786,7 +786,7 @@ const EmployeesModel = sequelize.define("employees", {
     },
     hired_date: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: true
     },
     gender: {
         type: Sequelize.STRING,
