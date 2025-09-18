@@ -180,8 +180,9 @@ const updateMinorEmployee = async(req, res) => {
                         model: AllModel.DepartmentModel,
                     }]
                 },
-            ]
-        }, {transaction: t});
+            ],
+            transaction: t
+        });
 
         await t.commit();
         res.status(201).json(employeeData);
@@ -204,8 +205,9 @@ const deleteEmployee = async(req, res) => {
         await AllModel.EmployeesModel.destroy({
             where: {
                 employee_id: employee_id
-            }
-        }, {transaction: t});
+            },
+            transaction: t
+        });
 
         await t.commit();
     }
