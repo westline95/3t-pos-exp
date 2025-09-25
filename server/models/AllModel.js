@@ -817,19 +817,11 @@ const SalarySettingModel = sequelize.define("salary_settings", {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    salary_type: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    salary_amount: {
+    base_salary: {
         type: Sequelize.DECIMAL,
         allowNull: false
     },
-    start_date: {
-        type: Sequelize.DATE,
-        allowNull: false
-    },
-    end_date: {
+    effective_date: {
         type: Sequelize.DATE,
         allowNull: false
     },
@@ -837,11 +829,40 @@ const SalarySettingModel = sequelize.define("salary_settings", {
         type: Sequelize.BOOLEAN,
         allowNull: false
     },
-    now_active: {
-        type: Sequelize.BOOLEAN,
+}, { tableName: 'salary_setting'});
+
+const SalaryAdjusmentsModel = sequelize.define("salary_adjustments", {
+    salary_adjustment_id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
         allowNull: false
     },
-}, { tableName: 'salary_setting'});
+    employee_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    old_salary: {
+        type: Sequelize.DECIMAL,
+        allowNull: false
+    },
+    new_salary: {
+        type: Sequelize.DECIMAL,
+        allowNull: false
+    },
+    effective_date: {
+        type: Sequelize.DATE,
+        allowNull: false
+    },
+    approved_by: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    notes: {
+        type: Sequelize.TEXT,
+        allowNull: true
+    },
+}, { tableName: 'salary_adjustments'});
 
 const DepartmentModel = sequelize.define("department", {
     department_id:{
@@ -1150,6 +1171,28 @@ SalarySettingModel.belongsTo(EmployeesModel, {
     targetKey: 'employee_id',
 });
 
+// one to many (employee - salary adjs)
+EmployeesModel.hasMany(SalaryAdjusmentsModel, {
+    sourceKey: 'employee_id',
+    foreignKey: 'employee_id',
+});
+
+SalaryAdjusmentsModel.belongsTo(EmployeesModel, {
+    foreignKey: 'employee_id',
+    targetKey: 'employee_id',
+});
+
+// one to one (salary sett - salary adjs)
+SalaryAdjusmentsModel.hasOne(SalarySettingModel, {
+    sourceKey: 'salary_adjustment_id',
+    foreignKey: 'salary_adjustment_id',
+});
+
+SalarySettingModel.belongsTo(SalaryAdjusmentsModel, {
+    foreignKey: 'salary_adjustment_id',
+    targetKey: 'salary_adjustment_id',
+});
+
 // one to many (department - departmentHistory)
 DepartmentModel.hasMany(DepartmentHistoryModel, {
     sourceKey: 'department_id',
@@ -1195,6 +1238,7 @@ export default {
     OrdersCreditModel,
     EmployeesModel,
     SalarySettingModel,
+    SalaryAdjusmentsModel,
     DepartmentModel,
     DepartmentHistoryModel
 };

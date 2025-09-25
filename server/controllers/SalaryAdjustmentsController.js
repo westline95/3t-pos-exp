@@ -1,19 +1,19 @@
 import sequelize from "../config/Database.js";
 import AllModel from "../models/AllModel.js";
 
-const insertSalarySett = async(req, res) => {
+const insertSalaryAdj = async(req, res) => {
     const t = await sequelize.transaction();
-    const { salary } = req.body;
+    const { old_salary, salary_adj } = req.body;
 
     try{
         // employee salary
         const checkEmployeeSalary = await AllModel.SalarySettingModel.findOne({
             where: {
-                employee_id: salary.employee_id,
+                employee_id: salary_adj.employee_id,
             }
         })
         
-        if(checkEmployeeSalary) return res.status(400).json({message: "There is still on going salary setting!"});
+        if(checkEmployeeSalary) return res.status(400).json({message: "There is no base salary found!"});
 
         const newSalarySett = await AllModel.SalarySettingModel.create(salary, {
             returning: true,
@@ -30,24 +30,21 @@ const insertSalarySett = async(req, res) => {
 };
 
 const getCurrentSalarySettByEmployee = async(req, res) => {
-    const { employee_id } = req.params;
+    const {employee_id} = req.params;
 
     try{
-        // find recent salary_adj => found ? use : use base salary in salary sett 
-        const checkEmployeeBaseSalary = await AllModel.SalarySettingModel.findByPk(employee_id);
-        if(!checkEmployeeBaseSalary) return res.status(404).json({message: "No base salary has been set for this employee!"});
-
-        const checkEmployeeSalaryAdj = await AllModel.SalaryAdjusmentsModel.findAll({
+        const currSalarySett = await AllModel.SalarySettingModel.findOne({
             where: {
-                employee_id: salary.employee_id,
+                employee_id: employee_id,
             },
-            order: [['createdAt', 'DESC']]
-        })
+            include: [
+                {
+                    model: AllModel.SalaryAdjusmentsModel,
+                }
+            ]
+        });
 
-        const currSalarySett = {
-            salary_setting: checkEmployeeBaseSalary,
-            salary_adjustments: checkEmployeeSalaryAdj
-        };
+        if(!currSalarySett) return res.status(404).json({message: "No salary has been set for this employee!"});
 
         res.status(201).json(currSalarySett);
     }
