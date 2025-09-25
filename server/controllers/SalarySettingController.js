@@ -33,23 +33,10 @@ const getCurrentSalarySettByEmployee = async(req, res) => {
     const { employee_id } = req.params;
 
     try{
-        // find recent salary_adj => found ? use : use base salary in salary sett 
         const checkEmployeeBaseSalary = await AllModel.SalarySettingModel.findByPk(employee_id);
-        if(!checkEmployeeBaseSalary) return res.status(404).json({message: "No base salary has been set for this employee!"});
+        if(!checkEmployeeBaseSalary) return res.status(404).json({message: "Ther is no current salary has been set for this employee!"});
 
-        const checkEmployeeSalaryAdj = await AllModel.SalaryAdjusmentsModel.findAll({
-            where: {
-                employee_id: salary.employee_id,
-            },
-            order: [['createdAt', 'DESC']]
-        })
-
-        const currSalarySett = {
-            salary_setting: checkEmployeeBaseSalary,
-            salary_adjustments: checkEmployeeSalaryAdj
-        };
-
-        res.status(201).json(currSalarySett);
+        res.status(201).json(checkEmployeeBaseSalary);
     }
     catch(err) {
         res.status(500).json({err: err});

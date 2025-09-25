@@ -69,8 +69,9 @@ const insertInv = async (req, res) => {
                     model: AllModel.CustomersModel,
                     as: 'customer'
                 },
-            ]
-        },{transaction: t});
+            ],
+            transaction: t
+        });
 
         // update order => inv
         const orderIDs = JSON.parse(newInv.order_id);
@@ -78,8 +79,9 @@ const insertInv = async (req, res) => {
         await AllModel.OrdersModel.update({invoice_id: newInv.invoice_id}, {
             where: {
                 order_id: orderIDs
-            }
-        },{transaction: t});
+            },
+            transaction: t
+        });
 
 
         // if(paidData){

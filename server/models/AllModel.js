@@ -806,7 +806,7 @@ const EmployeesModel = sequelize.define("employees", {
 }
 )
 
-const SalarySettingModel = sequelize.define("salary_settings", {
+const SalarySettingModel = sequelize.define("salary_setting", {
     salary_setting_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -831,7 +831,7 @@ const SalarySettingModel = sequelize.define("salary_settings", {
     },
 }, { tableName: 'salary_setting'});
 
-const SalaryAdjusmentsModel = sequelize.define("salary_adjustments", {
+const SalaryAdjustmentsModel = sequelize.define("salary_adjustments", {
     salary_adjustment_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -861,6 +861,14 @@ const SalaryAdjusmentsModel = sequelize.define("salary_adjustments", {
     notes: {
         type: Sequelize.TEXT,
         allowNull: true
+    },
+    old_status_uang_rokok: {
+       type: Sequelize.BOOLEAN,
+       allowNull: false
+    },
+    new_status_uang_rokok: {
+       type: Sequelize.BOOLEAN,
+       allowNull: false
     },
 }, { tableName: 'salary_adjustments'});
 
@@ -1227,7 +1235,7 @@ export default {
     OrdersCreditModel,
     EmployeesModel,
     SalarySettingModel,
-    SalaryAdjusmentsModel,
+    SalaryAdjustmentsModel,
     DepartmentModel,
     DepartmentHistoryModel
 };

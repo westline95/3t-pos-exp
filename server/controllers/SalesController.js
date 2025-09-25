@@ -126,8 +126,9 @@ const insertSales = async (req, res) => {
     try{
 
         const newSales = await AllModel.OrdersModel.create(sales, {
-            returning: true
-        }, {transaction: t});
+            returning: true,
+            transaction: t
+        });
 
         if(!newSales) return res.status(404).json({ message: 'error when get order_id' });
 
@@ -154,7 +155,10 @@ const insertSales = async (req, res) => {
                 return res.status(404).json({ message: 'Delivery already exists for this order.' });
             }
     
-            deliveryData = await AllModel.DeliveryModel.create(deliveryModel, {returning:true}, {transaction:t});
+            deliveryData = await AllModel.DeliveryModel.create(deliveryModel, {
+                returning:true,
+                transaction: t
+            });
         } 
 
         // check order credit
@@ -236,8 +240,9 @@ const insertSales = async (req, res) => {
 
             // create invoice
             inv = await AllModel.InvoicesModel.create(modelInv, {
-                returning: true
-            },{transaction: t});
+                returning: true,
+                transaction: t
+            });
 
             const checkOrder = await AllModel.OrdersModel.findByPk(newSales.order_id);
             if(!checkOrder){
@@ -248,8 +253,9 @@ const insertSales = async (req, res) => {
                 where:{
                     order_id: newSales.order_id
                 },
-                returning: true
-            }, {transaction: t})
+                returning: true,
+                transaction: t
+            })
             // updatedOrder.invoice_id = inv.invoice_id;
             // updatedOrder.save({transaction:t});
 
@@ -281,15 +287,19 @@ const insertSales = async (req, res) => {
                     receipt_date: new Date()
                 }
 
-                receipt = await AllModel.ReceiptsModel.create(receiptModel, {returning: true} ,{transaction: t});
+                receipt = await AllModel.ReceiptsModel.create(receiptModel, {
+                    returning: true,
+                    transaction: t
+                });
 
                 // update order => receipt_id 
                 updatedOrder = await AllModel.OrdersModel.update({receipt_id: receipt.receipt_id}, {
                     where:{
                         order_id: newSales.order_id
                     },
-                    returning: true
-                }, {transaction: t})
+                    returning: true,
+                    transaction: t
+                })
             }
             checkInvBB = false;
         } else {

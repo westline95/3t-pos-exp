@@ -33,6 +33,7 @@ import OrdersCreditRoute from "./routes/OrdersCreditRoute.js";
 import EmployeeRoute from "./routes/EmployeeRoute.js";
 import DepartmentsRoute from "./routes/DepartmentsRoute.js";
 import SalarySettingRoute from "./routes/SalarySettingRoute.js";
+import SalaryAdjRoute from "./routes/SalaryAdjustmentsRoute.js";
 
 dotenv.config();
 
@@ -82,16 +83,16 @@ app.get('/', (req, res) => res.send("HelloWorld"));
 
 // // return order CRUD
 // app.use(RORoute);
-app.use(CustomersRoute);
+// app.use(CustomersRoute);
 // return order CRUD
 // app.use(OrdersCreditRoute);
 // // return order item CRUD
 // app.use(ROItemRoute);
 // app.use(OrdersCreditRoute);
-app.use(InvoiceRoute);
-app.use(EmployeeRoute);
-app.use(DepartmentsRoute);
-app.use(SalarySettingRoute);
+// app.use(InvoiceRoute);
+// app.use(EmployeeRoute);
+// app.use(DepartmentsRoute);
+// app.use(SalarySettingRoute);
 // // sales CRUD
 // app.use(SalesRoute);
 // auth
@@ -150,6 +151,8 @@ app.use(EmployeeRoute);
 app.use(DepartmentsRoute);
 // return salary setting CRUD
 app.use(SalarySettingRoute);
+// return salary adj CRUD
+app.use(SalaryAdjRoute);
 
 
 app.listen(port, () => console.log(`

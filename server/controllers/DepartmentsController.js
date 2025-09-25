@@ -45,7 +45,8 @@ const updateDepartment = async(req, res) => {
                 department_id: department_id
             },
             returning: true,
-        }, {transaction: t});
+            transaction: t
+        });
 
         await t.commit();
         res.status(201).json(updatedDepartment)
@@ -70,7 +71,8 @@ const updateMinorDepartment = async(req, res) => {
                 department_id: department_id
             },
             returning: true,
-        }, {transaction: t});
+            transaction: t
+        });
 
         await t.commit();
         res.status(201).json(updatedDepartment)
@@ -120,8 +122,10 @@ const insertDepartmentHistory = async(req, res) => {
         if(checkID) return res.status(404).json({message: "There is still active department"});
 
         const newDH = await AllModel.DepartmentHistoryModel.create(department_history,
-            {returning:true},
-            {transaction:t}
+            {
+                returning:true,
+                transaction: t
+            }
         );
 
         await t.commit();
@@ -175,7 +179,8 @@ const updateDepartmentHistory = async(req, res) => {
                 department_history_id: department_history_id
             },
             returning: true,
-        }, {transaction: t});
+            transaction: t
+        });
 
         await t.commit();
         res.status(201).json(updatedDH)
@@ -202,7 +207,8 @@ const updateMinorDH = async(req, res) => {
         
         let insertNewOneDH = await AllModel.DepartmentHistoryModel.create(req.body, {
             returning: true,
-        }, {transaction: t});
+            transaction: t
+        });
 
         await t.commit();
         res.status(201).json(insertNewOneDH)
@@ -223,8 +229,9 @@ const deleteDepartmentHistory = async(req, res) => {
         if(!checkID) return res.status(404).json({message: "Department history id is not found"});
 
         const deletedDH = await AllModel.DepartmentHistoryModel.destroy({where: {
-            department_history_id: department_history_id
-        }}, {transaction: t});
+            department_history_id: department_history_id,
+            transaction: t
+        }});
 
         await t.commit();
         res.status(201).json(deletedDH);

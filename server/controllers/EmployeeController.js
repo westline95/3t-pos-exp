@@ -29,22 +29,25 @@ const insertEmployee = async(req, res) => {
 const getAllEmployees = async(req, res) => {
     try{
        const employees = await AllModel.EmployeesModel.findAll({
+            where: {
+                is_active: true
+            },
             include: [
                 {
                     model: AllModel.SalarySettingModel,
-                    limit: 1,
                     required: false
                 }, 
                 {
                     model: AllModel.SalaryAdjusmentsModel,
                     order: [["createdAt", "DESC"]],
+                    limit: 3,
+                    separate: true
                 }, 
                 {
                     model: AllModel.DepartmentHistoryModel,
                     where: {
                         now_active: true
                     },
-                    limit: 1,
                     required: false,
                     include: [{
                         model: AllModel.DepartmentModel,
@@ -70,9 +73,6 @@ const getEmployee = async(req, res) => {
             include: [
                 {
                     model: AllModel.SalarySettingModel,
-                    where: {
-                        now_active: true
-                    },
                     required: false
                 }, 
                 {
