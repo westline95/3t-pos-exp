@@ -3,8 +3,8 @@ import SalaryAdjustmentsController from "../controllers/SalaryAdjustmentsControl
 
 const SalaryAdjRoute = express.Router();
 
-SalaryAdjRoute.post("/salary-setting", SalaryAdjustmentsController.insertSalaryAdj);
-SalaryAdjRoute.get("/salary-setting/active/:employee_id", SalaryAdjustmentsController.getSalaryByPeriod);
+SalaryAdjRoute.post("/salary-adj", SalaryAdjustmentsController.insertSalaryAdj);
+SalaryAdjRoute.get("/salary-adj/period", SalaryAdjustmentsController.getSalaryByPeriod);
 // SalaryAdjRoute.put("/salary-setting/update", SalarySettingController.updateSalarySett);
 // SalaryAdjRoute.patch("/salary-setting/minor-update", SalarySettingController.updateMinorSalarySett);
 // SalaryAdjRoute.delete("/salary-setting/del", SalarySettingController.deleteSalarySetting);
