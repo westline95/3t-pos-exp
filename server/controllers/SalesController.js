@@ -982,7 +982,7 @@ const salesWOrderItems = async (req, res) => {
                 {
                     model: AllModel.OrderItemsModel,
                     as: 'order_items',
-                    order: [["createdAt", "ASC"]],
+                    order: [["item_id", "ASC"]],
                     required: true,
                     include: [
                         {
