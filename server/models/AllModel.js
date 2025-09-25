@@ -1180,12 +1180,12 @@ SalarySettingModel.belongsTo(EmployeesModel, {
 });
 
 // one to many (employee - salary adjs)
-EmployeesModel.hasMany(SalaryAdjusmentsModel, {
+EmployeesModel.hasMany(SalaryAdjustmentsModel, {
     sourceKey: 'employee_id',
     foreignKey: 'employee_id',
 });
 
-SalaryAdjusmentsModel.belongsTo(EmployeesModel, {
+SalaryAdjustmentsModel.belongsTo(EmployeesModel, {
     foreignKey: 'employee_id',
     targetKey: 'employee_id',
 });
