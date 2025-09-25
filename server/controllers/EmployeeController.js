@@ -32,11 +32,12 @@ const getAllEmployees = async(req, res) => {
             include: [
                 {
                     model: AllModel.SalarySettingModel,
-                    where: {
-                        now_active: true
-                    },
                     limit: 1,
                     required: false
+                }, 
+                {
+                    model: AllModel.SalaryAdjusmentsModel,
+                    order: [["createdAt", "DESC"]],
                 }, 
                 {
                     model: AllModel.DepartmentHistoryModel,

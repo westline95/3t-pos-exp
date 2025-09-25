@@ -1182,17 +1182,6 @@ SalaryAdjusmentsModel.belongsTo(EmployeesModel, {
     targetKey: 'employee_id',
 });
 
-// one to one (salary sett - salary adjs)
-SalaryAdjusmentsModel.hasOne(SalarySettingModel, {
-    sourceKey: 'salary_adjustment_id',
-    foreignKey: 'salary_adjustment_id',
-});
-
-SalarySettingModel.belongsTo(SalaryAdjusmentsModel, {
-    foreignKey: 'salary_adjustment_id',
-    targetKey: 'salary_adjustment_id',
-});
-
 // one to many (department - departmentHistory)
 DepartmentModel.hasMany(DepartmentHistoryModel, {
     sourceKey: 'department_id',
