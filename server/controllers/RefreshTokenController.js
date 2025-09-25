@@ -16,7 +16,7 @@ const handleRefreshToken = async (req, res) => {
     if (!foundUser) return res.sendStatus(403); //Forbidden 
 
     const roles = foundUser.role;
-    const name = foundUser.name;
+    const name = foundUser.user_name;
     // evaluate jwt 
     jwt.verify(
         refreshToken,
