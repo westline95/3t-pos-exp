@@ -38,7 +38,7 @@ const getAllEmployees = async(req, res) => {
                     required: false
                 }, 
                 {
-                    model: AllModel.SalaryAdjusmentsModel,
+                    model: AllModel.SalaryAdjustmentsModel,
                     order: [["createdAt", "DESC"]],
                     limit: 3,
                     separate: true
