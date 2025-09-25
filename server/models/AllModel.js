@@ -855,7 +855,7 @@ const SalaryAdjustmentsModel = sequelize.define("salary_adjustments", {
         allowNull: false
     },
     approved_by: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false
     },
     notes: {
