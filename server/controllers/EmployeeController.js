@@ -29,8 +29,43 @@ const insertEmployee = async(req, res) => {
 const getAllEmployees = async(req, res) => {
     try{
        const employees = await AllModel.EmployeesModel.findAll({
+            include: [
+                {
+                    model: AllModel.SalarySettingModel,
+                    required: false
+                }, 
+                {
+                    model: AllModel.SalaryAdjustmentsModel,
+                    order: [["createdAt", "DESC"]],
+                    limit: 3,
+                    separate: true
+                }, 
+                {
+                    model: AllModel.DepartmentHistoryModel,
+                    where: {
+                        now_active: true
+                    },
+                    required: false,
+                    include: [{
+                        model: AllModel.DepartmentModel,
+                        required: false
+                    }]
+                },
+            ]
+       });
+       res.status(201).json(employees);
+    }
+    catch(err) {
+        res.status(500).json({err: err});
+    }
+};
+
+const getAllEmployeesByActive = async(req, res) => {
+    const is_active = req.query.active;
+    try{
+       const employees = await AllModel.EmployeesModel.findAll({
             where: {
-                is_active: true
+                is_active: is_active
             },
             include: [
                 {
@@ -222,6 +257,7 @@ const deleteEmployee = async(req, res) => {
 export default {
     insertEmployee,
     getAllEmployees,
+    getAllEmployeesByActive,
     getEmployee,
     updateEmployee,
     updateMinorEmployee,
