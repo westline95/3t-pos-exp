@@ -800,6 +800,10 @@ const EmployeesModel = sequelize.define("employees", {
         type: Sequelize.STRING,
         allowNull: true
     },
+    user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+    },
 }, 
 {
     tableName: 'employees'
@@ -1211,6 +1215,18 @@ DepartmentHistoryModel.belongsTo(EmployeesModel, {
     foreignKey: 'employee_id',
     targetKey: 'employee_id',
 });
+
+// one to one (employee - user)
+UsersModel.hasOne(EmployeesModel,{
+    sourceKey: 'id',
+    foreignKey: 'user_id',
+});
+
+EmployeesModel.belongsTo(UsersModel, {
+    foreignKey: 'user_id',
+    targetKey: 'id',
+});
+
 
 
 export default {

@@ -6,6 +6,7 @@ import AllModel from "../models/AllModel.js";
 const insertEmployee = async(req, res) => {
     const t = await sequelize.transaction();
     const { employee, department_history } = req.body;
+    
     try {
         const employeeData = await AllModel.EmployeesModel.create(employee, {
             returning: true,
@@ -33,6 +34,9 @@ const getAllEmployees = async(req, res) => {
                 {
                     model: AllModel.SalarySettingModel,
                     required: false
+                }, 
+                {
+                    model: AllModel.UsersModel,
                 }, 
                 {
                     model: AllModel.SalaryAdjustmentsModel,
