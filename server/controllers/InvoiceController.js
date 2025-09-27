@@ -113,7 +113,7 @@ const insertInv = async (req, res) => {
         // }
 
         await t.commit();
-        
+        res.status(201).json(newInv);
     } 
     catch(err) {
         await t.rollback();
