@@ -4,6 +4,7 @@ import EmployeeController from "../controllers/EmployeeController.js";
 const EmployeeRoute = express.Router();
 
 EmployeeRoute.post("/employee", EmployeeController.insertEmployee);
+EmployeeRoute.post("/employee/account", EmployeeController.insertEmployeeAcc);
 EmployeeRoute.get("/employee/all", EmployeeController.getAllEmployees);
 EmployeeRoute.get("/employee/all/active", EmployeeController.getAllEmployeesByActive);
 EmployeeRoute.get("/employee/:employee_id", EmployeeController.getEmployee);

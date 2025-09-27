@@ -27,6 +27,36 @@ const insertEmployee = async(req, res) => {
     }
 };
 
+const insertEmployeeAcc = async(req, res) => {
+    const t = await sequelize.transaction();    
+    const { user, employee_id } = req.body;
+
+    try{
+        const checkEmployee = await AllModel.EmployeesModel.findByPk(employee_id);
+
+        if(!checkEmployee) return res.status(404).json({msg: "Employee id is not found"});
+
+        const hashedPass = await bcrypt.hash(user.user_pass, 10);
+        const newUser = await AllModel.UsersModel.create({
+            user_name: user.user_name,
+            user_mail: user.user_mail,
+            user_pass: hashedPass,
+            role: user.role,
+        }, {transaction: t});
+
+        // update user_id => employee
+        checkEmployee.user_id = newUser.id;
+        checkEmployee.save({transaction:t});
+        
+        await t.commit();
+        res.status(201).json({message: 'user created'});
+    } 
+    catch(err) {
+        await t.rollback();
+        res.status(500).json({err: err});
+    }
+};
+
 const getAllEmployees = async(req, res) => {
     try{
        const employees = await AllModel.EmployeesModel.findAll({
@@ -260,6 +290,7 @@ const deleteEmployee = async(req, res) => {
 
 export default {
     insertEmployee,
+    insertEmployeeAcc,
     getAllEmployees,
     getAllEmployeesByActive,
     getEmployee,
