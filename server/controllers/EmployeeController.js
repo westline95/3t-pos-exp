@@ -145,6 +145,9 @@ const getEmployee = async(req, res) => {
                     required: false
                 }, 
                 {
+                    model: AllModel.UsersModel,
+                }, 
+                {
                     model: AllModel.DepartmentHistoryModel,
                     where: {
                         now_active: true
