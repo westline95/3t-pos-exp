@@ -48,6 +48,7 @@ const CustomersModel = sequelize.define("customers",
         name: {
             type: Sequelize.STRING,
             allowNull: false,
+            unique: true
         },
         img: {
             type: Sequelize.STRING,

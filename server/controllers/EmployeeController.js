@@ -33,8 +33,16 @@ const insertEmployeeAcc = async(req, res) => {
 
     try{
         const checkEmployee = await AllModel.EmployeesModel.findByPk(employee_id);
-
+        
         if(!checkEmployee) return res.status(404).json({msg: "Employee id is not found"});
+        
+        const checkEmployeeUserMail = await AllModel.UsersModel.findOne({
+            where: {
+                user_mail: user.user_mail
+            }
+        });
+        
+        if(checkEmployeeUserMail) return res.status(400).json({msg: "email aready exist!"});
 
         const hashedPass = await bcrypt.hash(user.user_pass, 10);
         const newUser = await AllModel.UsersModel.create({
