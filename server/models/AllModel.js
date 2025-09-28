@@ -20,7 +20,7 @@ const UsersModel = sequelize.define("users",
         },
         user_pass: {
             type: Sequelize.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         role: {
             type: Sequelize.STRING,

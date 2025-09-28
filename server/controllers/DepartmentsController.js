@@ -202,7 +202,7 @@ const updateMinorDH = async(req, res) => {
 
         if(checkID.now_active){
             checkID.now_active = false;
-            checkID.save({transaction:t});
+            await checkID.save({transaction:t});
         }
         
         let insertNewOneDH = await AllModel.DepartmentHistoryModel.create(req.body, {

@@ -90,7 +90,7 @@ app.get('/', (req, res) => res.send("HelloWorld"));
 // app.use(ROItemRoute);
 // app.use(OrdersCreditRoute);
 // app.use(InvoiceRoute);
-// app.use(EmployeeRoute);
+app.use(EmployeeRoute);
 // app.use(DepartmentsRoute);
 // app.use(SalarySettingRoute);
 // // sales CRUD

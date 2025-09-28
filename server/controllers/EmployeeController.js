@@ -1,6 +1,7 @@
 import { where } from "sequelize";
 import sequelize from "../config/Database.js";
 import AllModel from "../models/AllModel.js";
+import bcrypt from "bcrypt";
 
 
 const insertEmployee = async(req, res) => {
@@ -50,11 +51,14 @@ const insertEmployeeAcc = async(req, res) => {
             user_mail: user.user_mail,
             user_pass: hashedPass,
             role: user.role,
-        }, {transaction: t});
+        }, {
+            returning: true,
+            transaction: t
+        });
 
         // update user_id => employee
         checkEmployee.user_id = newUser.id;
-        checkEmployee.save({transaction:t});
+        await checkEmployee.save({transaction:t});
         
         await t.commit();
         res.status(201).json({message: 'user created'});
