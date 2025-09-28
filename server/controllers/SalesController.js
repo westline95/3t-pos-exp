@@ -121,7 +121,7 @@ const validationDateSales = async (req, res) => {
 const insertSales = async (req, res) => {
     const t = await sequelize.transaction();
     const { 
-        sales, order_items, delivery, paidData
+        sales, order_items, delivery, paidData, guest_mode
     } = req.body;
     try{
 
@@ -161,53 +161,55 @@ const insertSales = async (req, res) => {
             });
         } 
 
-        // check order credit
-        const allCreditByCust = await AllModel.OrdersCreditModel.findAll({
-            where: {
-                customer_id: sales.customer_id,
-                order_id: null
-            },
-            include: [
-                {
-                    model: AllModel.CustomersModel,
-                    as: 'customer'
+        if(!guest_mode){
+            // check order credit
+            const allCreditByCust = await AllModel.OrdersCreditModel.findAll({
+                where: {
+                    customer_id: sales.customer_id,
+                    order_id: null
                 },
-                {
-                    model: AllModel.ROModel,
-                    as: 'return_order',
-                    include: [
-                        {
-                            model: AllModel.CustomersModel,
-                            as: 'customer'
-                        },
-                        {
-                            model: AllModel.ROItemsModel,
-                            as: 'return_order_items',
-                        }
-                    ]
-                },
-            ]
-        });
-
-        let orderCredit;
-        if(allCreditByCust && allCreditByCust.length > 0){
-            orderCredit = await AllModel.OrdersCreditModel.findByPk(allCreditByCust[0].order_credit_id,
-                {
-                    include: [
-                        {
-                            model: AllModel.ROModel,
-                            as: 'return_order',
-                        }
-                    ]
-                }
-            );
-            
-            if(!orderCredit){
-                return res.status(404).json({ message: 'Order credit is not found.' });
-            } 
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                    {
+                        model: AllModel.ROModel,
+                        as: 'return_order',
+                        include: [
+                            {
+                                model: AllModel.CustomersModel,
+                                as: 'customer'
+                            },
+                            {
+                                model: AllModel.ROItemsModel,
+                                as: 'return_order_items',
+                            }
+                        ]
+                    },
+                ]
+            });
     
-            orderCredit.order_id = newSales.order_id;
-            await orderCredit.save({transaction:t});
+            let orderCredit;
+            if(allCreditByCust && allCreditByCust.length > 0){
+                orderCredit = await AllModel.OrdersCreditModel.findByPk(allCreditByCust[0].order_credit_id,
+                    {
+                        include: [
+                            {
+                                model: AllModel.ROModel,
+                                as: 'return_order',
+                            }
+                        ]
+                    }
+                );
+                
+                if(!orderCredit){
+                    return res.status(404).json({ message: 'Order credit is not found.' });
+                } 
+        
+                orderCredit.order_id = newSales.order_id;
+                await orderCredit.save({transaction:t});
+            }
         }
 
         let checkInvBB = false;
@@ -218,7 +220,6 @@ const insertSales = async (req, res) => {
             const invDue = new Date().setDate(invDate.getDate() + 7);
 
             let modelInv = {
-                customer_id: newSales.customer_id,
                 order_id: JSON.stringify([newSales.order_id]),
                 invoice_date: invDate,
                 invoice_due: invDue,
@@ -238,6 +239,7 @@ const insertSales = async (req, res) => {
                 modelInv.remaining_payment = (newSales.grandtotal + (orderCredit ? Number(orderCredit.return_order.refund_total) : 0)) - (paidData ? Number(paidData.amountOrigin):0);
             }
 
+            if(guest_mode ? modelInv.guest_name = newSales.guest_name : modelInv.customer_id = newSales.customer_id);
             // create invoice
             inv = await AllModel.InvoicesModel.create(modelInv, {
                 returning: true,
@@ -265,7 +267,7 @@ const insertSales = async (req, res) => {
             }
 
             let paymentModel = {
-                customer_id: inv.customer_id,
+                // customer_id: inv.customer_id,
                 invoice_id: inv.invoice_id,
                 payment_date: paidData.payment_date,
                 amount_paid: paidData.amountOrigin,
@@ -274,19 +276,22 @@ const insertSales = async (req, res) => {
                 note: paidData.note 
             };
 
+            if(guest_mode ? paymentModel.guest_name = inv.guest_name : paymentModel.customer_id = inv.customer_id);
             // save payment
             await AllModel.PaymentsModel.create(paymentModel, {transaction: t});
 
             // handle receipt if is_paid true
             if(inv.is_paid){
                 let receiptModel = {
-                    customer_id: inv.customer_id,
+                    // customer_id: inv.customer_id,
                     invoice_id: inv.invoice_id,
                     total_payment: Number(paidData.amountOrigin),
                     change: Number(paidData.change),
                     receipt_date: new Date()
                 }
 
+                if(guest_mode ? receiptModel.guest_name = inv.guest_name : receiptModel.customer_id = inv.customer_id);
+                
                 receipt = await AllModel.ReceiptsModel.create(receiptModel, {
                     returning: true,
                     transaction: t
@@ -313,6 +318,8 @@ const insertSales = async (req, res) => {
         if(Object.keys(deliveryData).length > 0){
             res.status(201).json({
                 customer_id: newSales.customer_id,
+                guest_name: newSales.guest_name,
+                guest_mode: newSales.guest_mode,
                 order: updatedOrder ? updatedOrder[1][0] : newSales, 
                 order_credit: allCreditByCust, 
                 delivery: deliveryData,
@@ -323,6 +330,8 @@ const insertSales = async (req, res) => {
         } else {
             res.status(201).json({
                 customer_id: newSales.customer_id,
+                guest_name: newSales.guest_name,
+                guest_mode: newSales.guest_mode,
                 order: updatedOrder ? updatedOrder[1][0] : newSales, 
                 order_credit: allCreditByCust,
                 invoice: inv,

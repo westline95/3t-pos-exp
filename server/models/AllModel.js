@@ -220,7 +220,7 @@ const OrdersModel = sequelize.define("orders",
         },       
         customer_id: {
             type: Sequelize.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },       
         invoice_id: {
             type: Sequelize.INTEGER,
@@ -276,7 +276,11 @@ const OrdersModel = sequelize.define("orders",
         receipt_id: {
             type: Sequelize.INTEGER,
             allowNull: true,
-        }
+        },
+        guest_name: {
+            type: Sequelize.STRING,
+            allowNull: true
+        },
     }, 
     {
         tableName: 'orders',
@@ -376,7 +380,7 @@ const InvoicesModel = sequelize.define("invoices",
         },
         customer_id: {
             type: Sequelize.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
         order_id: {
             type: Sequelize.STRING,
@@ -424,7 +428,11 @@ const InvoicesModel = sequelize.define("invoices",
         status: {
             type: Sequelize.INTEGER,
             allowNull: false,
-        }
+        },
+        guest_name: {
+            type: Sequelize.STRING,
+            allowNull: true
+        },
     }, 
     {
         tableName: 'invoices',
@@ -482,7 +490,7 @@ const PaymentsModel = sequelize.define("payments",
         },
         customer_id: {
             type: Sequelize.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
         invoice_id: {
             type: Sequelize.INTEGER,
@@ -507,7 +515,11 @@ const PaymentsModel = sequelize.define("payments",
         payment_ref: {
             type: Sequelize.STRING,
             allowNull: true,
-        }
+        },
+        guest_name: {
+            type: Sequelize.STRING,
+            allowNull: true
+        },
     }, 
     {
         tableName: 'payments',
@@ -524,7 +536,7 @@ const ReceiptsModel = sequelize.define("receipts",
         },
         customer_id: {
             type: Sequelize.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
         invoice_id: {
             type: Sequelize.INTEGER,
@@ -546,7 +558,11 @@ const ReceiptsModel = sequelize.define("receipts",
         url: {
             type: Sequelize.STRING,
             allowNull: true,
-        }
+        },
+        guest_name: {
+            type: Sequelize.STRING,
+            allowNull: true
+        },
     }, 
     {
         tableName: 'receipts',
