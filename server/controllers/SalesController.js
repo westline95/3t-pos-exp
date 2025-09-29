@@ -139,26 +139,27 @@ const insertSales = async (req, res) => {
         await AllModel.OrderItemsModel.bulkCreate(order_items, {transaction:t})
 
         let deliveryData = {};
-        if(newSales.order_type == 'delivery' && delivery.courier_id !== "" || delivery.courier_id){
+        if(newSales.order_type == 'delivery' && delivery){
             let deliveryModel = {
                 order_id: newSales.order_id,
                 courier_id: delivery.courier_id,
                 courier_name: delivery.courier_name,
                 delivery_address: delivery.delivery_address,
                 ship_date: new Date(delivery.ship_date),
-                elivery_status: 'pending',
+                delivery_status: 'pending',
             }
     
             // check delivery with order id if existed
             const checkExistDelivery = await AllModel.DeliveryModel.findOne({ where: {order_id: newSales.order_id}});
             if(checkExistDelivery){
                 return res.status(404).json({ message: 'Delivery already exists for this order.' });
+            } else {
+                deliveryData = await AllModel.DeliveryModel.create(deliveryModel, {
+                    returning:true,
+                    transaction: t
+                });
             }
     
-            deliveryData = await AllModel.DeliveryModel.create(deliveryModel, {
-                returning:true,
-                transaction: t
-            });
         } 
 
         if(!guest_mode){
@@ -321,7 +322,7 @@ const insertSales = async (req, res) => {
                 guest_name: newSales.guest_name,
                 guest_mode: newSales.guest_mode,
                 order: updatedOrder ? updatedOrder[1][0] : newSales, 
-                order_credit: allCreditByCust, 
+                // order_credit: allCreditByCust, 
                 delivery: deliveryData,
                 invoice: inv,
                 receipt: receipt,
@@ -333,7 +334,7 @@ const insertSales = async (req, res) => {
                 guest_name: newSales.guest_name,
                 guest_mode: newSales.guest_mode,
                 order: updatedOrder ? updatedOrder[1][0] : newSales, 
-                order_credit: allCreditByCust,
+                // order_credit: allCreditByCust,
                 invoice: inv,
                 receipt: receipt,
                 checkInv: checkInvBB
