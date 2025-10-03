@@ -26,7 +26,7 @@ const handleLogin = async (req, res) => {
         if(isValidPass){
             const roles = user.role;
             const name = user.user_name;
-            const id = user.id;
+            const staff_id = user.employee_id;
             const payload = {
                 id: user.id,
                 name: user.user_name,
@@ -56,7 +56,7 @@ const handleLogin = async (req, res) => {
             res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
             // Send authorization roles and access token to user
-            return res.json({ id, name, roles, access_token });
+            return res.json({ staff_id, name, roles, access_token });
         } else {
             return res.status(403).json({
                 message: 'Wrong password!'

@@ -30,6 +30,10 @@ const UsersModel = sequelize.define("users",
             type: Sequelize.STRING,
             allowNull: true,
         },
+        employee_id:{
+            type:  Sequelize.INTEGER,
+            allowNull: true,
+        },
 
     }, 
     {
@@ -1101,6 +1105,16 @@ OrdersModel.hasMany(OrderItemsModel, {
 OrderItemsModel.belongsTo(OrdersModel, {
     foreignKey: 'order_id',
     targetKey: 'order_id',
+});
+
+// one to one (employee - users)
+EmployeesModel.hasOne(UsersModel, {
+    sourceKey: 'employee_id',
+    foreignKey: 'employee_id',
+});
+UsersModel.belongsTo(EmployeesModel, {
+    foreignKey: 'employee_id',
+    targetKey: 'employee_id',
 });
 
 // one to many (products - order-items)

@@ -17,7 +17,7 @@ const handleRefreshToken = async (req, res) => {
 
     const roles = foundUser.role;
     const name = foundUser.user_name;
-    const id = foundUser.id;
+    const staff_id = foundUser.employee_id;
     // evaluate jwt 
     jwt.verify(
         refreshToken,
@@ -29,7 +29,7 @@ const handleRefreshToken = async (req, res) => {
                 process.env.JWT_SECRET,
                 { expiresIn: '15m' }
             );
-            res.json({ id, name, roles, access_token })
+            res.json({ staff_id, name, roles, access_token })
         }
     );
 }
