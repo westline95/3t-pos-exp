@@ -51,6 +51,7 @@ const insertEmployeeAcc = async(req, res) => {
             user_mail: user.user_mail,
             user_pass: hashedPass,
             role: user.role,
+            employee_id: employee_id
         }, {
             returning: true,
             transaction: t

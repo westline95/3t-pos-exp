@@ -102,7 +102,7 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
             where: {
                 employee_id: req.query.emp_id,
                 status: {
-                    [Op.ne]: [0,2]
+                    [Op.eq]: 1
                 }
             },
             include: [
