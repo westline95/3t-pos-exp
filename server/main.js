@@ -34,6 +34,7 @@ import EmployeeRoute from "./routes/EmployeeRoute.js";
 import DepartmentsRoute from "./routes/DepartmentsRoute.js";
 import SalarySettingRoute from "./routes/SalarySettingRoute.js";
 import SalaryAdjRoute from "./routes/SalaryAdjustmentsRoute.js";
+import DeliveryGroupsRoute from "./routes/DeliveryGroupsRoute.js";
 
 dotenv.config();
 
@@ -91,7 +92,7 @@ app.get('/', (req, res) => res.send("HelloWorld"));
 // app.use(OrdersCreditRoute);
 // app.use(InvoiceRoute);
 app.use(EmployeeRoute);
-// app.use(DepartmentsRoute);
+app.use(DeliveryGroupsRoute);
 // app.use(SalarySettingRoute);
 // // sales CRUD
 // app.use(SalesRoute);

@@ -126,7 +126,7 @@ const insertSales = async (req, res) => {
     try{
 
         const newSales = await AllModel.OrdersModel.create(sales, {
-            returning: true,
+            // returning: true,
             transaction: t
         });
 
@@ -138,8 +138,8 @@ const insertSales = async (req, res) => {
 
         await AllModel.OrderItemsModel.bulkCreate(order_items, {transaction:t})
 
-        let deliveryData = {};
-        if(newSales.order_type == 'delivery' && delivery){
+        let deliveryData = null;
+        if(delivery){
             let deliveryModel = {
                 order_id: newSales.order_id,
                 courier_id: delivery.courier_id,
@@ -153,16 +153,16 @@ const insertSales = async (req, res) => {
             const checkExistDelivery = await AllModel.DeliveryModel.findOne({ where: {order_id: newSales.order_id}});
             if(checkExistDelivery){
                 return res.status(404).json({ message: 'Delivery already exists for this order.' });
-            } else {
-                deliveryData = await AllModel.DeliveryModel.create(deliveryModel, {
-                    returning:true,
-                    transaction: t
-                });
-            }
+            } 
+            deliveryData = await AllModel.DeliveryModel.create(deliveryModel, {
+                returning:true,
+                transaction: t
+            });
     
         } 
 
-        if(!guest_mode){
+        let orderCredit=null;
+        if(guest_mode == false){
             // check order credit
             const allCreditByCust = await AllModel.OrdersCreditModel.findAll({
                 where: {
@@ -191,7 +191,7 @@ const insertSales = async (req, res) => {
                 ]
             });
     
-            let orderCredit;
+            
             if(allCreditByCust && allCreditByCust.length > 0){
                 orderCredit = await AllModel.OrdersCreditModel.findByPk(allCreditByCust[0].order_credit_id,
                     {
@@ -209,7 +209,7 @@ const insertSales = async (req, res) => {
                 } 
         
                 orderCredit.order_id = newSales.order_id;
-                await orderCredit.save({transaction:t});
+                await orderCredit.save({returning: true,transaction:t});
             }
         }
 
@@ -240,30 +240,20 @@ const insertSales = async (req, res) => {
                 modelInv.remaining_payment = (newSales.grandtotal + (orderCredit ? Number(orderCredit.return_order.refund_total) : 0)) - (paidData ? Number(paidData.amountOrigin):0);
             }
 
-            if(guest_mode ? modelInv.guest_name = newSales.guest_name : modelInv.customer_id = newSales.customer_id);
+            guest_mode ? modelInv.guest_name = newSales.guest_name : modelInv.customer_id = newSales.customer_id;
+
             // create invoice
             inv = await AllModel.InvoicesModel.create(modelInv, {
                 returning: true,
                 transaction: t
             });
-
-            const checkOrder = await AllModel.OrdersModel.findByPk(newSales.order_id);
-            if(!checkOrder){
-                return res.status(404).json({ message: 'Order is not found.' });
-            } 
-
-            updatedOrder = await AllModel.OrdersModel.update({invoice_id: inv.invoice_id}, {
-                where:{
-                    order_id: newSales.order_id
-                },
-                returning: true,
-                transaction: t
-            })
-            // updatedOrder.invoice_id = inv.invoice_id;
-            // updatedOrder.save({transaction:t});
+            
+            
+            newSales.invoice_id = inv.invoice_id;
+            await newSales.save({transaction:t});
 
             // handle payment
-             if(!paidData){
+            if(!paidData){
                 return res.status(404).json({ message: 'Payment data not found' });
             }
 
@@ -277,7 +267,8 @@ const insertSales = async (req, res) => {
                 note: paidData.note 
             };
 
-            if(guest_mode ? paymentModel.guest_name = inv.guest_name : paymentModel.customer_id = inv.customer_id);
+            guest_mode ? paymentModel.guest_name = newSales.guest_name : paymentModel.customer_id = newSales.customer_id;
+
             // save payment
             await AllModel.PaymentsModel.create(paymentModel, {transaction: t});
 
@@ -291,7 +282,7 @@ const insertSales = async (req, res) => {
                     receipt_date: new Date()
                 }
 
-                if(guest_mode ? receiptModel.guest_name = inv.guest_name : receiptModel.customer_id = inv.customer_id);
+                guest_mode ? receiptModel.guest_name = inv.guest_name : receiptModel.customer_id = inv.customer_id;
                 
                 receipt = await AllModel.ReceiptsModel.create(receiptModel, {
                     returning: true,
@@ -316,30 +307,17 @@ const insertSales = async (req, res) => {
         }
 
         await t.commit();
-        if(Object.keys(deliveryData).length > 0){
-            res.status(201).json({
-                customer_id: newSales.customer_id,
-                guest_name: newSales.guest_name,
-                guest_mode: newSales.guest_mode,
-                order: updatedOrder ? updatedOrder[1][0] : newSales, 
-                // order_credit: allCreditByCust, 
-                delivery: deliveryData,
-                invoice: inv,
-                receipt: receipt,
-                checkInv: checkInvBB
-            });
-        } else {
-            res.status(201).json({
-                customer_id: newSales.customer_id,
-                guest_name: newSales.guest_name,
-                guest_mode: newSales.guest_mode,
-                order: updatedOrder ? updatedOrder[1][0] : newSales, 
-                // order_credit: allCreditByCust,
-                invoice: inv,
-                receipt: receipt,
-                checkInv: checkInvBB
-            });
-        }
+        res.status(201).json({
+            customer_id: newSales.customer_id,
+            guest_name: newSales.guest_name,
+            guest_mode: guest_mode,
+            order: updatedOrder ? updatedOrder[1][0] : newSales, 
+            order_credit: orderCredit, 
+            delivery: deliveryData,
+            invoice: inv,
+            receipt: receipt,
+            checkInv: checkInvBB
+        });
     } 
     catch(err) {
         await t.rollback();

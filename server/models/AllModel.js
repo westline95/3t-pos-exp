@@ -281,6 +281,10 @@ const OrdersModel = sequelize.define("orders",
             type: Sequelize.STRING,
             allowNull: true
         },
+        deliv_group_report_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true,
+        },
     }, 
     {
         tableName: 'orders',
@@ -461,6 +465,7 @@ const OrdersGroupModel = sequelize.define("orders_group",
         tableName: 'orders_group',
     }
 );
+
 
 InvoicesModel.beforeCreate(async (inv, options) => {
   const now = new Date();
@@ -953,6 +958,120 @@ DeliveryModel.beforeCreate(async (deliv, options) => {
   deliv.tracking_number = `TR-3T${timestamp}${sequence}`;
 });
 
+const DeliveryGroupsModel = sequelize.define("delivery_groups", 
+    {
+        delivery_group_id:{
+            type:  Sequelize.INTEGER,
+            primaryKey:  true,
+            autoIncrement: true,
+            allowNull: false,
+        },
+        employee_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },   
+        delivery_group_date: {
+            type: Sequelize.DATE,
+            allowNull: false,
+        },    
+        total_item: {
+            type: Sequelize.DECIMAL,
+            allowNull: false,
+        },
+        total_value: {
+            type: Sequelize.DECIMAL,
+            allowNull: false,
+        },
+        status: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        }, 
+    }, 
+    {
+        tableName: 'delivery_groups',
+    }
+);
+
+const DeliveryGroupItemsModel = sequelize.define("delivery_group_items", {
+    deliv_group_item_id: {
+        type:  Sequelize.INTEGER,
+        primaryKey:  true,
+        autoIncrement: true,
+        allowNull: false,
+    },
+    delivery_group_id: {
+        type:  Sequelize.INTEGER,
+        allowNull: false,
+    },
+    product_id: {
+        type:  Sequelize.INTEGER,
+        allowNull: false,
+    },
+    quantity: {
+        type:  Sequelize.DECIMAL,
+        allowNull: false,
+    },
+    sell_price: {
+        type:  Sequelize.DECIMAL,
+        allowNull: false,
+    },
+    notes: {
+        type:  Sequelize.STRING,
+        allowNull: false,
+    },
+    disc_prod_rec: {
+        type:  Sequelize.DECIMAL,
+        defaultValue:0
+    }
+
+}, { 
+    tableName: 'delivery_group_items'
+});
+
+const DeliveryGroupReportModel = sequelize.define("delivery_group_report", {
+    deliv_group_report_id: {
+        type:  Sequelize.INTEGER,
+        primaryKey:  true,
+        autoIncrement: true,
+        allowNull: false,
+    },
+    customer_id: {
+        type:  Sequelize.INTEGER,
+        allowNull: true,
+    },
+    guest_name: {
+        type:  Sequelize.STRING,
+        allowNull: true,
+    },
+    delivery_group_id: {
+        type:  Sequelize.INTEGER,
+        allowNull: false,
+    },
+    report_status: {
+        type:  Sequelize.INTEGER,
+        allowNull: false,
+    },
+    employee_id: {
+        type:  Sequelize.INTEGER,
+        allowNull: false,
+    },
+    notes: {
+        type:  Sequelize.STRING,
+        allowNull: false,
+    },
+    total_item: {
+        type: Sequelize.DECIMAL,
+        allowNull: false,
+    },
+    total_value: {
+        type: Sequelize.DECIMAL,
+        allowNull: false,
+    },
+
+}, { 
+    tableName: 'delivery_group_report'
+})
+
 // assocations
 // one to many (categories - products)
 CategoriesModel.hasMany(ProductsCatalogModel, {
@@ -1244,6 +1363,72 @@ EmployeesModel.belongsTo(UsersModel, {
     targetKey: 'id',
 });
 
+// one to many (employee - delivery group)
+EmployeesModel.hasMany(DeliveryGroupsModel,{
+    sourceKey: 'employee_id',
+    foreignKey: 'employee_id',
+});
+
+DeliveryGroupsModel.belongsTo(EmployeesModel, {
+    foreignKey: 'employee_id',
+    targetKey: 'employee_id',
+});
+
+// one to many (employee - delivery group report)
+EmployeesModel.hasMany(DeliveryGroupReportModel,{
+    sourceKey: 'employee_id',
+    foreignKey: 'employee_id',
+});
+
+DeliveryGroupReportModel.belongsTo(EmployeesModel, {
+    foreignKey: 'employee_id',
+    targetKey: 'employee_id',
+});
+
+// one to many (delivery group - delivery group item)
+DeliveryGroupsModel.hasMany(DeliveryGroupItemsModel,{
+    sourceKey: 'delivery_group_id',
+    foreignKey: 'delivery_group_id',
+});
+
+DeliveryGroupItemsModel.belongsTo(DeliveryGroupsModel, {
+    foreignKey: 'delivery_group_id',
+    targetKey: 'delivery_group_id',
+});
+
+// one to many (product - delivery group item)
+ProductsCatalogModel.hasMany(DeliveryGroupItemsModel,{
+    sourceKey: 'product_id',
+    foreignKey: 'product_id',
+});
+
+DeliveryGroupItemsModel.belongsTo(ProductsCatalogModel, {
+    foreignKey: 'product_id',
+    targetKey: 'product_id',
+});
+
+// one to many (customer - delivery group report)
+CustomersModel.hasMany(DeliveryGroupReportModel,{
+    sourceKey: 'customer_id',
+    foreignKey: 'customer_id',
+});
+
+DeliveryGroupReportModel.belongsTo(CustomersModel, {
+    foreignKey: 'customer_id',
+    targetKey: 'customer_id',
+});
+
+// one to many (delivery group - delivery group report)
+DeliveryGroupsModel.hasOne(DeliveryGroupReportModel,{
+    sourceKey: 'delivery_group_id',
+    foreignKey: 'delivery_group_id',
+});
+
+DeliveryGroupReportModel.belongsTo(DeliveryGroupsModel, {
+    foreignKey: 'delivery_group_id',
+    targetKey: 'delivery_group_id',
+});
+
 
 
 export default {
@@ -1270,5 +1455,8 @@ export default {
     SalarySettingModel,
     SalaryAdjustmentsModel,
     DepartmentModel,
-    DepartmentHistoryModel
+    DepartmentHistoryModel,
+    DeliveryGroupsModel,
+    DeliveryGroupItemsModel,
+    DeliveryGroupReportModel
 };
