@@ -9,5 +9,6 @@ DeliveryGroupsRoute.get("/delivery-group/by", DeliveryGroupsController.getDelive
 DeliveryGroupsRoute.put("/edit/delivery-group", DeliveryGroupsController.editDeliveryGroup);
 DeliveryGroupsRoute.patch("/edit-minor/delivery-group", DeliveryGroupsController.editDeliveryGroup);
 DeliveryGroupsRoute.delete("/del/delivery-group", DeliveryGroupsController.deleteDeliveryGroup);
+DeliveryGroupsRoute.delete("/cancel/delivery-group", DeliveryGroupsController.cancelDeliveryGroup);
 
 export default DeliveryGroupsRoute;
