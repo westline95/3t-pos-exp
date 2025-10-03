@@ -96,6 +96,48 @@ const getDeliveryGroupByID = async(req, res) => {
     }
 }
 
+const getDeliveryGroupActiveByEmployee = async(req, res) => {
+    try{
+        const allDG = await AllModel.DeliveryGroupsModel.findAll({
+            where: {
+                employee_id: req.query.emp_id,
+                status: {
+                    [Op.ne]: [0,2]
+                }
+            },
+            include: [
+                {
+                    model: AllModel.EmployeesModel
+                },
+                {
+                    model: AllModel.DeliveryGroupItemsModel,
+                    include: [
+                        {
+                            model: AllModel.ProductsCatalogModel
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.DeliveryGroupReportModel,
+                    include: [
+                        {
+                            model: AllModel.CustomersModel
+                        },
+                        {
+                            model: AllModel.EmployeesModel
+                        }
+                    ]
+                }
+            ]
+        });
+
+        res.status(201).json(allDG);
+    }
+    catch(err){
+        res.status(500).json({err: err});
+    }
+}
+
 const editDeliveryGroup = async(req, res) => {
     const t = await sequelize.transaction();
     const { delivery_group, delivery_group_items, delivery_group_item_id } = req.body;
@@ -193,6 +235,7 @@ export default {
     setDeliveryGroup,
     getAllDeliveryGroup,
     getDeliveryGroupByID,
+    getDeliveryGroupActiveByEmployee,
     editDeliveryGroup,
     deleteDeliveryGroup,
     cancelDeliveryGroup
