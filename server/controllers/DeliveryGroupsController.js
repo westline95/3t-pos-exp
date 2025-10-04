@@ -43,10 +43,18 @@ const getAllDeliveryGroup = async(req, res) => {
                     model: AllModel.DeliveryGroupReportModel,
                     include: [
                         {
-                            model: AllModel.CustomersModel
+                            model: AllModel.EmployeesModel
                         },
                         {
-                            model: AllModel.EmployeesModel
+                            model: AllModel.DeliveryGroupReportListModel,
+                            include: [
+                                {
+                                    model: AllModel.CustomersModel,
+                                },
+                                {
+                                    model: AllModel.ProductsCatalogModel,
+                                }
+                            ]
                         }
                     ]
                 }
@@ -120,9 +128,6 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
                 {
                     model: AllModel.DeliveryGroupReportModel,
                     include: [
-                        {
-                            model: AllModel.CustomersModel
-                        },
                         {
                             model: AllModel.EmployeesModel
                         }

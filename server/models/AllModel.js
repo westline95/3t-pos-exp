@@ -1547,6 +1547,17 @@ DeliveryGroupReportListModel.belongsTo(CustomersModel, {
     targetKey: 'customer_id',
 });
 
+// one to many (customer - delivery group report list)
+ProductsCatalogModel.hasMany(DeliveryGroupReportListModel,{
+    sourceKey: 'product_id',
+    foreignKey: 'product_id',
+});
+
+DeliveryGroupReportListModel.belongsTo(ProductsCatalogModel, {
+    foreignKey: 'product_id',
+    targetKey: 'product_id',
+});
+
 
 
 export default {
