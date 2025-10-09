@@ -35,6 +35,7 @@ import DepartmentsRoute from "./routes/DepartmentsRoute.js";
 import SalarySettingRoute from "./routes/SalarySettingRoute.js";
 import SalaryAdjRoute from "./routes/SalaryAdjustmentsRoute.js";
 import DeliveryGroupsRoute from "./routes/DeliveryGroupsRoute.js";
+import DeliveryGroupsReportRoute from "./routes/DeliveryGroupReportRoute.js";
 
 dotenv.config();
 
@@ -154,6 +155,8 @@ app.use(DepartmentsRoute);
 app.use(SalarySettingRoute);
 // return salary adj CRUD
 app.use(SalaryAdjRoute);
+//  return delivery group reportCRUD
+app.use(DeliveryGroupsReportRoute);
 
 
 app.listen(port, () => console.log(`
