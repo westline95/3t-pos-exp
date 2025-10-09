@@ -164,11 +164,10 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
 
 const editDeliveryGroup = async(req, res) => {
     const t = await sequelize.transaction();
-    const { delivery_group, delivery_group_items, delivery_group_item_id } = req.body;
+    const { delivery_group, delivery_group_items } = req.body;
 
     try{
         let dg, dGItems = null;
-      
             
         dg = await AllModel.DeliveryGroupsModel.update(delivery_group, {
             where:{
@@ -181,7 +180,7 @@ const editDeliveryGroup = async(req, res) => {
         if(delivery_group_items){
             await AllModel.DeliveryGroupItemsModel.destroy({
                 where: {
-                    deliv_group_item_id: delivery_group_item_id
+                    delivery_group_id: req.query.id
                 },
                 transaction: t
             });
