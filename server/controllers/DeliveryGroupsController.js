@@ -27,7 +27,7 @@ const setDeliveryGroup = async(req, res) => {
 const getAllDeliveryGroup = async(req, res) => {
     try{
         const allDG = await AllModel.DeliveryGroupsModel.findAll({
-            order: ["delivery_group_date", "ASC"],
+            order: [["delivery_group_date", "ASC"]],
             include: [
                 {
                     model: AllModel.EmployeesModel
@@ -122,7 +122,7 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
                     [Op.eq]: 1
                 }
             },
-            order: ["delivery_group_date", "ASC"],
+            order: [["delivery_group_date", "ASC"]],
             include: [
                 {
                     model: AllModel.EmployeesModel
