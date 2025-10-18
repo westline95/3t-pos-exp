@@ -1034,13 +1034,13 @@ const DeliveryGroupItemsModel = sequelize.define("delivery_group_items", {
 
 const DeliveryGroupReportModel = sequelize.define("delivery_group_report", {
     deliv_group_report_id: {
-        type:  Sequelize.INTEGER,
+        type:  Sequelize.BIGINT,
         primaryKey:  true,
         autoIncrement: true,
         allowNull: false,
     },
     delivery_group_id: {
-        type:  Sequelize.INTEGER,
+        type:  Sequelize.BIGINT,
         allowNull: false,
     },
     report_status: {
@@ -1048,12 +1048,12 @@ const DeliveryGroupReportModel = sequelize.define("delivery_group_report", {
         allowNull: false,
     },
     employee_id: {
-        type:  Sequelize.INTEGER,
+        type:  Sequelize.BIGINT,
         allowNull: false,
     },
     notes: {
         type:  Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     total_item: {
         type: Sequelize.DECIMAL,
@@ -1071,17 +1071,17 @@ const DeliveryGroupReportModel = sequelize.define("delivery_group_report", {
 const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_list", 
     {
         deliv_group_report_list_id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
         },
         deliv_group_report_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             allowNull: false,
         },   
         customer_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             allowNull: true,
         },       
         guest_name: {
@@ -1115,12 +1115,10 @@ const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_lis
         subtotal: {
             type: Sequelize.DECIMAL,
             allowNull: false,
-            defaultValue: 0
         },
         grandtotal: {
             type: Sequelize.DECIMAL,
             allowNull: false,
-            defaultValue: 0
         },
         note: {
             type: Sequelize.STRING,
@@ -1136,19 +1134,19 @@ const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_lis
             allowNull: true,
         },
         invoice_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             allowNull: true,
         },
         return_order_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             allowNull: true,
         },
         receipt_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             allowNull: true,
         },
         product_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             allowNull: false,
         },
         quantity: {
@@ -1163,11 +1161,62 @@ const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_lis
             type: Sequelize.DECIMAL,
             allowNull: true,
         },
+        payment_date: {
+            type: Sequelize.DATE,
+            allowNull: false,
+        },
+        amount_paid: {
+            type: Sequelize.DECIMAL,
+            allowNull: false,
+        },
+        payment_method: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        payment_note: {
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
     }, 
     {
         tableName: 'delivery_group_report_list',
     }
 );
+
+const DeliveryGroupLogs = sequelize.define("delivery_group_logs", {
+    dg_log_id:{
+        type:  Sequelize.BIGINT,
+        primaryKey:  true,
+        autoIncrement: true,
+        allowNull: false,
+    },
+    delivery_group_id:{
+        type:  Sequelize.BIGINT,
+        allowNull: false,
+    },
+    employee_id: {
+        type: Sequelize.BIGINT,
+        allowNull: false,
+    },   
+    delivery_group_date: {
+        type: Sequelize.DATE,
+        allowNull: false,
+    },    
+    item: {
+        type: Sequelize.DECIMAL,
+        allowNull: false,
+    },
+    value: {
+        type: Sequelize.DECIMAL,
+        allowNull: false,
+    },
+    status: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    }, 
+}, {
+    tableName: "delivery_group_logs"
+})
 
 // assocations
 // one to many (categories - products)
@@ -1525,6 +1574,18 @@ DeliveryGroupReportModel.belongsTo(DeliveryGroupsModel, {
     targetKey: 'delivery_group_id',
 });
 
+// one to many ( delivery group logs - delivery group)
+DeliveryGroupsModel.hasMany(DeliveryGroupLogs,{
+    sourceKey: 'delivery_group_id',
+    foreignKey: 'delivery_group_id',
+});
+
+DeliveryGroupLogs.belongsTo(DeliveryGroupsModel, {
+    foreignKey: 'delivery_group_id',
+    targetKey: 'delivery_group_id',
+});
+
+
 // one to many (delivery group report - delivery group report list)
 DeliveryGroupReportModel.hasMany(DeliveryGroupReportListModel,{
     sourceKey: 'deliv_group_report_id',
@@ -1586,6 +1647,7 @@ export default {
     DepartmentModel,
     DepartmentHistoryModel,
     DeliveryGroupsModel,
+    DeliveryGroupLogs,
     DeliveryGroupItemsModel,
     DeliveryGroupReportModel,
     DeliveryGroupReportListModel

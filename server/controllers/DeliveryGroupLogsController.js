@@ -2,25 +2,21 @@ import { Op, Sequelize, where } from "sequelize";
 import AllModel from "../models/AllModel.js";
 import sequelize from "../config/Database.js";
 
-const createDeliveryGroupReport = async(req, res) => {
+const addDeliveryGroupLog = async(req, res) => {
     const t = await sequelize.transaction();
-    const { delivery_group_report, delivery_group_report_list } = req.body;
+    const { delivery_group, delivery_group_items } = req.body;
+
     try{
-        const newDGR = await AllModel.DeliveryGroupReportModel.create(delivery_group_report, {transaction: t});
+        const newDG = await AllModel.DeliveryGroupsModel.create(delivery_group, {transaction: t});
 
-        // if(newDGR){
-            delivery_group_report_list.map(item => {
-                item.deliv_group_report_id = newDGR.deliv_group_report_id;
-            })
-        // }
-        let newDGRItems = await AllModel.DeliveryGroupReportListModel.bulkCreate(delivery_group_report_list, {
-            returning:true,
-            transaction: t
-        });
+        delivery_group_items.map(e => {
+            e.delivery_group_id = newDG.delivery_group_id;
+        })
+
+        const newDGItems = await AllModel.DeliveryGroupItemsModel.bulkCreate(delivery_group_items, {transaction: t});
+
         await t.commit();
-        res.json(newDGRItems)
-
-        // return res.status(201).json({message: "delivery group report created"});
+        return res.status(201).json({delivery_group: newDG, delivery_group_items: newDGItems, message: "delivery group created"});
     }
     catch(err){
         await t.rollback();
@@ -259,7 +255,7 @@ const cancelDeliveryGroup = async(req, res) => {
 
 
 export default {
-    createDeliveryGroupReport,
+    setDeliveryGroup,
     getAllDeliveryGroup,
     getDeliveryGroupByID,
     getDeliveryGroupActiveByEmployee,
