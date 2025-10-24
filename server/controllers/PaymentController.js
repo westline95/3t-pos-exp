@@ -5,6 +5,7 @@ import { Sequelize, where } from "sequelize";
 const getAllPayment = async (req, res) => {
     try{
         const allPayment = await AllModel.PaymentsModel.findAll({ 
+            order: [["createdAt", "DESC"]],
             include: [
                 {
                     model: AllModel.InvoicesModel,
