@@ -92,9 +92,10 @@ app.get('/', (req, res) => res.send("HelloWorld"));
 // app.use(ROItemRoute);
 // app.use(OrdersCreditRoute);
 // app.use(InvoiceRoute);
-app.use(EmployeeRoute);
-app.use(DeliveryGroupsRoute);
-app.use(DeliveryGroupsReportRoute);
+// app.use(EmployeeRoute);
+// app.use(DeliveryGroupsRoute);
+// app.use(DeliveryGroupsRoute);
+// app.use(DeliveryGroupsReportRoute);
 // app.use(SalarySettingRoute);
 // // sales CRUD
 // app.use(SalesRoute);
@@ -156,7 +157,9 @@ app.use(DepartmentsRoute);
 app.use(SalarySettingRoute);
 // return salary adj CRUD
 app.use(SalaryAdjRoute);
-//  return delivery group reportCRUD
+//  return delivery group CRUD
+app.use(DeliveryGroupsRoute);
+//  return delivery group report CRUD
 app.use(DeliveryGroupsReportRoute);
 
 

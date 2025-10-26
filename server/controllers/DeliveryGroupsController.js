@@ -62,7 +62,34 @@ const getAllDeliveryGroup = async(req, res) => {
             ]
         });
 
-        res.status(201).json(allDG);
+        const formatted = allDG.map((group) => {
+            const items = group.delivery_group_items || [];
+
+            // Group items by log time
+            const groupedItems = Object.values(
+                items.reduce((acc, item) => {
+                const logTime = item.delivery_group_log_time || null;
+                if (!acc[logTime]) acc[logTime] = { logTime, items: [] };
+                acc[logTime].items.push(item);
+                return acc;
+                }, {})
+            );
+
+            // Sort berdasarkan logTime (descending)
+            groupedItems.sort((a, b) => {
+                // Pastikan logTime valid date, Unknown di akhir
+                if (a.logTime === null) return 1;
+                if (b.logTime === null) return -1;
+                return new Date(b.logTime) - new Date(a.logTime);
+            });
+
+            return {
+                ...group.toJSON(),
+                DeliveryGroupItemsGrouped: groupedItems,
+            };
+        });
+
+        res.status(201).json(formatted);
     }
     catch(err){
         res.status(500).json({err: err});
