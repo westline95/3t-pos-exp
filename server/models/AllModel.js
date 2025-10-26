@@ -1007,6 +1007,10 @@ const DeliveryGroupItemsModel = sequelize.define("delivery_group_items", {
         type:  Sequelize.INTEGER,
         allowNull: false,
     },
+    delivery_group_log_time: {
+        type:  Sequelize.DATE,
+        allowNull: false,
+    },
     product_id: {
         type:  Sequelize.INTEGER,
         allowNull: false,
