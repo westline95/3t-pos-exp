@@ -68,10 +68,14 @@ const getAllDeliveryGroup = async(req, res) => {
             // Group items by log time
             const groupedItems = Object.values(
                 items.reduce((acc, item) => {
-                const logTime = item.delivery_group_log_time || null;
-                if (!acc[logTime]) acc[logTime] = { logTime, items: [] };
-                acc[logTime].items.push(item);
-                return acc;
+                    const logTime = item.delivery_group_log_time || null;
+                    const qty = Number(item.quantity);
+                    const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
+                    if (!acc[logTime]) acc[logTime] = { logTime, items: [], total_item: 0, total_value: 0};
+                    acc[logTime].items.push(item);
+                    acc[logTime].total_item += qty;
+                    acc[logTime].total_value += value;
+                    return acc;
                 }, {})
             );
 
@@ -138,10 +142,14 @@ const getDeliveryGroupByID = async(req, res) => {
         // Group items by log time
         const groupedItems = Object.values(
             items.reduce((acc, item) => {
-            const logTime = item.delivery_group_log_time || null;
-            if (!acc[logTime]) acc[logTime] = { logTime, items: [] };
-            acc[logTime].items.push(item);
-            return acc;
+                const logTime = item.delivery_group_log_time || null;
+                const qty = Number(item.quantity);
+                const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
+                if (!acc[logTime]) acc[logTime] = { logTime, items: [], total_item: 0, total_value: 0};
+                acc[logTime].items.push(item);
+                acc[logTime].total_item += qty;
+                acc[logTime].total_value += value;
+                return acc;
             }, {})
         );
 
@@ -152,7 +160,6 @@ const getDeliveryGroupByID = async(req, res) => {
             if (b.logTime === null) return -1;
             return new Date(a.logTime) - new Date(b.logTime);
         });
-
             
         const formatted = {
             ...allDG.toJSON(),
