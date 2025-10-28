@@ -4,6 +4,7 @@ import DeliveryGroupsController from "../controllers/DeliveryGroupsController.js
 const DeliveryGroupsRoute = express.Router();
 
 DeliveryGroupsRoute.post("/add/delivery-group", DeliveryGroupsController.setDeliveryGroup);
+DeliveryGroupsRoute.post("/add-more-item/delivery-group", DeliveryGroupsController.addMoreItemDeliveryGroup);
 DeliveryGroupsRoute.get("/all/delivery-group", DeliveryGroupsController.getAllDeliveryGroup);
 DeliveryGroupsRoute.get("/delivery-group/by", DeliveryGroupsController.getDeliveryGroupByID);
 DeliveryGroupsRoute.get("/delivery-group/by/emp", DeliveryGroupsController.getDeliveryGroupActiveByEmployee);

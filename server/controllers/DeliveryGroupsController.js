@@ -68,7 +68,7 @@ const getAllDeliveryGroup = async(req, res) => {
             // Group items by log time
             const groupedItems = Object.values(
                 items.reduce((acc, item) => {
-                    const logTime = item.delivery_group_log_time || null;
+                    const logTime = item.createdAt || null;
                     const qty = Number(item.quantity);
                     const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
                     if (!acc[logTime]) acc[logTime] = { logTime, items: [], total_item: 0, total_value: 0};
@@ -142,7 +142,7 @@ const getDeliveryGroupByID = async(req, res) => {
         // Group items by log time
         const groupedItems = Object.values(
             items.reduce((acc, item) => {
-                const logTime = item.delivery_group_log_time || null;
+                const logTime = item.createdAt || null;
                 const qty = Number(item.quantity);
                 const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
                 if (!acc[logTime]) acc[logTime] = { logTime, items: [], total_item: 0, total_value: 0};
@@ -230,7 +230,10 @@ const editDeliveryGroup = async(req, res) => {
 
     try{
         let dg, dGItems = null;
-            
+        dg = await AllModel.DeliveryGroupsModel.findByPk(delivery_group);
+
+        if(!dg) return res.status(404).json({message: "delivery group id is not found"});
+
         dg = await AllModel.DeliveryGroupsModel.update(delivery_group, {
             where:{
                 delivery_group_id: req.query.id
@@ -240,12 +243,61 @@ const editDeliveryGroup = async(req, res) => {
         });
 
         if(delivery_group_items){
+            const session = delivery_group_items[0].session;
+
             await AllModel.DeliveryGroupItemsModel.destroy({
                 where: {
-                    delivery_group_id: req.query.id
+                    delivery_group_id: req.query.id,
+                    session: session
                 },
                 transaction: t
             });
+
+            dGItems = await AllModel.DeliveryGroupItemsModel.bulkCreate(delivery_group_items, {
+                returning: true,
+                transaction: t
+            });
+        }
+
+        await t.commit();
+        return res.status(201).json({ message: "update success", delivery_group: dg[1], delivery_group_items: dGItems});
+    }
+    catch(err){
+        await t.rollback();
+        res.status(500).json({err: err});
+    }
+}
+
+const addMoreItemDeliveryGroup = async(req, res) => {
+    const t = await sequelize.transaction();
+    const { delivery_group, delivery_group_items } = req.body;
+
+    try{
+        let dg, dGItems = null;
+        dg = await AllModel.DeliveryGroupsModel.findByPk(delivery_group);
+
+        if(!dg) return res.status(404).json({message: "delivery group id is not found"});
+
+        dg = await AllModel.DeliveryGroupsModel.update(delivery_group, {
+            where:{
+                delivery_group_id: req.query.id
+            },
+            returning: true,
+            transaction: t
+        });
+
+        if(delivery_group_items){
+            const dgItemsAll = await AllModel.DeliveryGroupItemsModel.findAll({
+                order: [["createdAt", "DESC"]],
+                where: {
+                    delivery_group_id: req.query.id,
+                },
+                transaction: t
+            });
+
+            delivery_group_items.map(e => {
+                e.session = dgItemsAll[0].session+1;
+            })
 
             dGItems = await AllModel.DeliveryGroupItemsModel.bulkCreate(delivery_group_items, {
                 returning: true,
@@ -322,6 +374,7 @@ export default {
     getDeliveryGroupByID,
     getDeliveryGroupActiveByEmployee,
     editDeliveryGroup,
+    addMoreItemDeliveryGroup,
     deleteDeliveryGroup,
     cancelDeliveryGroup
 }
