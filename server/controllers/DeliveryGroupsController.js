@@ -11,6 +11,7 @@ const setDeliveryGroup = async(req, res) => {
 
         delivery_group_items.map(e => {
             e.delivery_group_id = newDG.delivery_group_id;
+            e.session = 1;
         })
 
         const newDGItems = await AllModel.DeliveryGroupItemsModel.bulkCreate(delivery_group_items, {transaction: t});
