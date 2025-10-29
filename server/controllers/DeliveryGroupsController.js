@@ -65,26 +65,26 @@ const getAllDeliveryGroup = async(req, res) => {
         const formatted = allDG.map((group) => {
             const items = group.delivery_group_items || [];
 
-            // Group items by log time
+            // Group items by session
             const groupedItems = Object.values(
                 items.reduce((acc, item) => {
-                    const logTime = item.createdAt || null;
+                    const session = item.session || null;
                     const qty = Number(item.quantity);
                     const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
-                    if (!acc[logTime]) acc[logTime] = { logTime, items: [], total_item: 0, total_value: 0};
-                    acc[logTime].items.push(item);
-                    acc[logTime].total_item += qty;
-                    acc[logTime].total_value += value;
+                    if (!acc[session]) acc[session] = { session, items: [], total_item: 0, total_value: 0};
+                    acc[session].items.push(item);
+                    acc[session].total_item += qty;
+                    acc[session].total_value += value;
                     return acc;
                 }, {})
             );
 
-            // Sort berdasarkan logTime (ascending)
+            // Sort berdasarkan session (ascending)
             groupedItems.sort((a, b) => {
-                // Pastikan logTime valid date, Unknown di akhir
-                if (a.logTime === null) return 1;
-                if (b.logTime === null) return -1;
-                return new Date(a.logTime) - new Date(b.logTime);
+                // Pastikan session valid, Unknown di akhir
+                if (a.session === null) return 1;
+                if (b.session === null) return -1;
+                return a.session - b.session;
             });
 
             return {
@@ -142,13 +142,13 @@ const getDeliveryGroupByID = async(req, res) => {
         // Group items by log time
         const groupedItems = Object.values(
             items.reduce((acc, item) => {
-                const logTime = item.createdAt || null;
+                const session = item.session || null;
                 const qty = Number(item.quantity);
                 const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
-                if (!acc[logTime]) acc[logTime] = { logTime, items: [], total_item: 0, total_value: 0};
-                acc[logTime].items.push(item);
-                acc[logTime].total_item += qty;
-                acc[logTime].total_value += value;
+                if (!acc[session]) acc[session] = { session, items: [], total_item: 0, total_value: 0};
+                acc[session].items.push(item);
+                acc[session].total_item += qty;
+                acc[session].total_value += value;
                 return acc;
             }, {})
         );
@@ -156,9 +156,9 @@ const getDeliveryGroupByID = async(req, res) => {
         // Sort berdasarkan logTime (ascending)
         groupedItems.sort((a, b) => {
             // Pastikan logTime valid date, Unknown di akhir
-            if (a.logTime === null) return 1;
-            if (b.logTime === null) return -1;
-            return new Date(a.logTime) - new Date(b.logTime);
+            if (a.session === null) return 1;
+            if (b.session === null) return -1;
+            return a.session - b.session;
         });
             
         const formatted = {
@@ -234,7 +234,7 @@ const editDeliveryGroup = async(req, res) => {
 
         if(!dg) return res.status(404).json({message: "delivery group id is not found"});
 
-        dg = await AllModel.DeliveryGroupsModel.update(delivery_group, {
+        await AllModel.DeliveryGroupsModel.update(delivery_group, {
             where:{
                 delivery_group_id: req.query.id
             },
@@ -257,6 +257,18 @@ const editDeliveryGroup = async(req, res) => {
                 returning: true,
                 transaction: t
             });
+
+            // update deivery group
+            let totalQty = 0;
+            let totalValue = 0;
+            dGItems.reduce((prev, curr) => {
+                totalQty = Number(prev.quantity) + Number(curr.quantity);
+                totalValue = (Number(prev.quantity)*Number(prev.sell_price))-(Number(prev.quantity)*Number(prev.disc_prod_rec));
+            },0);
+
+            dg.total_item = totalQty;
+            dg.total_value = totalValue;
+            await dg.save({transaction: t});
         }
 
         await t.commit();
