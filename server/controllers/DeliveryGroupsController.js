@@ -278,7 +278,7 @@ const editDeliveryGroup = async(req, res) => {
         // await dg.save({transaction: t});
 
         await t.commit();
-        return res.status(201).json({ message: "update success", delivery_group: dg});
+        res.status(201).json({ message: "update success", delivery_group: dg});
     }
     catch(err){
         await t.rollback();
@@ -315,7 +315,7 @@ const editDeliveryGroupList = async(req, res) => {
         // update delivery group
         const getDGItems = await AllModel.DeliveryGroupItemsModel.findAll({
             where: {
-                delivery_group_id: req.query.id,
+                delivery_group_id: delivery_group_id,
             },
             transaction: t
         })
@@ -332,7 +332,7 @@ const editDeliveryGroupList = async(req, res) => {
         await dg.save({transaction: t});
 
         await t.commit();
-        return res.status(201).json({ message: "update success", delivery_group_items: dGItems});
+        res.status(201).json({ message: "update success", delivery_group_items: dGItems});
     }
     catch(err){
         await t.rollback();
