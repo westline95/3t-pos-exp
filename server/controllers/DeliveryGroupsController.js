@@ -320,19 +320,20 @@ const editDeliveryGroupList = async(req, res) => {
             transaction: t
         })
 
-        let totalQty = 0;
-        let totalValue = 0;
-        getDGItems.reduce((prev, curr) => {
-            totalQty = Number(prev.quantity) + Number(curr.quantity);
-            totalValue = (Number(prev.quantity)*Number(prev.sell_price))-(Number(prev.quantity)*Number(prev.disc_prod_rec));
-        },0);
+        let totalQty = getDGItems.reduce((prev, curr) => {
+            return Number(prev.quantity) + Number(curr.quantity);
+        });
+
+        let totalValue = getDGItems.reduce((prev, curr) => {
+            return ((Number(prev.quantity)*Number(prev.sell_price))-(Number(prev.quantity)*Number(prev.disc_prod_rec))) + ((Number(curr.quantity)*Number(curr.sell_price))-(Number(curr.quantity)*Number(curr.disc_prod_rec)));
+        });
 
         dg.total_item = totalQty;
         dg.total_value = totalValue;
         await dg.save({transaction: t});
 
         await t.commit();
-        res.status(201).json({ message: "update success", delivery_group_items: dGItems});
+        res.status(201).json({ message: "update success", delivery_group: dg, delivery_group_items: getDGItems});
     }
     catch(err){
         await t.rollback();
