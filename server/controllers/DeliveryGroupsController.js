@@ -227,53 +227,112 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
 
 const editDeliveryGroup = async(req, res) => {
     const t = await sequelize.transaction();
-    const { delivery_group, delivery_group_items } = req.body;
+    const { delivery_group } = req.body;
+    const delivery_group_id = req.query.id;
 
     try{
         let dg, dGItems = null;
-        dg = await AllModel.DeliveryGroupsModel.findByPk(delivery_group);
+        dg = await AllModel.DeliveryGroupsModel.findByPk(delivery_group_id);
 
         if(!dg) return res.status(404).json({message: "delivery group id is not found"});
 
         await AllModel.DeliveryGroupsModel.update(delivery_group, {
             where:{
-                delivery_group_id: req.query.id
+                delivery_group_id: delivery_group_id
             },
             returning: true,
             transaction: t
         });
 
-        if(delivery_group_items){
-            const session = delivery_group_items[0].session;
+        // await AllModel.DeliveryGroupItemsModel.destroy({
+        //     where: {
+        //         delivery_group_id: req.query.id,
+        //         session: session
+        //     },
+        //     transaction: t
+        // });
+        
+        // if(delivery_group_items.length > 0){
+        //     dGItems = await AllModel.DeliveryGroupItemsModel.bulkCreate(delivery_group_items, {
+        //         returning: true,
+        //         transaction: t
+        //     });
+        // }
 
-            await AllModel.DeliveryGroupItemsModel.destroy({
-                where: {
-                    delivery_group_id: req.query.id,
-                    session: session
-                },
-                transaction: t
-            });
+        // // update delivery group
+        // const getDGItems = await AllModel.DeliveryGroupItemsModel.findAll({
+        //     where: {
+        //         delivery_group_id: req.query.id,
+        //     },
+        //     transaction: t
+        // })
+        // let totalQty = 0;
+        // let totalValue = 0;
+        // getDGItems.reduce((prev, curr) => {
+        //     totalQty = Number(prev.quantity) + Number(curr.quantity);
+        //     totalValue = (Number(prev.quantity)*Number(prev.sell_price))-(Number(prev.quantity)*Number(prev.disc_prod_rec));
+        // },0);
 
+        // dg.total_item = totalQty;
+        // dg.total_value = totalValue;
+        // await dg.save({transaction: t});
+
+        await t.commit();
+        return res.status(201).json({ message: "update success", delivery_group: dg});
+    }
+    catch(err){
+        await t.rollback();
+        res.status(500).json({err: err});
+    }
+}
+
+const editDeliveryGroupList = async(req, res) => {
+    const t = await sequelize.transaction();
+    const { session, delivery_group_items } = req.body;
+    const delivery_group_id = req.query.id;
+
+    try{
+        let dg, dGItems = null;
+        dg = await AllModel.DeliveryGroupsModel.findByPk(delivery_group_id);
+
+        if(!dg) return res.status(404).json({message: "delivery group id is not found"});
+
+        await AllModel.DeliveryGroupItemsModel.destroy({
+            where: {
+                delivery_group_id: delivery_group_id,
+                session: session
+            },
+            transaction: t
+        });
+        
+        if(delivery_group_items.length > 0){
             dGItems = await AllModel.DeliveryGroupItemsModel.bulkCreate(delivery_group_items, {
                 returning: true,
                 transaction: t
             });
-
-            // update deivery group
-            let totalQty = 0;
-            let totalValue = 0;
-            dGItems.reduce((prev, curr) => {
-                totalQty = Number(prev.quantity) + Number(curr.quantity);
-                totalValue = (Number(prev.quantity)*Number(prev.sell_price))-(Number(prev.quantity)*Number(prev.disc_prod_rec));
-            },0);
-
-            dg.total_item = totalQty;
-            dg.total_value = totalValue;
-            await dg.save({transaction: t});
         }
 
+        // update delivery group
+        const getDGItems = await AllModel.DeliveryGroupItemsModel.findAll({
+            where: {
+                delivery_group_id: req.query.id,
+            },
+            transaction: t
+        })
+
+        let totalQty = 0;
+        let totalValue = 0;
+        getDGItems.reduce((prev, curr) => {
+            totalQty = Number(prev.quantity) + Number(curr.quantity);
+            totalValue = (Number(prev.quantity)*Number(prev.sell_price))-(Number(prev.quantity)*Number(prev.disc_prod_rec));
+        },0);
+
+        dg.total_item = totalQty;
+        dg.total_value = totalValue;
+        await dg.save({transaction: t});
+
         await t.commit();
-        return res.status(201).json({ message: "update success", delivery_group: dg[1], delivery_group_items: dGItems});
+        return res.status(201).json({ message: "update success", delivery_group_items: dGItems});
     }
     catch(err){
         await t.rollback();
@@ -387,6 +446,7 @@ export default {
     getDeliveryGroupByID,
     getDeliveryGroupActiveByEmployee,
     editDeliveryGroup,
+    editDeliveryGroupList,
     addMoreItemDeliveryGroup,
     deleteDeliveryGroup,
     cancelDeliveryGroup
