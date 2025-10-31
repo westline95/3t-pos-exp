@@ -248,6 +248,9 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
                 },
                 {
                     model: AllModel.DeliveryGroupItemsModel,
+                    where: {
+                        status: 2
+                    },
                     include: [
                         {
                             model: AllModel.ProductsCatalogModel

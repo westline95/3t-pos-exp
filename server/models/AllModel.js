@@ -1031,6 +1031,10 @@ const DeliveryGroupItemsModel = sequelize.define("delivery_group_items", {
         type:  Sequelize.INTEGER,
         allowNull: false,
     },
+    status: {
+        type:  Sequelize.INTEGER,
+        allowNull: false,
+    },
 
 }, { 
     tableName: 'delivery_group_items'
