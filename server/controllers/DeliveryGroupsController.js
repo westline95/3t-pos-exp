@@ -5,19 +5,77 @@ import sequelize from "../config/Database.js";
 const setDeliveryGroup = async(req, res) => {
     const t = await sequelize.transaction();
     const { delivery_group, delivery_group_items } = req.body;
+        
+    let date1 = new Date();
+    let date2 = new Date();
+    date1.setHours(0, 0, 0, 0);
+    date2.setHours(23, 59, 59, 999);
 
-    try{
-        const newDG = await AllModel.DeliveryGroupsModel.create(delivery_group, {transaction: t});
+    let now_utc = Date.UTC(date1.getUTCFullYear(), date1.getUTCMonth(),
+                date1.getUTCDate(), date1.getUTCHours(),
+                date1.getUTCMinutes(), date1.getUTCSeconds());
+    let endnow_utc = Date.UTC(date2.getUTCFullYear(), date2.getUTCMonth(),
+                date2.getUTCDate(), date2.getUTCHours(),
+                date2.getUTCMinutes(), date2.getUTCSeconds());
+    
+    try {
+        // find exist delivery group by mployeeid, status != 2 && current time
+        const findExistDG = await AllModel.DeliveryGroupsModel.findOne({
+            order: [[AllModel.DeliveryGroupItemsModel, "session", "DESC"]],
+            where:{
+                employee_id: delivery_group.employee_id,
+                status: {
+                    [Op.notIn]: [3,4]
+                },
+                delivery_group_date: {
+                    [Op.gte]: now_utc,
+                    [Op.lt]: endnow_utc,
+                }
 
-        delivery_group_items.map(e => {
-            e.delivery_group_id = newDG.delivery_group_id;
-            e.session = 1;
+            }, 
+            include: [ 
+                {
+                    model:AllModel.DeliveryGroupItemsModel,
+                }
+            ],
+            transaction: t
         })
+
+        let newDG = null;
+        if(!findExistDG){
+            newDG = await AllModel.DeliveryGroupsModel.create(delivery_group, {transaction: t});
+    
+            delivery_group_items.map(e => {
+                e.delivery_group_id = newDG.delivery_group_id;
+                e.session = 1;
+            })
+        } else {
+            delivery_group_items.map(e => {
+                e.delivery_group_id = findExistDG.delivery_group_id;
+                e.session = Number(findExistDG.delivery_group_items[0].session) + 1;
+            })
+
+            let newTotalQty = Number(findExistDG.total_item) + Number(delivery_group.total_item);
+            let newTotalValue = Number(findExistDG.total_value) + Number(delivery_group.total_value);
+
+            let updatedDeliveryGroup = {
+                total_item: newTotalQty,
+                total_value: newTotalValue,
+            };
+
+            newDG = await AllModel.DeliveryGroupsModel.update(updatedDeliveryGroup, {
+                where: {
+                    delivery_group_id: findExistDG.delivery_group_id
+                },
+                returning: true,
+                transaction: t
+            });
+        } 
 
         const newDGItems = await AllModel.DeliveryGroupItemsModel.bulkCreate(delivery_group_items, {transaction: t});
 
         await t.commit();
-        return res.status(201).json({delivery_group: newDG, delivery_group_items: newDGItems, message: "delivery group created"});
+        res.status(201).json({delivery_group: newDG, delivery_group_items: newDGItems, message: "delivery group created"});
     }
     catch(err){
         await t.rollback();
@@ -154,9 +212,9 @@ const getDeliveryGroupByID = async(req, res) => {
             }, {})
         );
 
-        // Sort berdasarkan logTime (ascending)
+        // Sort berdasarkan session (ascending)
         groupedItems.sort((a, b) => {
-            // Pastikan logTime valid date, Unknown di akhir
+            // Pastikan session valid date, Unknown di akhir
             if (a.session === null) return 1;
             if (b.session === null) return -1;
             return a.session - b.session;
@@ -180,7 +238,7 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
             where: {
                 employee_id: req.query.emp_id,
                 status: {
-                    [Op.eq]: 1
+                    [Op.eq]: 2
                 }
             },
             order: [["delivery_group_date", "ASC"]],
@@ -317,19 +375,18 @@ const editDeliveryGroupList = async(req, res) => {
             where: {
                 delivery_group_id: delivery_group_id,
             },
+            attributes: [
+                [sequelize.literal('SUM(quantity)'), 'totalQty'],
+                [sequelize.literal('SUM((quantity*sell_price)-(quantity*disc_prod_rec))'), 'totalValue'],
+            ],
+            raw: true,
             transaction: t
         })
 
-        let totalQty = getDGItems.reduce((prev, curr) => {
-            return Number(prev.quantity) + Number(curr.quantity);
-        });
-
-        let totalValue = getDGItems.reduce((prev, curr) => {
-            return ((Number(prev.quantity)*Number(prev.sell_price))-(Number(prev.quantity)*Number(prev.disc_prod_rec))) + ((Number(curr.quantity)*Number(curr.sell_price))-(Number(curr.quantity)*Number(curr.disc_prod_rec)));
-        });
-
-        dg.total_item = totalQty;
-        dg.total_value = totalValue;
+        
+        dg.total_item = Number(getDGItems[0].totalQty),
+        dg.total_value = Number(getDGItems[0].totalValue),
+      
         await dg.save({transaction: t});
 
         await t.commit();
