@@ -241,7 +241,7 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
                     [Op.eq]: 2
                 }
             },
-            order: [["delivery_group_date", "ASC"]],
+            order: [["delivery_group_date", "DESC"]],
             include: [
                 {
                     model: AllModel.EmployeesModel
@@ -279,7 +279,36 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
             ]
         });
 
-        res.status(201).json(allDG);
+        const items = allDG.delivery_group_items || [];
+
+        // Group items by log time
+        const groupedItems = Object.values(
+            items.reduce((acc, item) => {
+                const session = item.session || null;
+                const qty = Number(item.quantity);
+                const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
+                if (!acc[session]) acc[session] = { session, items: [], total_item: 0, total_value: 0};
+                acc[session].items.push(item);
+                acc[session].total_item += qty;
+                acc[session].total_value += value;
+                return acc;
+            }, {})
+        );
+
+        // Sort berdasarkan session (ascending)
+        groupedItems.sort((a, b) => {
+            // Pastikan session valid date, Unknown di akhir
+            if (a.session === null) return 1;
+            if (b.session === null) return -1;
+            return a.session - b.session;
+        });
+            
+        const formatted = {
+            ...allDG.toJSON(),
+            DeliveryGroupItemsGrouped: groupedItems,
+        }
+
+        res.status(201).json(formatted);
     }
     catch(err){
         res.status(500).json({err: err});
