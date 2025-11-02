@@ -212,6 +212,22 @@ const getDeliveryGroupByID = async(req, res) => {
             }, {})
         );
 
+        // Group items by product
+        const groupedItemsByProduct = Object.values(
+            items.reduce((acc, item) => {
+                const product_id = item.product_id || null;
+                const qty = Number(item.quantity);
+                const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
+                const product = item.product;
+                if (!acc[product_id]) acc[product_id] = { product_id, items: [], product, total_item: 0, total_value: 0};
+                acc[product_id].items.push(item);
+                acc[product_id].total_item += qty;
+                acc[product_id].total_value += value;
+                return acc;
+            }, {})
+        );
+
+
         // Sort berdasarkan session (ascending)
         groupedItems.sort((a, b) => {
             // Pastikan session valid date, Unknown di akhir
@@ -223,6 +239,7 @@ const getDeliveryGroupByID = async(req, res) => {
         const formatted = {
             ...allDG.toJSON(),
             DeliveryGroupItemsGrouped: groupedItems,
+            DeliveryGroupItemsProduct: groupedItemsByProduct,
         }
 
         res.status(201).json(formatted);
@@ -249,7 +266,9 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
                 {
                     model: AllModel.DeliveryGroupItemsModel,
                     where: {
-                        status: 2
+                        status: {
+                            [Op.eq]: 2
+                        }
                     },
                     include: [
                         {
@@ -279,34 +298,36 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
             ]
         });
 
-        const items = allDG.delivery_group_items || [];
+        const formatted = allDG.map((group) => {
+            const items = group.delivery_group_items || [];
 
-        // Group items by log time
-        const groupedItems = Object.values(
-            items.reduce((acc, item) => {
-                const session = item.session || null;
-                const qty = Number(item.quantity);
-                const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
-                if (!acc[session]) acc[session] = { session, items: [], total_item: 0, total_value: 0};
-                acc[session].items.push(item);
-                acc[session].total_item += qty;
-                acc[session].total_value += value;
-                return acc;
-            }, {})
-        );
+            // Group items by session
+            const groupedItemsBySession = Object.values(
+                items.reduce((acc, item) => {
+                    const session = item.session || null;
+                    const qty = Number(item.quantity);
+                    const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
+                    if (!acc[session]) acc[session] = { session, items: [], total_item: 0, total_value: 0};
+                    acc[session].items.push(item);
+                    acc[session].total_item += qty;
+                    acc[session].total_value += value;
+                    return acc;
+                }, {})
+            );
 
-        // Sort berdasarkan session (ascending)
-        groupedItems.sort((a, b) => {
-            // Pastikan session valid date, Unknown di akhir
-            if (a.session === null) return 1;
-            if (b.session === null) return -1;
-            return a.session - b.session;
+            // Sort berdasarkan session (ascending)
+            groupedItemsBySession.sort((a, b) => {
+                // Pastikan session valid, Unknown di akhir
+                if (a.session === null) return 1;
+                if (b.session === null) return -1;
+                return a.session - b.session;
+            });
+
+            return {
+                ...group.toJSON(),
+                DeliveryGroupItemsGrouped: groupedItemsBySession,
+            };
         });
-            
-        const formatted = {
-            ...allDG.toJSON(),
-            DeliveryGroupItemsGrouped: groupedItems,
-        }
 
         res.status(201).json(formatted);
     }

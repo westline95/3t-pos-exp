@@ -42,6 +42,21 @@ const getCustomers = async (req, res) => {
     }
 }
 
+const getPureCustomers = async (req, res) => {
+    try{
+        const allCust = await AllModel.CustomersModel.findAll();
+
+        if(allCust){
+            res.json(allCust);
+        } else {
+            res.status(404).json({error: `get all customer not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: err});
+    }
+}
+
 const getCustomersUnpaidInv = async (req, res) => {
     try{
         const allCust = await AllModel.CustomersModel.findAll({
@@ -611,6 +626,7 @@ const getDetailedCust = async(req, res) => {
 
 export default {
     getCustomers, 
+    getPureCustomers, 
     getCustomerByID,
     insertCustomers, 
     insertMultipleCustomer, 

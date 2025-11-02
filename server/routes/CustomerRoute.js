@@ -4,6 +4,7 @@ import CustomerController from "../controllers/CustomerController.js";
 const CustomersRoute = express.Router();
 
 CustomersRoute.get("/customers", CustomerController.getCustomers);
+CustomersRoute.get("/pure-customers", CustomerController.getPureCustomers);
 CustomersRoute.get("/customers/member", CustomerController.getCustomerByID);
 CustomersRoute.get("/customers/group", CustomerController.countCustByName);
 CustomersRoute.post("/customer/write", CustomerController.insertCustomers);
