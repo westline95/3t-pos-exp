@@ -6,21 +6,29 @@ const createDeliveryGroupReport = async(req, res) => {
     const t = await sequelize.transaction();
     const { delivery_group_report, delivery_group_report_list } = req.body;
     try{
+        // checking duplicate report with same status
+        const findDuplicateReport = await AllModel.DeliveryGroupReportModel.findOne({
+            where: {
+                delivery_group_report: delivery_group_report.delivery_group_report,
+                report_status: delivery_group_report.report_status
+            }
+        });
+
+        if(findDuplicateReport) return res.status(403).json({message: "duplicate report"});
+
         const newDGR = await AllModel.DeliveryGroupReportModel.create(delivery_group_report, {transaction: t});
 
-        // if(newDGR){
-            delivery_group_report_list.map(item => {
-                item.deliv_group_report_id = newDGR.deliv_group_report_id;
-            })
-        // }
+        delivery_group_report_list.map(item => {
+            item.deliv_group_report_id = newDGR.deliv_group_report_id;
+        })
+        
         let newDGRItems = await AllModel.DeliveryGroupReportListModel.bulkCreate(delivery_group_report_list, {
             returning:true,
             transaction: t
         });
-        await t.commit();
-        res.json(newDGRItems)
 
-        // return res.status(201).json({message: "delivery group report created"});
+        await t.commit();
+        res.json(newDGRItems);
     }
     catch(err){
         await t.rollback();
