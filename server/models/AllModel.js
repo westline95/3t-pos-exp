@@ -1157,6 +1157,10 @@ const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_lis
             type: Sequelize.TEXT,
             allowNull: false,
         },
+        total_qty: {
+            type: Sequelize.DECIMAL,
+            allowNull: false,
+        },
     }, 
     {
         tableName: 'delivery_group_report_list',
