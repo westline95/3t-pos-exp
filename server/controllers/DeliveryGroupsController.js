@@ -288,9 +288,6 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
                                 {
                                     model: AllModel.CustomersModel,
                                 },
-                                {
-                                    model: AllModel.ProductsCatalogModel,
-                                }
                             ]
                         }
                     ]

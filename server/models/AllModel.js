@@ -1137,38 +1137,6 @@ const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_lis
             allowNull: false,
             defaultValue: false
         },
-        order_discount: {
-            type: Sequelize.DECIMAL,
-            allowNull: true,
-        },
-        invoice_id: {
-            type: Sequelize.BIGINT,
-            allowNull: true,
-        },
-        return_order_id: {
-            type: Sequelize.BIGINT,
-            allowNull: true,
-        },
-        receipt_id: {
-            type: Sequelize.BIGINT,
-            allowNull: true,
-        },
-        product_id: {
-            type: Sequelize.BIGINT,
-            allowNull: false,
-        },
-        quantity: {
-            type: Sequelize.DECIMAL,
-            allowNull: false,
-        },
-        sell_price: {
-            type: Sequelize.DECIMAL,
-            allowNull: false,
-        },
-        disc_prod_rec: {
-            type: Sequelize.DECIMAL,
-            allowNull: true,
-        },
         payment_date: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -1184,6 +1152,10 @@ const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_lis
         payment_note: {
             type: Sequelize.STRING,
             allowNull: true,
+        },
+        order_items: {
+            type: Sequelize.TEXT,
+            allowNull: false,
         },
     }, 
     {
@@ -1616,16 +1588,16 @@ DeliveryGroupReportListModel.belongsTo(CustomersModel, {
     targetKey: 'customer_id',
 });
 
-// one to many (customer - delivery group report list)
-ProductsCatalogModel.hasMany(DeliveryGroupReportListModel,{
-    sourceKey: 'product_id',
-    foreignKey: 'product_id',
-});
+// // one to many (customer - delivery group report list)
+// ProductsCatalogModel.hasMany(DeliveryGroupReportListModel,{
+//     sourceKey: 'product_id',
+//     foreignKey: 'product_id',
+// });
 
-DeliveryGroupReportListModel.belongsTo(ProductsCatalogModel, {
-    foreignKey: 'product_id',
-    targetKey: 'product_id',
-});
+// DeliveryGroupReportListModel.belongsTo(ProductsCatalogModel, {
+//     foreignKey: 'product_id',
+//     targetKey: 'product_id',
+// });
 
 
 
