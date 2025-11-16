@@ -30,7 +30,7 @@ const createDeliveryGroupReport = async(req, res) => {
         let onlyDGReportList = [];
         let onyDGReportOrderPayment = [];
         delivery_group_report_orders.map(ro => {
-            delivery_group_report_lists.map(item => {
+            ro.delivery_group_report_lists.map(item => {
                 item.dg_report_order_id = newDGROrder.dg_report_order_id;
                 onlyDGReportList.push(item);
             })
