@@ -4,7 +4,7 @@ import sequelize from "../config/Database.js";
 
 const createDeliveryGroupReport = async(req, res) => {
     const t = await sequelize.transaction();
-    const { delivery_group_report, delivery_group_report_list } = req.body;
+    const { delivery_group_report, delivery_group_report_orders, delivery_group_report_lists } = req.body;
     // checking duplicate report with same status
     try{
         const findDuplicateReport = await AllModel.DeliveryGroupReportModel.findOne({
@@ -16,19 +16,33 @@ const createDeliveryGroupReport = async(req, res) => {
 
         if(findDuplicateReport) return res.status(403).json({status: 403, message: "duplicate report"});
 
+        // insert delivery group report
         const newDGR = await AllModel.DeliveryGroupReportModel.create(delivery_group_report, {transaction: t});
+        
+        // add deliv group report id to delivery group report orders
+        delivery_group_report_orders.deliv_group_report_id = newDGR.deliv_group_report_id;
 
-        delivery_group_report_list.map(item => {
-            item.deliv_group_report_id = newDGR.deliv_group_report_id;
+        const newDGROrder = await AllModel.DeliveryGroupReportOrderModel.create(delivery_group_report_orders, {transaction:t});
+        // add deliv group report order id to delivery group report lists
+        delivery_group_report_lists.map(item => {
+            item.dg_report_order_id = newDGROrder.dg_report_order_id;
         })
         
-        let newDGRItems = await AllModel.DeliveryGroupReportListModel.bulkCreate(delivery_group_report_list, {
+        let newDGRItems = await AllModel.DeliveryGroupReportListModel.bulkCreate(delivery_group_report_lists, {
             returning:true,
             transaction: t
         });
 
+        // insert payment
+        if(!delivery_group_report_orders.payment) return res.status(404).json({status:404, message: "payment data not found"});
+        const payment = await AllModel.DGReportOrderPaymentsModel.create(delivery_group_report_orders.payment, {transaction: t});
+
         await t.commit();
-        res.json(newDGRItems);
+        res.json({
+            delivery_group_report: newDGR, 
+            delivery_group_report_orders: {...newDGROrder, payment: payment}, 
+            delivery_group_report_lists: newDGRItems
+        });
     }
     catch(err){
         await t.rollback();
@@ -58,13 +72,23 @@ const getAllDeliveryGroup = async(req, res) => {
                             model: AllModel.EmployeesModel
                         },
                         {
-                            model: AllModel.DeliveryGroupReportListModel,
+                            model: AllModel.DeliveryGroupReportOrderModel,
                             include: [
                                 {
-                                    model: AllModel.CustomersModel,
-                                },
+                                    model: AllModel.DeliveryGroupReportListModel,
+                                    include: [
+                                        {
+                                            model: AllModel.ProductsCatalogModel,
+                                        }
+                                    ]
+                                }, 
                                 {
-                                    model: AllModel.ProductsCatalogModel,
+                                    model: AllModel.DGReportOrderPaymentsModel,
+                                    include: [
+                                        {
+                                            model: AllModel.CustomersModel,
+                                        },
+                                    ]
                                 }
                             ]
                         }
@@ -102,13 +126,23 @@ const getDeliveryGroupByID = async(req, res) => {
                             model: AllModel.EmployeesModel
                         },
                         {
-                            model: AllModel.DeliveryGroupReportListModel,
+                            model: AllModel.DeliveryGroupReportOrderModel,
                             include: [
                                 {
-                                    model: AllModel.CustomersModel,
-                                },
+                                    model: AllModel.DeliveryGroupReportListModel,
+                                    include: [
+                                        {
+                                            model: AllModel.ProductsCatalogModel,
+                                        }
+                                    ]
+                                }, 
                                 {
-                                    model: AllModel.ProductsCatalogModel,
+                                    model: AllModel.DGReportOrderPaymentsModel,
+                                    include: [
+                                        {
+                                            model: AllModel.CustomersModel,
+                                        },
+                                    ]
                                 }
                             ]
                         }
@@ -152,13 +186,23 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
                             model: AllModel.EmployeesModel
                         },
                         {
-                            model: AllModel.DeliveryGroupReportListModel,
+                            model: AllModel.DeliveryGroupReportOrderModel,
                             include: [
                                 {
-                                    model: AllModel.CustomersModel,
-                                },
+                                    model: AllModel.DeliveryGroupReportListModel,
+                                    include: [
+                                        {
+                                            model: AllModel.ProductsCatalogModel,
+                                        }
+                                    ]
+                                }, 
                                 {
-                                    model: AllModel.ProductsCatalogModel,
+                                    model: AllModel.DGReportOrderPaymentsModel,
+                                    include: [
+                                        {
+                                            model: AllModel.CustomersModel,
+                                        },
+                                    ]
                                 }
                             ]
                         }

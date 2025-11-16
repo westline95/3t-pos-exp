@@ -1076,9 +1076,9 @@ const DeliveryGroupReportModel = sequelize.define("delivery_group_report", {
     tableName: 'delivery_group_report'
 })
 
-const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_list", 
+const DeliveryGroupReportOrderModel = sequelize.define("delivery_group_report_orders", 
     {
-        deliv_group_report_list_id:{
+        dg_report_order_id:{
             type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
@@ -1116,10 +1116,6 @@ const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_lis
             type: Sequelize.DATE,
             allowNull: true,
         },
-        payment_type: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
         subtotal: {
             type: Sequelize.DECIMAL,
             allowNull: false,
@@ -1137,6 +1133,62 @@ const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_lis
             allowNull: false,
             defaultValue: false
         },
+    }, 
+    {
+        tableName: 'delivery_group_report_orders',
+    }
+);
+
+const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_lists", 
+    {
+        deliv_group_report_list_id:{
+            type:  Sequelize.BIGINT,
+            primaryKey:  true,
+            autoIncrement: true,
+            allowNull: false,
+        },
+        dg_report_order_id: {
+            type: Sequelize.BIGINT,
+            allowNull: false,
+        },   
+        product_id: {
+            type: Sequelize.BIGINT,
+            allowNull: false,
+        },
+        quantity: {
+            type: Sequelize.DECIMAL,
+            allowNull: false,
+        },
+        sell_price: {
+            type: Sequelize.DECIMAL,
+            allowNull: false,
+        },
+    }, 
+    {
+        tableName: 'delivery_group_report_lists',
+    }
+);
+
+const DGReportOrderPaymentsModel = sequelize.define("dg_report_order_payments", 
+    {
+        dg_report_order_payment_id:{
+            type:  Sequelize.BIGINT,
+            primaryKey:  true,
+            autoIncrement: true,
+            allowNull: false,
+        },
+        dg_report_order_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true,
+        },
+        customer_id: {
+            type: Sequelize.INTEGER,
+            allowNull: true,
+        },
+        guest_name: {
+            type: Sequelize.STRING,
+            allowNull: true
+        },
         payment_date: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -1149,21 +1201,14 @@ const DeliveryGroupReportListModel = sequelize.define("delivery_group_report_lis
             type: Sequelize.STRING,
             allowNull: false,
         },
-        payment_note: {
+        note: {
             type: Sequelize.STRING,
             allowNull: true,
         },
-        order_items: {
-            type: Sequelize.TEXT,
-            allowNull: false,
-        },
-        totalQty: {
-            type: Sequelize.DECIMAL,
-            allowNull: false,
-        },
+        
     }, 
     {
-        tableName: 'delivery_group_report_list',
+        tableName: 'dg_report_order_payments',
     }
 );
 
@@ -1570,39 +1615,97 @@ DeliveryGroupLogs.belongsTo(DeliveryGroupsModel, {
 });
 
 
-// one to many (delivery group report - delivery group report list)
-DeliveryGroupReportModel.hasMany(DeliveryGroupReportListModel,{
+// // one to many (delivery group report - delivery group report list)
+// DeliveryGroupReportModel.hasMany(DeliveryGroupReportListModel,{
+//     sourceKey: 'deliv_group_report_id',
+//     foreignKey: 'deliv_group_report_id',
+// });
+
+// DeliveryGroupReportListModel.belongsTo(DeliveryGroupReportModel, {
+//     foreignKey: 'deliv_group_report_id',
+//     targetKey: 'deliv_group_report_id',
+// });
+
+// // one to many (customer - delivery group report list)
+// CustomersModel.hasMany(DeliveryGroupReportListModel,{
+//     sourceKey: 'customer_id',
+//     foreignKey: 'customer_id',
+// });
+
+// DeliveryGroupReportListModel.belongsTo(CustomersModel, {
+//     foreignKey: 'customer_id',
+//     targetKey: 'customer_id',
+// });
+
+
+// one to many (delivery group report - delivery group report orders)
+DeliveryGroupReportModel.hasMany(DeliveryGroupReportOrderModel, {
     sourceKey: 'deliv_group_report_id',
     foreignKey: 'deliv_group_report_id',
 });
 
-DeliveryGroupReportListModel.belongsTo(DeliveryGroupReportModel, {
+DeliveryGroupReportOrderModel.belongsTo(DeliveryGroupReportModel, {
     foreignKey: 'deliv_group_report_id',
     targetKey: 'deliv_group_report_id',
 });
 
-// one to many (customer - delivery group report list)
-CustomersModel.hasMany(DeliveryGroupReportListModel,{
+// one to many (delivery group report order - customer)
+CustomersModel.hasMany(DeliveryGroupReportOrderModel, {
     sourceKey: 'customer_id',
     foreignKey: 'customer_id',
 });
 
-DeliveryGroupReportListModel.belongsTo(CustomersModel, {
+DeliveryGroupReportOrderModel.belongsTo(CustomersModel, {
     foreignKey: 'customer_id',
     targetKey: 'customer_id',
 });
 
-// // one to many (customer - delivery group report list)
-// ProductsCatalogModel.hasMany(DeliveryGroupReportListModel,{
-//     sourceKey: 'product_id',
-//     foreignKey: 'product_id',
-// });
 
-// DeliveryGroupReportListModel.belongsTo(ProductsCatalogModel, {
-//     foreignKey: 'product_id',
-//     targetKey: 'product_id',
-// });
+// one to many (delivery group report order  - delivery group report list)
+DeliveryGroupReportOrderModel.hasMany(DeliveryGroupReportListModel, {
+    sourceKey: 'dg_report_order_id',
+    foreignKey: 'dg_report_order_id',
+});
 
+DeliveryGroupReportListModel.belongsTo(DeliveryGroupReportOrderModel, {
+    foreignKey: 'dg_report_order_id',
+    targetKey: 'dg_report_order_id',
+});
+
+// one to many (product - delivery group report list)
+ProductsCatalogModel.hasMany(DeliveryGroupReportListModel,{
+    sourceKey: 'product_id',
+    foreignKey: 'product_id',
+});
+
+DeliveryGroupReportListModel.belongsTo(ProductsCatalogModel, {
+    foreignKey: 'product_id',
+    targetKey: 'product_id',
+});
+
+
+// one to many (delivery group report order payment - delivery group report orders)
+DeliveryGroupReportOrderModel.hasMany(DGReportOrderPaymentsModel, {
+    sourceKey: 'dg_report_order_id',
+    foreignKey: 'dg_report_order_id',
+});
+
+DGReportOrderPaymentsModel.belongsTo(DeliveryGroupReportOrderModel, {
+    foreignKey: 'dg_report_order_id',
+    targetKey: 'dg_report_order_id',
+});
+
+
+// one to many (delivery group report order ayment - customer)
+CustomersModel.hasMany(DGReportOrderPaymentsModel, {
+    sourceKey: 'customer_id',
+    foreignKey: 'customer_id',
+});
+
+DGReportOrderPaymentsModel.belongsTo(CustomersModel, {
+    foreignKey: 'customer_id',
+    targetKey: 'customer_id',
+});
 
 
 export default {
@@ -1634,5 +1737,7 @@ export default {
     DeliveryGroupLogs,
     DeliveryGroupItemsModel,
     DeliveryGroupReportModel,
-    DeliveryGroupReportListModel
+    DeliveryGroupReportOrderModel,
+    DeliveryGroupReportListModel,
+    DGReportOrderPaymentsModel
 };
