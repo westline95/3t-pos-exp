@@ -4,7 +4,7 @@ import sequelize from "../config/Database.js";
 
 const createDeliveryGroupReport = async(req, res) => {
     const t = await sequelize.transaction();
-    const { delivery_group_report, delivery_group_report_orders, delivery_group_report_lists } = req.body;
+    const { delivery_group_report, delivery_group_report_orders } = req.body;
     // checking duplicate report with same status
     try{
         const findDuplicateReport = await AllModel.DeliveryGroupReportModel.findOne({
@@ -20,29 +20,36 @@ const createDeliveryGroupReport = async(req, res) => {
         const newDGR = await AllModel.DeliveryGroupReportModel.create(delivery_group_report, {transaction: t});
         
         // add deliv group report id to delivery group report orders
-        delivery_group_report_orders.deliv_group_report_id = newDGR.deliv_group_report_id;
+        delivery_group_report_orders.map(ro => ro.deliv_group_report_id = newDGR.deliv_group_report_id);
 
-        const newDGROrder = await AllModel.DeliveryGroupReportOrderModel.create(delivery_group_report_orders, {transaction:t});
+        const newDGROrder = await AllModel.DeliveryGroupReportOrderModel.bulkCreate(delivery_group_report_orders, {transaction:t});
         // add deliv group report order id to delivery group report lists
-        delivery_group_report_lists.map(item => {
-            item.dg_report_order_id = newDGROrder.dg_report_order_id;
+        if(!delivery_group_report_orders[0].delivery_group_report_lists) return res.status(404).json({status:404, message: "dg report list data isnot found"});
+        if(!delivery_group_report_orders[0].payment) return res.status(404).json({status:404, message: "payment data is not found"});
+        
+        let onlyDGReportList = [];
+        let onyDGReportOrderPayment = [];
+        delivery_group_report_orders.map(ro => {
+            delivery_group_report_lists.map(item => {
+                item.dg_report_order_id = newDGROrder.dg_report_order_id;
+                onlyDGReportList.push(item);
+            })
+            ro.payment.dg_report_order_id = newDGROrder.dg_report_order_id;
+            onyDGReportOrderPayment.push(ro.payment);
         })
         
-        let newDGRItems = await AllModel.DeliveryGroupReportListModel.bulkCreate(delivery_group_report_lists, {
+        if(onlyDGReportList.length == 0 || onyDGReportOrderPayment.length == 0) return res.status(505).json({status:505, message: "only dgreportlist or onyDGReportOrderPayment is not valid"});
+        
+        let newDGRItems = await AllModel.DeliveryGroupReportListModel.bulkCreate(onlyDGReportList, {
             returning:true,
             transaction: t
         });
 
         // insert payment
-        if(!delivery_group_report_orders.payment) return res.status(404).json({status:404, message: "payment data not found"});
-        const payment = await AllModel.DGReportOrderPaymentsModel.create(delivery_group_report_orders.payment, {transaction: t});
+        const payment = await AllModel.DGReportOrderPaymentsModel.bulkCreate(onyDGReportOrderPayment, {transaction: t});
 
         await t.commit();
-        res.json({
-            delivery_group_report: newDGR, 
-            delivery_group_report_orders: {...newDGROrder, payment: payment}, 
-            delivery_group_report_lists: newDGRItems
-        });
+        res.status(201).json({status: 201, message: "Delivery group report created successfuly"});
     }
     catch(err){
         await t.rollback();
