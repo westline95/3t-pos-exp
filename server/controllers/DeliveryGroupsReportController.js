@@ -22,31 +22,35 @@ const createDeliveryGroupReport = async(req, res) => {
         // add deliv group report id to delivery group report orders
         delivery_group_report_orders.map(ro => ro.deliv_group_report_id = newDGR.deliv_group_report_id);
 
-        const newDGROrder = await AllModel.DeliveryGroupReportOrderModel.bulkCreate(delivery_group_report_orders, {transaction:t});
+        const newDGROrder = await AllModel.DeliveryGroupReportOrderModel.bulkCreate(delivery_group_report_orders, {returning:true, transaction:t});
         // add deliv group report order id to delivery group report lists
         if(!delivery_group_report_orders[0].delivery_group_report_lists) return res.status(404).json({status:404, message: "dg report list data isnot found"});
         if(!delivery_group_report_orders[0].payment) return res.status(404).json({status:404, message: "payment data is not found"});
         
         let onlyDGReportList = [];
-        let onyDGReportOrderPayment = [];
-        delivery_group_report_orders.map(ro => {
-            ro.delivery_group_report_lists.map(item => {
-                item.dg_report_order_id = newDGROrder.dg_report_order_id;
+        let onlyDGReportOrderPayment = [];
+
+        let onlyOrderID = newDGROrder.map(order => {return order.dg_report_order_id});
+
+        delivery_group_report_orders.map((dgrOrder, idx) => {
+            dgrOrder.delivery_group_report_lists.map(item => {
+                item.dg_report_order_id = onlyOrderID[idx];
                 onlyDGReportList.push(item);
-            })
-            ro.payment.dg_report_order_id = newDGROrder.dg_report_order_id;
-            onyDGReportOrderPayment.push(ro.payment);
-        })
+            });
+
+            dgrOrder.payment.dg_report_order_id = onlyOrderID[idx];
+            onlyDGReportOrderPayment.push(dgrOrder.payment);
+        });
         
-        if(onlyDGReportList.length == 0 || onyDGReportOrderPayment.length == 0) return res.status(505).json({status:505, message: "only dgreportlist or onyDGReportOrderPayment is not valid"});
+        if(onlyDGReportList.length == 0 || onlyDGReportOrderPayment.length == 0) return res.status(505).json({status:505, message: "only dgreportlist or onyDGReportOrderPayment is not valid"});
         
-        let newDGRItems = await AllModel.DeliveryGroupReportListModel.bulkCreate(onlyDGReportList, {
+        await AllModel.DeliveryGroupReportListModel.bulkCreate(onlyDGReportList, {
             returning:true,
             transaction: t
         });
 
         // insert payment
-        const payment = await AllModel.DGReportOrderPaymentsModel.bulkCreate(onyDGReportOrderPayment, {transaction: t});
+        await AllModel.DGReportOrderPaymentsModel.bulkCreate(onlyDGReportOrderPayment, {transaction: t});
 
         await t.commit();
         res.status(201).json({status: 201, message: "Delivery group report created successfuly"});
