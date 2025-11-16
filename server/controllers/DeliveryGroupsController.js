@@ -363,6 +363,112 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
     }
 }
 
+const getDeliveryGroupByID4Employee = async(req, res) => {
+    try{
+        const allDG = await AllModel.DeliveryGroupsModel.findByPk(req.query.id,
+            {
+            order: [["delivery_group_date", "DESC"]],
+            include: [
+                {
+                    model: AllModel.EmployeesModel
+                },
+                {
+                    model: AllModel.DeliveryGroupItemsModel,
+                    where: {
+                        status: {
+                            [Op.eq]: 2
+                        }
+                    },
+                    include: [
+                        {
+                            model: AllModel.ProductsCatalogModel
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.DeliveryGroupReportModel,
+                    include: [
+                        {
+                            model: AllModel.EmployeesModel
+                        },
+                        {
+                            model: AllModel.DeliveryGroupReportOrderModel,
+                            include: [
+                                {
+                                    model: AllModel.CustomersModel,
+                                }, 
+                                {
+                                    model: AllModel.DeliveryGroupReportListModel,
+                                    include: [
+                                        {
+                                            model: AllModel.ProductsCatalogModel,
+                                        },
+                                    ]
+                                },
+                                {
+                                    model: AllModel.DGReportOrderPaymentsModel,
+                                }
+                            ]
+                        },
+                       
+                    ]
+                }
+            ]
+        });
+
+        const items = allDG.delivery_group_items || [];
+
+        // Group items by log time
+        const groupedItems = Object.values(
+            items.reduce((acc, item) => {
+                const session = item.session || null;
+                const qty = Number(item.quantity);
+                const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
+                if (!acc[session]) acc[session] = { session, items: [], total_item: 0, total_value: 0};
+                acc[session].items.push(item);
+                acc[session].total_item += qty;
+                acc[session].total_value += value;
+                return acc;
+            }, {})
+        );
+
+        // Group items by product
+        const groupedItemsByProduct = Object.values(
+            items.reduce((acc, item) => {
+                const product_id = item.product_id || null;
+                const qty = Number(item.quantity);
+                const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
+                const product = item.product;
+                if (!acc[product_id]) acc[product_id] = { product_id, items: [], product, total_item: 0, total_value: 0};
+                acc[product_id].items.push(item);
+                acc[product_id].total_item += qty;
+                acc[product_id].total_value += value;
+                return acc;
+            }, {})
+        );
+
+
+        // Sort berdasarkan session (ascending)
+        groupedItems.sort((a, b) => {
+            // Pastikan session valid date, Unknown di akhir
+            if (a.session === null) return 1;
+            if (b.session === null) return -1;
+            return a.session - b.session;
+        });
+            
+        const formatted = {
+            ...allDG.toJSON(),
+            DeliveryGroupItemsGrouped: groupedItems,
+            DeliveryGroupItemsProduct: groupedItemsByProduct,
+        }
+
+        res.status(201).json(formatted);
+    }
+    catch(err){
+        res.status(500).json({err: err});
+    }
+}
+
 const editDeliveryGroup = async(req, res) => {
     const t = await sequelize.transaction();
     const { delivery_group } = req.body;
@@ -583,6 +689,7 @@ export default {
     getAllDeliveryGroup,
     getDeliveryGroupByID,
     getDeliveryGroupActiveByEmployee,
+    getDeliveryGroupByID4Employee,
     editDeliveryGroup,
     editDeliveryGroupList,
     addMoreItemDeliveryGroup,
