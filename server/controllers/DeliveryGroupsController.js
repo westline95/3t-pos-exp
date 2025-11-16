@@ -111,9 +111,6 @@ const getAllDeliveryGroup = async(req, res) => {
                                 {
                                     model: AllModel.CustomersModel,
                                 },
-                                {
-                                    model: AllModel.ProductsCatalogModel,
-                                }
                             ]
                         }
                     ]
