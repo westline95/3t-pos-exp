@@ -120,7 +120,7 @@ const getAllDeliveryGroup = async(req, res) => {
                                     ]
                                 },
                                 {
-                                    model: AllModel.PaymentsModel,
+                                    model: AllModel.DGReportOrderPaymentsModel,
                                 }
                             ]
                         },
@@ -204,7 +204,7 @@ const getDeliveryGroupByID = async(req, res) => {
                                     ]
                                 },
                                 {
-                                    model: AllModel.PaymentsModel,
+                                    model: AllModel.DGReportOrderPaymentsModel,
                                 }
                             ]
                         },
@@ -315,7 +315,7 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
                                     ]
                                 },
                                 {
-                                    model: AllModel.PaymentsModel,
+                                    model: AllModel.DGReportOrderPaymentsModel,
                                 }
                             ]
                         },
