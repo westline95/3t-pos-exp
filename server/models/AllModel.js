@@ -4,7 +4,7 @@ import sequelize from "../config/Database.js";
 const UsersModel = sequelize.define("users", 
     {
         id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -44,7 +44,7 @@ const UsersModel = sequelize.define("users",
 const CustomersModel = sequelize.define("customers", 
     {
         customer_id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -122,7 +122,7 @@ const CustomersModel = sequelize.define("customers",
 const CategoriesModel = sequelize.define("categories", 
     {
       category_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
@@ -144,7 +144,7 @@ const CategoriesModel = sequelize.define("categories",
 const CustTypeModel = sequelize.define("cust_type", 
     {
         cust_type_id:{
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false
@@ -164,7 +164,7 @@ const CustTypeModel = sequelize.define("cust_type",
 const ProductsCatalogModel = sequelize.define("products", 
     {
         product_id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -213,7 +213,7 @@ const ProductsCatalogModel = sequelize.define("products",
 const OrdersModel = sequelize.define("orders", 
     {
         order_id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -297,7 +297,7 @@ const OrdersModel = sequelize.define("orders",
 
 const OrderItemsModel = sequelize.define("order_items", {
     item_id: {
-        type:  Sequelize.INTEGER,
+        type:  Sequelize.BIGINT,
         primaryKey:  true,
         autoIncrement: true,
         allowNull: false,
@@ -330,7 +330,7 @@ const OrderItemsModel = sequelize.define("order_items", {
 const StatusModel = sequelize.define("statusList", 
     {
         id:{
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -348,7 +348,7 @@ const StatusModel = sequelize.define("statusList",
 const SubCategoryModel = sequelize.define("subCategory", 
     {
         id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -377,7 +377,7 @@ const SubCategoryModel = sequelize.define("subCategory",
 const InvoicesModel = sequelize.define("invoices", 
     {
         invoice_id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -451,7 +451,7 @@ const InvoicesModel = sequelize.define("invoices",
 const OrdersGroupModel = sequelize.define("orders_group", 
     {
         order_group_id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -492,7 +492,7 @@ InvoicesModel.beforeCreate(async (inv, options) => {
 const PaymentsModel = sequelize.define("payments", 
     {
         payment_id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -538,7 +538,7 @@ const PaymentsModel = sequelize.define("payments",
 const ReceiptsModel = sequelize.define("receipts", 
     {
         receipt_id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -581,7 +581,7 @@ const ReceiptsModel = sequelize.define("receipts",
 const invSettModel = sequelize.define("inv_setting", 
     {
         id:{
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -599,7 +599,7 @@ const invSettModel = sequelize.define("inv_setting",
 const mailerSettModel = sequelize.define("mailer_setting", 
     {
         id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -633,7 +633,7 @@ const mailerSettModel = sequelize.define("mailer_setting",
 const DeliveryModel = sequelize.define("delivery", 
     {
         delivery_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             primaryKey: true,
             autoIncrement:true,
             allowNull: false
@@ -680,7 +680,7 @@ const DeliveryModel = sequelize.define("delivery",
 const ROModel = sequelize.define("return_orders", 
     {
         return_order_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             primaryKey: true,
             autoIncrement:true,
             allowNull: false
@@ -718,7 +718,7 @@ const ROModel = sequelize.define("return_orders",
 const ROItemsModel = sequelize.define("return_order_items", 
     {
         ro_item_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             primaryKey: true,
             autoIncrement:true,
             allowNull: false
@@ -760,7 +760,7 @@ const ROItemsModel = sequelize.define("return_order_items",
 const OrdersCreditModel = sequelize.define("orders_credits", 
     {
         order_credit_id: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,
             primaryKey: true,
             autoIncrement:true,
             allowNull: false
@@ -785,7 +785,7 @@ const OrdersCreditModel = sequelize.define("orders_credits",
 
 const EmployeesModel = sequelize.define("employees", {
     employee_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
@@ -838,7 +838,7 @@ const EmployeesModel = sequelize.define("employees", {
 
 const SalarySettingModel = sequelize.define("salary_setting", {
     salary_setting_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
@@ -863,7 +863,7 @@ const SalarySettingModel = sequelize.define("salary_setting", {
 
 const SalaryAdjustmentsModel = sequelize.define("salary_adjustments", {
     salary_adjustment_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
@@ -904,7 +904,7 @@ const SalaryAdjustmentsModel = sequelize.define("salary_adjustments", {
 
 const DepartmentModel = sequelize.define("department", {
     department_id:{
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
@@ -917,7 +917,7 @@ const DepartmentModel = sequelize.define("department", {
 
 const DepartmentHistoryModel =sequelize.define("department_history", {
     department_history_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
@@ -965,7 +965,7 @@ DeliveryModel.beforeCreate(async (deliv, options) => {
 const DeliveryGroupsModel = sequelize.define("delivery_groups", 
     {
         delivery_group_id:{
-            type:  Sequelize.INTEGER,
+            type:  Sequelize.BIGINT,
             primaryKey:  true,
             autoIncrement: true,
             allowNull: false,
@@ -998,7 +998,7 @@ const DeliveryGroupsModel = sequelize.define("delivery_groups",
 
 const DeliveryGroupItemsModel = sequelize.define("delivery_group_items", {
     deliv_group_item_id: {
-        type:  Sequelize.INTEGER,
+        type:  Sequelize.BIGINT,
         primaryKey:  true,
         autoIncrement: true,
         allowNull: false,

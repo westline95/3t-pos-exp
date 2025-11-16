@@ -5,16 +5,16 @@ import sequelize from "../config/Database.js";
 const createDeliveryGroupReport = async(req, res) => {
     const t = await sequelize.transaction();
     const { delivery_group_report, delivery_group_report_list } = req.body;
+    // checking duplicate report with same status
     try{
-        // checking duplicate report with same status
         const findDuplicateReport = await AllModel.DeliveryGroupReportModel.findOne({
             where: {
-                delivery_group_report: delivery_group_report.delivery_group_report,
+                delivery_group_id: delivery_group_report.delivery_group_id,
                 report_status: delivery_group_report.report_status
             }
         });
 
-        if(findDuplicateReport) return res.status(403).json({message: "duplicate report"});
+        if(findDuplicateReport) return res.status(403).json({status: 403, message: "duplicate report"});
 
         const newDGR = await AllModel.DeliveryGroupReportModel.create(delivery_group_report, {transaction: t});
 
