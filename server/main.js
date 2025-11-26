@@ -94,8 +94,8 @@ app.get('/', (req, res) => res.send("HelloWorld"));
 // app.use(InvoiceRoute);
 // app.use(EmployeeRoute);
 // app.use(DeliveryGroupsRoute);
-// app.use(DeliveryGroupsRoute);
-// app.use(DeliveryGroupsReportRoute);
+app.use(DeliveryGroupsRoute);
+app.use(DeliveryGroupsReportRoute);
 // app.use(SalarySettingRoute);
 // // sales CRUD
 // app.use(SalesRoute);

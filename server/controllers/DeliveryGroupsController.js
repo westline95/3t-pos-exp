@@ -417,6 +417,7 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
         });
 
         const items = allDG.delivery_group_items || [];
+        const reportItems = allDG.delivery_group_report?.delivery_group_report_orders || null;
 
         // Group items by log time
         const groupedItems = Object.values(
@@ -447,6 +448,29 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
             }, {})
         );
 
+        let groupedItemsByProductReportList;
+        if(reportItems) {
+            let joinAll = [];
+            reportItems.map(e => {
+                e.delivery_group_report_lists.map(list => {
+                    joinAll.push(list)
+                })
+            });
+
+            groupedItemsByProductReportList = Object.values(
+                items.reduce((acc, item) => {
+                    const product_id = item.product_id || null;
+                    const qty = Number(item.quantity);
+                    const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
+                    const product = item.product;
+                    if (!acc[product_id]) acc[product_id] = { product_id, items: [], product, total_item: 0, total_value: 0};
+                    acc[product_id].items.push(item);
+                    acc[product_id].total_item += qty;
+                    acc[product_id].total_value += value;
+                    return acc;
+                }, {})
+            )
+        }
 
         // Sort berdasarkan session (ascending)
         groupedItems.sort((a, b) => {
@@ -460,6 +484,7 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
             ...allDG.toJSON(),
             DeliveryGroupItemsGrouped: groupedItems,
             DeliveryGroupItemsProduct: groupedItemsByProduct,
+            DeliveryGroupItemsGroupedOut: groupedItemsByProductReportList
         }
 
         res.status(201).json(formatted);
