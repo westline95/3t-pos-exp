@@ -8,7 +8,7 @@ DeliveryGroupsReportRoute.post("/add/delivery-group-report", DeliveryGroupsRepor
 // DeliveryGroupsReportRoute.get("/delivery-group/by", DeliveryGroupsReportController.getDeliveryGroupByID);
 // DeliveryGroupsReportRoute.get("/delivery-group/by/emp", DeliveryGroupsReportController.getDeliveryGroupActiveByEmployee);
 // DeliveryGroupsReportRoute.put("/edit/delivery-group", DeliveryGroupsReportController.editDeliveryGroup);
-// DeliveryGroupsReportRoute.patch("/edit-minor/delivery-group", DeliveryGroupsReportController.editDeliveryGroup);
+DeliveryGroupsReportRoute.patch("/status/delivery-group-report/:id/:status", DeliveryGroupsReportController.updateStatusDGReport);
 // DeliveryGroupsReportRoute.delete("/del/delivery-group", DeliveryGroupsReportController.deleteDeliveryGroup);
 // DeliveryGroupsReportRoute.delete("/cancel/delivery-group", DeliveryGroupsReportController.cancelDeliveryGroup);
 

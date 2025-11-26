@@ -61,6 +61,28 @@ const createDeliveryGroupReport = async(req, res) => {
     }
 }
 
+const updateStatusDGReport = async(req, res) => {
+    const t = await sequelize.transaction();
+    const delivery_group_report_id = req.params.id;
+    const report_status = req.params.status;
+
+    try{
+        const checkPK = await AllModel.DeliveryGroupReportModel.findByPk(delivery_group_report_id);
+
+        if(!checkPK) return res.status(404).json({message: "delivery group report is not found!"});
+
+        checkPK.report_status = report_status;
+        await checkPK.save({transaction: t});
+
+        await t.commit();
+        return res.status(201).json({message: "report status updated"});
+    }
+    catch(err){
+        await t.rollback();
+        res.status(500).json({err: err});
+    }
+}
+
 const getAllDeliveryGroup = async(req, res) => {
     try{
         const allDG = await AllModel.DeliveryGroupsModel.findAll({
@@ -323,6 +345,7 @@ const cancelDeliveryGroup = async(req, res) => {
 
 export default {
     createDeliveryGroupReport,
+    updateStatusDGReport,
     getAllDeliveryGroup,
     getDeliveryGroupByID,
     getDeliveryGroupActiveByEmployee,
