@@ -687,16 +687,17 @@ const deleteDeliveryGroup = async(req, res) => {
     }
 }
 
-const cancelDeliveryGroup = async(req, res) => {
+const updateStatusDeliveryGroup = async(req, res) => {
     const t = await sequelize.transaction();
-    const delivery_group_id = req.query.id;
+    const delivery_group_id = req.params.id;
+    const status = req.params.status;
 
     try{
         const checkPK = await AllModel.DeliveryGroupsModel.findByPk(delivery_group_id);
 
         if(!checkPK) return res.status(404).json({message: "delivery group is not found!"});
 
-        checkPK.status = 2;
+        checkPK.status = status;
         await checkPK.save({transaction: t});
 
         await t.commit();
@@ -719,5 +720,5 @@ export default {
     editDeliveryGroupList,
     addMoreItemDeliveryGroup,
     deleteDeliveryGroup,
-    cancelDeliveryGroup
+    updateStatusDeliveryGroup
 }

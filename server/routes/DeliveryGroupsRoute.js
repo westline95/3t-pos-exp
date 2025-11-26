@@ -13,6 +13,6 @@ DeliveryGroupsRoute.put("/edit/delivery-group", DeliveryGroupsController.editDel
 DeliveryGroupsRoute.put("/edit/delivery-group-list", DeliveryGroupsController.editDeliveryGroupList);
 DeliveryGroupsRoute.patch("/edit-minor/delivery-group", DeliveryGroupsController.editDeliveryGroup);
 DeliveryGroupsRoute.delete("/del/delivery-group", DeliveryGroupsController.deleteDeliveryGroup);
-DeliveryGroupsRoute.delete("/cancel/delivery-group", DeliveryGroupsController.cancelDeliveryGroup);
+DeliveryGroupsRoute.patch("/status/delivery-group/:id/:status", DeliveryGroupsController.updateStatusDeliveryGroup);
 
 export default DeliveryGroupsRoute;
