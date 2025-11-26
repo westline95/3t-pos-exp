@@ -484,7 +484,7 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
             ...allDG.toJSON(),
             DeliveryGroupItemsGrouped: groupedItems,
             DeliveryGroupItemsProduct: groupedItemsByProduct,
-            DeliveryGroupItemsGroupedOut: groupedItemsByProductReportList
+            DeliveryGroupItemsProductOut: groupedItemsByProductReportList
         }
 
         res.status(201).json(formatted);
