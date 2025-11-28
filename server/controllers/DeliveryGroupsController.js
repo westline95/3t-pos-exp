@@ -458,10 +458,10 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
             });
 
             groupedItemsByProductReportList = Object.values(
-                items.reduce((acc, item) => {
+                joinAll.reduce((acc, item) => {
                     const product_id = item.product_id || null;
                     const qty = Number(item.quantity);
-                    const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
+                    const value = (Number(item.quantity)*Number(item.sell_price));
                     const product = item.product;
                     if (!acc[product_id]) acc[product_id] = { product_id, items: [], product, total_item: 0, total_value: 0};
                     acc[product_id].items.push(item);
