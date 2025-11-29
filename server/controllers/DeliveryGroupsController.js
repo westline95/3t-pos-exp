@@ -376,7 +376,7 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
                     model: AllModel.DeliveryGroupItemsModel,
                     where: {
                         status: {
-                            [Op.eq]: 2
+                            [Op.eq]: req.query.status
                         }
                     },
                     include: [
