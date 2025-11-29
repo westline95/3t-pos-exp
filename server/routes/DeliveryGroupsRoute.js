@@ -9,6 +9,7 @@ DeliveryGroupsRoute.get("/all/delivery-group", DeliveryGroupsController.getAllDe
 DeliveryGroupsRoute.get("/delivery-group/by", DeliveryGroupsController.getDeliveryGroupByID);
 DeliveryGroupsRoute.get("/delivery-group/by/emp", DeliveryGroupsController.getDeliveryGroupActiveByEmployee);
 DeliveryGroupsRoute.get("/delivery-group/by/dgid-emp", DeliveryGroupsController.getDeliveryGroupByID4Employee);
+DeliveryGroupsRoute.get("/delivery-group/by/dgid-admin", DeliveryGroupsController.getDeliveryGroupByID4Admin);
 DeliveryGroupsRoute.put("/edit/delivery-group", DeliveryGroupsController.editDeliveryGroup);
 DeliveryGroupsRoute.put("/edit/delivery-group-list", DeliveryGroupsController.editDeliveryGroupList);
 DeliveryGroupsRoute.patch("/edit-minor/delivery-group", DeliveryGroupsController.editDeliveryGroup);
