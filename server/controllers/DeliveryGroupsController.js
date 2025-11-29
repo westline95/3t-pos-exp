@@ -100,6 +100,17 @@ const getAllDeliveryGroup = async(req, res) => {
                     ]
                 },
                 {
+                    model: AllModel.DeliveryGroupLogs,
+                    include: [
+                        {
+                            model: AllModel.EmployeesModel
+                        },
+                        {
+                            model: AllModel.DeliveryGroupLogItemsModel
+                        }
+                    ]
+                },
+                {
                     model: AllModel.DeliveryGroupReportModel,
                     include: [
                         {
@@ -180,6 +191,17 @@ const getDeliveryGroupByID = async(req, res) => {
                     include: [
                         {
                             model: AllModel.ProductsCatalogModel
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.DeliveryGroupLogs,
+                    include: [
+                        {
+                            model: AllModel.EmployeesModel
+                        },
+                        {
+                            model: AllModel.DeliveryGroupLogItemsModel
                         }
                     ]
                 },
@@ -295,6 +317,17 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
                     ]
                 },
                 {
+                    model: AllModel.DeliveryGroupLogs,
+                    include: [
+                        {
+                            model: AllModel.EmployeesModel
+                        },
+                        {
+                            model: AllModel.DeliveryGroupLogItemsModel
+                        }
+                    ]
+                },
+                {
                     model: AllModel.DeliveryGroupReportModel,
                     include: [
                         {
@@ -382,6 +415,17 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
                     include: [
                         {
                             model: AllModel.ProductsCatalogModel
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.DeliveryGroupLogs,
+                    include: [
+                        {
+                            model: AllModel.EmployeesModel
+                        },
+                        {
+                            model: AllModel.DeliveryGroupLogItemsModel
                         }
                     ]
                 },
@@ -508,6 +552,17 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
                     include: [
                         {
                             model: AllModel.ProductsCatalogModel
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.DeliveryGroupLogs,
+                    include: [
+                        {
+                            model: AllModel.EmployeesModel
+                        },
+                        {
+                            model: AllModel.DeliveryGroupLogItemsModel
                         }
                     ]
                 },
