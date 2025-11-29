@@ -1223,19 +1223,15 @@ const DeliveryGroupLogs = sequelize.define("delivery_group_logs", {
         type:  Sequelize.BIGINT,
         allowNull: false,
     },
-    employee_id: {
+    checkedby_employee_id: {
         type: Sequelize.BIGINT,
         allowNull: false,
     },   
-    delivery_group_date: {
-        type: Sequelize.DATE,
-        allowNull: false,
-    },    
-    item: {
+    total_item_return: {
         type: Sequelize.DECIMAL,
         allowNull: false,
     },
-    value: {
+    total_value_return: {
         type: Sequelize.DECIMAL,
         allowNull: false,
     },
@@ -1246,6 +1242,38 @@ const DeliveryGroupLogs = sequelize.define("delivery_group_logs", {
 }, {
     tableName: "delivery_group_logs"
 })
+
+const DeliveryGroupLogItemsModel = sequelize.define("delivery_group_log_items", {
+    dg_log_item_id: {
+        type:  Sequelize.BIGINT,
+        primaryKey:  true,
+        autoIncrement: true,
+        allowNull: false,
+    },
+    dg_log_id: {
+        type:  Sequelize.INTEGER,
+        allowNull: false,
+    },
+    product_id: {
+        type:  Sequelize.INTEGER,
+        allowNull: false,
+    },
+    quantity: {
+        type:  Sequelize.DECIMAL,
+        allowNull: false,
+    },
+    sell_price: {
+        type:  Sequelize.DECIMAL,
+        allowNull: false,
+    },
+    notes: {
+        type:  Sequelize.STRING,
+        allowNull: false,
+    },
+
+}, { 
+    tableName: 'delivery_group_log_items'
+});
 
 // assocations
 // one to many (categories - products)
@@ -1613,6 +1641,38 @@ DeliveryGroupLogs.belongsTo(DeliveryGroupsModel, {
     foreignKey: 'delivery_group_id',
     targetKey: 'delivery_group_id',
 });
+// one to many ( employee - dg logs checkedby employee)
+EmployeesModel.hasMany(DeliveryGroupLogs,{
+    sourceKey: 'employee_id',
+    foreignKey: 'checkedby_employee_id',
+});
+
+DeliveryGroupLogs.belongsTo(EmployeesModel, {
+    foreignKey: 'checkedby_employee_id',
+    targetKey: 'employee_id',
+});
+
+// one to many ( dg log - dg log item)
+DeliveryGroupLogs.hasMany(DeliveryGroupLogItemsModel,{
+    sourceKey: 'dg_log_id',
+    foreignKey: 'dg_log_id',
+});
+
+DeliveryGroupLogItemsModel.belongsTo(DeliveryGroupLogs, {
+    foreignKey: 'dg_log_id',
+    targetKey: 'dg_log_id',
+});
+
+// one to many ( product - dg log item)
+ProductsCatalogModel.hasMany(DeliveryGroupLogItemsModel,{
+    sourceKey: 'product_id',
+    foreignKey: 'product_id',
+});
+
+DeliveryGroupLogItemsModel.belongsTo(ProductsCatalogModel, {
+    foreignKey: 'product_id',
+    targetKey: 'product_id',
+});
 
 
 // // one to many (delivery group report - delivery group report list)
@@ -1735,6 +1795,7 @@ export default {
     DepartmentHistoryModel,
     DeliveryGroupsModel,
     DeliveryGroupLogs,
+    DeliveryGroupLogItemsModel,
     DeliveryGroupItemsModel,
     DeliveryGroupReportModel,
     DeliveryGroupReportOrderModel,

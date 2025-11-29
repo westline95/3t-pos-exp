@@ -4,19 +4,25 @@ import sequelize from "../config/Database.js";
 
 const addDeliveryGroupLog = async(req, res) => {
     const t = await sequelize.transaction();
-    const { delivery_group, delivery_group_items } = req.body;
+    const { dg_logs, dg_log_items } = req.body;
 
     try{
-        const newDG = await AllModel.DeliveryGroupsModel.create(delivery_group, {transaction: t});
+        if(typeof dg_log_items != "array") return res.status(505).json({err: "invalid datatype of dg_log_items, dg_log_items mus be an array!"});
+        
+        const checkExistLog = await AllModel.DeliveryGroupLogs.findOne({where: {delivery_group_id: dg_logs.delivery_group_id}});
 
-        delivery_group_items.map(e => {
-            e.delivery_group_id = newDG.delivery_group_id;
+        if(!checkExistLog) return res.status(404).json({err: "log with delivery group id exist!"});
+
+        const newLog = await AllModel.DeliveryGroupLogs.create(dg_logs, {transaction: t});
+
+        dg_log_items.map(e => {
+            e.dg_log_id = newLog.dg_log_id;
         })
 
-        const newDGItems = await AllModel.DeliveryGroupItemsModel.bulkCreate(delivery_group_items, {transaction: t});
+        const newLogItems = await AllModel.DeliveryGroupLogItemsModel.bulkCreate(dg_log_items, {transaction: t});
 
         await t.commit();
-        return res.status(201).json({delivery_group: newDG, delivery_group_items: newDGItems, message: "delivery group created"});
+        return res.status(201).json({dg_logs: newLog, dg_log_items: newLogItems, message: "new log created"});
     }
     catch(err){
         await t.rollback();
@@ -255,7 +261,7 @@ const cancelDeliveryGroup = async(req, res) => {
 
 
 export default {
-    setDeliveryGroup,
+    addDeliveryGroupLog,
     getAllDeliveryGroup,
     getDeliveryGroupByID,
     getDeliveryGroupActiveByEmployee,
