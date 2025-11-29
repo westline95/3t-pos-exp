@@ -19,7 +19,7 @@ const setDeliveryGroup = async(req, res) => {
                 date2.getUTCMinutes(), date2.getUTCSeconds());
     
     try {
-        // find exist delivery group by mployeeid, status != 2 && current time
+        // find exist delivery group by employeeid, status != 2 && current time
         const findExistDG = await AllModel.DeliveryGroupsModel.findOne({
             order: [[AllModel.DeliveryGroupItemsModel, "session", "DESC"]],
             where:{
@@ -368,17 +368,17 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
         const allDG = await AllModel.DeliveryGroupsModel.findByPk(req.query.id,
             {
             order: [["delivery_group_date", "DESC"]],
+            where: {
+                status: {
+                    [Op.eq]: 2
+                }
+            },
             include: [
                 {
                     model: AllModel.EmployeesModel
                 },
                 {
                     model: AllModel.DeliveryGroupItemsModel,
-                    where: {
-                        status: {
-                            [Op.eq]: 2
-                        }
-                    },
                     include: [
                         {
                             model: AllModel.ProductsCatalogModel
@@ -548,7 +548,7 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
         // Group items by log time
         const groupedItems = Object.values(
             items.reduce((acc, item) => {
-                if(item.status == 2) {
+                // if(item.status == 2) {
                     const session = item.session || null;
                     const qty = Number(item.quantity);
                     const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
@@ -557,14 +557,14 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
                     acc[session].total_item += qty;
                     acc[session].total_value += value;
                     return acc;
-                }
+                // }
             }, {})
         );
 
         // Group items by product
         const groupedItemsByProduct = Object.values(
             items.reduce((acc, item) => {
-                if(item.status == 2) {
+                // if(item.status == 2) {
                     const product_id = item.product_id || null;
                     const qty = Number(item.quantity);
                     const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
@@ -574,7 +574,7 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
                     acc[product_id].total_item += qty;
                     acc[product_id].total_value += value;
                     return acc;
-                }
+                // }
             }, {})
         );
 
