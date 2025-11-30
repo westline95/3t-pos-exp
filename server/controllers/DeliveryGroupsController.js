@@ -106,7 +106,12 @@ const getAllDeliveryGroup = async(req, res) => {
                             model: AllModel.EmployeesModel
                         },
                         {
-                            model: AllModel.DeliveryGroupLogItemsModel
+                            model: AllModel.DeliveryGroupLogItemsModel,
+                            include: [
+                                {
+                                    model: AllModel.ProductsCatalogModel
+                                }
+                            ]
                         }
                     ]
                 },
