@@ -9,7 +9,7 @@ const addDeliveryGroupLog = async(req, res) => {
     try{        
         const checkExistLog = await AllModel.DeliveryGroupLogs.findOne({where: {delivery_group_id: dg_logs.delivery_group_id}});
 
-        if(!checkExistLog) return res.status(404).json({err: "log with delivery group id exist!"});
+        if(checkExistLog) return res.status(404).json({err: "log with delivery group id exist!"});
 
         const newLog = await AllModel.DeliveryGroupLogs.create(dg_logs, {transaction: t});
 
