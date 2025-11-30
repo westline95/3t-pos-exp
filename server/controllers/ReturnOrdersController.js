@@ -5,7 +5,7 @@ import { Sequelize } from "sequelize";
 const getAllRO = async (req, res) => {
     try{
         const allRO = await AllModel.ROModel.findAll({
-            return_order:  [['return_date', 'DESC']],
+            order:  [['return_date', 'DESC']],
             include: [
                 {
                     model: AllModel.CustomersModel,
@@ -68,7 +68,7 @@ const getAllRO = async (req, res) => {
         }
     } 
     catch(err) {
-        res.status(500).json({err: "internal server error"});
+        res.status(500).json({err: err});
     }
 }
 
