@@ -441,7 +441,12 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
                             model: AllModel.EmployeesModel
                         },
                         {
-                            model: AllModel.DeliveryGroupLogItemsModel
+                            model: AllModel.DeliveryGroupLogItemsModel,
+                            include: [
+                                {
+                                    model: AllModel.ProductsCatalogModel,
+                                },
+                            ]
                         }
                     ]
                 },
@@ -578,7 +583,12 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
                             model: AllModel.EmployeesModel
                         },
                         {
-                            model: AllModel.DeliveryGroupLogItemsModel
+                            model: AllModel.DeliveryGroupLogItemsModel,
+                            include: [
+                                {
+                                    model: AllModel.ProductsCatalogModel,
+                                },
+                            ]
                         }
                     ]
                 },
