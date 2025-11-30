@@ -6,9 +6,7 @@ const addDeliveryGroupLog = async(req, res) => {
     const t = await sequelize.transaction();
     const { dg_logs, dg_log_items } = req.body;
 
-    try{
-        if(typeof dg_log_items != "Array") return res.status(505).json({err: "invalid datatype of dg_log_items, dg_log_items mus be an array!"});
-        
+    try{        
         const checkExistLog = await AllModel.DeliveryGroupLogs.findOne({where: {delivery_group_id: dg_logs.delivery_group_id}});
 
         if(!checkExistLog) return res.status(404).json({err: "log with delivery group id exist!"});
