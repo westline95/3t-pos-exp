@@ -1020,7 +1020,7 @@ const DeliveryGroupItemsModel = sequelize.define("delivery_group_items", {
         allowNull: false,
     },
     notes: {
-        type:  Sequelize.STRING,
+        type:  Sequelize.TEXT,
         allowNull: false,
     },
     disc_prod_rec: {
@@ -1060,7 +1060,7 @@ const DeliveryGroupReportModel = sequelize.define("delivery_group_report", {
         allowNull: false,
     },
     notes: {
-        type:  Sequelize.STRING,
+        type:  Sequelize.TEXT,
         allowNull: true,
     },
     total_item: {
@@ -1239,6 +1239,10 @@ const DeliveryGroupLogs = sequelize.define("delivery_group_logs", {
         type: Sequelize.INTEGER,
         allowNull: false,
     }, 
+    notes: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+    }, 
 }, {
     tableName: "delivery_group_logs"
 })
@@ -1264,10 +1268,6 @@ const DeliveryGroupLogItemsModel = sequelize.define("delivery_group_log_items", 
     },
     sell_price: {
         type:  Sequelize.DECIMAL,
-        allowNull: false,
-    },
-    notes: {
-        type:  Sequelize.STRING,
         allowNull: false,
     },
 
