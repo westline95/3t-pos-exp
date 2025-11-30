@@ -5,7 +5,7 @@ import { Sequelize } from "sequelize";
 const getAllRO = async (req, res) => {
     try{
         const allRO = await AllModel.ROModel.findAll({
-            return_order:  [['return_date', 'ASC']],
+            return_order:  [['return_date', 'DESC']],
             include: [
                 {
                     model: AllModel.CustomersModel,
@@ -60,6 +60,7 @@ const getAllRO = async (req, res) => {
                 },
             ],
         });
+        
         if(allRO){
             res.json(allRO);
         } else {
@@ -72,25 +73,44 @@ const getAllRO = async (req, res) => {
 }
 
 const insertRO = async (req, res) => {
+    const t = await sequelize.transaction();
+    const { return_order, ROItems, nextOrderAddOn } = req.body;
+
     try{
         // check if already exist
-        const { order_id } = req.body;
-        const ro = await AllModel.ROModel.findOne({where: {order_id: order_id}});
+        const ro = await AllModel.ROModel.findOne({where: {order_id: return_order.order_id}});
 
-        if(ro){
-            res.status(403).json({error: `Return order already exist!`});
-        } else {
-            const newRO = await AllModel.ROModel.create(req.body);
-            
-            if(newRO){
-                res.status(201).json(newRO);
-            } else {
-                res.status(500).json({error: `Error when create return order!`});
-            }
+        if(ro) return res.status(404).json({err: "Return order with order id already exist!"});
+        
+        const newRO = await AllModel.ROModel.create(return_order, {returning: true, transaction: t});
+
+        // insert ROItem
+        ROItems.map(item => {
+            item.return_order_id = newRO.return_order_id;
+        });
+
+        await AllModel.ROItemsModel.bulkCreate(ROItems, {transaction: t});
+
+        // update order => return_order_id col
+        await AllModel.OrdersModel.update({return_order_id: newRO.return_order_id}, {
+            where: {
+                order_id: return_order.order_id
+            },
+            transaction: t
+        });
+
+        if(nextOrderAddOn){
+            nextOrderAddOn.return_order_id = newRO.return_order_id;
+            // insert order credit
+            await AllModel.OrdersCreditModel.create(nextOrderAddOn, {transaction:t});
         }
+
+        await t.commit();
+        res.status(201).json(newRO);
     } 
     catch(err) {
-        res.status(500).json({err: "internal server error"});
+        await t.rollback();
+        res.status(500).json({err: err});
     }
 }
 
