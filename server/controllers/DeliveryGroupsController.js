@@ -101,7 +101,7 @@ const getAllDeliveryGroup = async(req, res) => {
                 },
                 {
                     model: AllModel.DeliveryGroupLogs,
-                    as: 'delivery_group_log',
+                    
                     include: [
                         {
                             model: AllModel.EmployeesModel
@@ -219,7 +219,7 @@ const getDeliveryGroupByID = async(req, res) => {
                 },
                 {
                     model: AllModel.DeliveryGroupLogs,
-                    as: 'delivery_group_log',
+                    
                     include: [
                         {
                             model: AllModel.EmployeesModel
@@ -341,7 +341,7 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
                 },
                 {
                     model: AllModel.DeliveryGroupLogs,
-                    as: 'delivery_group_log',
+                    
                     include: [
                         {
                             model: AllModel.EmployeesModel
@@ -444,7 +444,7 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
                 },
                 {
                     model: AllModel.DeliveryGroupLogs,
-                    as: 'delivery_group_log',
+                    
                     include: [
                         {
                             model: AllModel.EmployeesModel
@@ -587,7 +587,7 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
                 },
                 {
                     model: AllModel.DeliveryGroupLogs,
-                    as: 'delivery_group_log',
+                    
                     include: [
                         {
                             model: AllModel.EmployeesModel
