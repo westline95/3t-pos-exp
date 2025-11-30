@@ -43,6 +43,12 @@ const getAllSales = async (req, res) => {
                 {
                     model: AllModel.OrdersCreditModel,
                     as: 'orders_credit',
+                    include: [
+                        {
+                            model: AllModel.ROModel,
+                            as: 'return_order',
+                        }
+                    ]
                 },
             ],
         });
@@ -604,6 +610,12 @@ const deleteSales = async (req, res) => {
                 {
                     model: AllModel.OrdersCreditModel,
                     as: 'orders_credit',
+                    include: [
+                        {
+                            model: AllModel.ROModel,
+                            as: 'return_order',
+                        }
+                    ]
                 },
             ],
         });
@@ -1045,6 +1057,12 @@ const forFilteredRO = async(req, res) => {
                 {
                     model: AllModel.OrdersCreditModel,
                     as: 'orders_credit',
+                    include: [
+                        {
+                            model: AllModel.ROModel,
+                            as: 'return_order',
+                        }
+                    ]
                 },
                 
             ]
