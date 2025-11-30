@@ -562,13 +562,167 @@ const updateRO = async (req, res) => {
 };
 
 const deleteSales = async (req, res) => {
+    const order_id = req.params.order_id;
+    const t = await sequelize.transaction();
     try{
-        const delSales = await AllModel.OrdersModel.destroy({where:{order_id: req.query.id}});
-        
-        res.status(201).json(delSales);
+        // checking first
+        const getSales = await AllModel.OrdersModel.findByPk(order_id,{
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+                {
+                    model: AllModel.OrderItemsModel,
+                    as: 'order_items',
+                    required: true
+                },
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice',
+                    include: [
+                       {
+                            model: AllModel.PaymentsModel,
+                            as: 'payments',
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                },
+                {
+                    model: AllModel.ROModel,
+                    as: 'return_order',
+                    include: [
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'return_order_item',
+                        },
+                    ]
+                },
+                {
+                    model: AllModel.OrdersCreditModel,
+                    as: 'orders_credit',
+                },
+            ],
+        });
+
+        if(!getSales) return res.status(404).json({err: "Order id not found!"});
+
+        // update sales status
+        getSales.order_status = "canceled";
+        getSales.is_complete = false;
+
+        // handle return order
+        if(getSales.return_order_id){
+            // delete return order if return method is order credit
+            const findOrderCreditByRO = await AllModel.OrdersCreditModel.findAll({
+                where: {
+                    return_order_id: getSales.return_order_id
+                },
+                transaction: t
+            });
+            
+            // if available => delete
+            if(findOrderCreditByRO){
+                await AllModel.OrdersCreditModel.destroy({
+                    where: {
+                        return_order_id: getSales.return_order_id
+                    },
+                    transaction: t
+                })
+            }
+
+            // delete RO
+            await AllModel.ROItemsModel.destroy({
+                where: {
+                    return_order_id: getSales.return_order_id
+                },
+                transaction: t
+            });
+            await AllModel.ROModel.destroy({
+                where: {
+                    return_order_id: getSales.return_order_id
+                },
+                transaction: t
+            });
+
+            // update sales: return order id = null
+            getSales.return_order_id = null;
+            await getSales.save({transaction:t});
+        } 
+        // handle order credit
+        if(getSales.orders_credit){
+            // unlink order credit
+            await AllModel.OrdersCreditModel.update({order_id:null}, {
+                where: {
+                    order_credit_id: getSales.orders_credit.order_credit_id
+                },
+                transaction: t
+            });
+        }
+
+        // handle if sales has delivery
+        if(getSales.delivery){
+            if(getSales.delivery.delivery_status !== "delivered"){
+                // cancel delivery
+                await AllModel.DeliveryModel.update({delivery_status: 'canceled'}, {
+                    where: {
+                        delivery_id: delivery.delivery_id
+                    },
+                    transaction: t
+                })
+            }
+        }
+
+        // handle invoice
+        if(getSales.invoice){
+            // update order id
+            const ordersID = JSON.parse(getSales.order_id);
+            // minimum 1 order in 1 invoice
+            if(ordersID.length > 1){
+                let getIndex = ordersID.indexOf(getSales.order_id);
+                getIndex >= 0 && ordersID.splice(getIndex, 1);
+
+                let newInvModel = {
+                    order_id: JSON.stringify(ordersID),
+                    subtotal: Number(getSales.invoice.subtotal) - Number(getSales.subtotal),
+                    amount_due: Number(getSales.invoice.amount_due) - Number(getSales.grandtotal),
+                    remaining_payment: Number(getSales.invoice.remaining_payment) - Number(getSales.grandtotal),
+                    total_discount: Number(getSales.invoice.total_discount) - Number(getSales.order_discount),
+                };
+                
+                newInvModel.is_paid = newInvModel.remaining_payment <= 0 ? true:false;
+
+                // update invoice
+                await AllModel.InvoicesModel.update(newInvModel, {where:{invoice_id: getSales.invoice_id}, transaction: t});
+            } else {
+                // handle if invoice only has 1 order
+                if(data.items.invoice?.payments?.length == 0){
+                    await AllModel.InvoicesModel.update({status: "canceled"}, {where:{invoice_id: getSales.invoice_id}, transaction: t});
+                } else {
+                    // if there is payment => handle from UI
+                    // update sales status
+                    if(getSales.invoice.is_paid){
+                        getSales.order_status = "selesai";
+                        getSales.is_complete = true;
+                    } else {
+                        getSales.order_status = "pending";
+                        getSales.is_complete = false;
+                    }
+                }
+            }
+        }
+
+       
+        await getSales.save({transaction:t});
+        await t.commit();
+        res.status(201).json(getSales);
     } 
     catch(err) {
-        res.status(500).json({err: "internal server error"});
+        await t.rollback();
+        res.status(500).json({err: err});
     }
 }
 
@@ -887,6 +1041,9 @@ const forFilteredRO = async(req, res) => {
                 },
                 {
                     model: AllModel.InvoicesModel,
+                },
+                {
+                    model: AllModel.OrdersCreditModel,
                 },
                 
             ]
