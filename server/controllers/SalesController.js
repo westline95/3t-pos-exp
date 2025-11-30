@@ -46,7 +46,6 @@ const getAllSales = async (req, res) => {
                     include: [
                         {
                             model: AllModel.ROModel,
-                            as: 'return_order',
                         }
                     ]
                 },
@@ -613,7 +612,6 @@ const deleteSales = async (req, res) => {
                     include: [
                         {
                             model: AllModel.ROModel,
-                            as: 'return_order',
                         }
                     ]
                 },
@@ -1060,7 +1058,6 @@ const forFilteredRO = async(req, res) => {
                     include: [
                         {
                             model: AllModel.ROModel,
-                            as: 'return_order',
                         }
                     ]
                 },
