@@ -7,7 +7,7 @@ const addDeliveryGroupLog = async(req, res) => {
     const { dg_logs, dg_log_items } = req.body;
 
     try{
-        if(typeof dg_log_items != "array") return res.status(505).json({err: "invalid datatype of dg_log_items, dg_log_items mus be an array!"});
+        if(typeof dg_log_items != "Array") return res.status(505).json({err: "invalid datatype of dg_log_items, dg_log_items mus be an array!"});
         
         const checkExistLog = await AllModel.DeliveryGroupLogs.findOne({where: {delivery_group_id: dg_logs.delivery_group_id}});
 
