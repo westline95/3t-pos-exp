@@ -4,6 +4,7 @@ import DeliveryGroupLogsController from "../controllers/DeliveryGroupLogsControl
 const DeliveryGroupLogsRoute = express.Router();
 
 DeliveryGroupLogsRoute.post("/add/dg-logs", DeliveryGroupLogsController.addDeliveryGroupLog);
+DeliveryGroupLogsRoute.put("/update/dg-logs", DeliveryGroupLogsController.UpdateDeliveryGroupLog);
 // DeliveryGroupsRoute.post("/add-more-item/delivery-group", DeliveryGroupsController.addMoreItemDeliveryGroup);
 // DeliveryGroupsRoute.get("/all/delivery-group", DeliveryGroupsController.getAllDeliveryGroup);
 // DeliveryGroupsRoute.get("/delivery-group/by", DeliveryGroupsController.getDeliveryGroupByID);

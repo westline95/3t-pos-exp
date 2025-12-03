@@ -20,9 +20,41 @@ const addDeliveryGroupLog = async(req, res) => {
         const newLogItems = await AllModel.DeliveryGroupLogItemsModel.bulkCreate(dg_log_items, {transaction: t});
 
         await t.commit();
-        return res.status(201).json({dg_logs: newLog, dg_log_items: newLogItems, message: "new log created"});
+        res.status(201).json({dg_logs: newLog, dg_log_items: newLogItems, message: "new log created"});
     }
     catch(err){
+        await t.rollback();
+        res.status(500).json({err: err});
+    }
+}
+
+const UpdateDeliveryGroupLog = async(req, res) => {
+    const t = await sequelize.transaction();
+    const { dg_logs, dg_log_items } = req.body;
+
+    try{
+        // make sure if dg_log_id is exist
+        const checkExist = await AllModel.DeliveryGroupLogs.findByPk(dg_logs.dg_log_id);
+        if(!checkExist) return res.status(404).json({err: "dg_log_id is not found!"});
+
+        // update dg_log_items
+        const updateLogItem = await AllModel.DeliveryGroupLogItemsModel.bulkCreate(dg_log_items, {
+            updateOnDuplicate: ["dg_log_item_id"],
+            transaction: t
+        });
+
+        // update dg_logs
+        const updateLog = await AllModel.DeliveryGroupLogs.update(dg_logs, {
+            where: {
+                dg_log_id: dg_logs.dg_log_id
+            },
+            returning: true,
+            transaction: t
+        })
+
+        await t.commit();
+        res.status(201).json({dg_logs: updateLog, dg_log_items: updateLogItem, message: "log was updated successfully"});
+    } catch(err) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -260,6 +292,7 @@ const cancelDeliveryGroup = async(req, res) => {
 
 export default {
     addDeliveryGroupLog,
+    UpdateDeliveryGroupLog,
     getAllDeliveryGroup,
     getDeliveryGroupByID,
     getDeliveryGroupActiveByEmployee,
