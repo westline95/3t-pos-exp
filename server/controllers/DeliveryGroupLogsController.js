@@ -40,6 +40,7 @@ const UpdateDeliveryGroupLog = async(req, res) => {
         // update dg_log_items
         const updateLogItem = await AllModel.DeliveryGroupLogItemsModel.bulkCreate(dg_log_items, {
             updateOnDuplicate: ["dg_log_item_id"],
+            returning:true,
             transaction: t
         });
 

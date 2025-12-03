@@ -587,7 +587,6 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
                 },
                 {
                     model: AllModel.DeliveryGroupLogs,
-                    
                     include: [
                         {
                             model: AllModel.EmployeesModel
