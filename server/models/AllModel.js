@@ -1275,6 +1275,76 @@ const DeliveryGroupLogItemsModel = sequelize.define("delivery_group_log_items", 
     tableName: 'delivery_group_log_items'
 });
 
+const EmployeeAttendanceModel = sequelize.define("employee_attendance", {
+    emp_attendance_id:{
+        type:  Sequelize.BIGINT,
+        primaryKey:  true,
+        autoIncrement: true,
+        allowNull: false,
+    },
+    employee_id:{
+        type:  Sequelize.BIGINT,
+        allowNull: false,
+    },
+    attendance_date: {
+        type: Sequelize.DATE,
+        allowNull: false,
+    },   
+    attendance_status: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    jam_masuk: {
+        type: Sequelize.DATE,
+        allowNull: true,
+    },
+    jam_pulang: {
+        type: Sequelize.DATE,
+        allowNull: true,
+    }, 
+    notes: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+    }, 
+}, {
+    tableName: "employee_attendance"
+});
+
+const EmployeeLoansModel = sequelize.define("employee_loans", {
+    emp_loan_id:{
+        type:  Sequelize.BIGINT,
+        primaryKey:  true,
+        autoIncrement: true,
+        allowNull: false,
+    },
+    loan_date:{
+        type:  Sequelize.DATE,
+        allowNull: false,
+    },
+    description: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },   
+    loan_amount: {
+        type: Sequelize.DECIMAL,
+        allowNull: false,
+    },
+    is_open: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+    },
+    payroll_id: {
+        type: Sequelize.BIGINT,
+        allowNull: true,
+    }, 
+    employee_id: {
+        type: Sequelize.BIGINT,
+        allowNull: false,
+    }, 
+}, {
+    tableName: "employee_loans"
+})
+
 // assocations
 // one to many (categories - products)
 CategoriesModel.hasMany(ProductsCatalogModel, {
@@ -1632,7 +1702,7 @@ DeliveryGroupReportModel.belongsTo(DeliveryGroupsModel, {
 });
 
 // one to many ( delivery group logs - delivery group)
-DeliveryGroupsModel.hasMany(DeliveryGroupLogs,{
+DeliveryGroupsModel.hasOne(DeliveryGroupLogs,{
     sourceKey: 'delivery_group_id',
     foreignKey: 'delivery_group_id',
 });
@@ -1745,7 +1815,7 @@ DeliveryGroupReportListModel.belongsTo(ProductsCatalogModel, {
 
 
 // one to many (delivery group report order payment - delivery group report orders)
-DeliveryGroupReportOrderModel.hasMany(DGReportOrderPaymentsModel, {
+DeliveryGroupReportOrderModel.hasOne(DGReportOrderPaymentsModel, {
     sourceKey: 'dg_report_order_id',
     foreignKey: 'dg_report_order_id',
 });
@@ -1765,6 +1835,26 @@ CustomersModel.hasMany(DGReportOrderPaymentsModel, {
 DGReportOrderPaymentsModel.belongsTo(CustomersModel, {
     foreignKey: 'customer_id',
     targetKey: 'customer_id',
+});
+
+// one to many (employees - employee attendance)
+EmployeesModel.hasMany(EmployeeAttendanceModel, {
+    sourceKey: 'employee_id',
+    foreignKey: 'employee_id',
+});
+EmployeeAttendanceModel.belongsTo(EmployeesModel, {
+    foreignKey: 'employee_id',
+    targetKey: 'employee_id',
+});
+
+// one to many (employees - employee attendance)
+EmployeesModel.hasMany(EmployeeLoansModel, {
+    sourceKey: 'employee_id',
+    foreignKey: 'employee_id',
+});
+EmployeeLoansModel.belongsTo(EmployeesModel, {
+    foreignKey: 'employee_id',
+    targetKey: 'employee_id',
 });
 
 
@@ -1800,5 +1890,7 @@ export default {
     DeliveryGroupReportModel,
     DeliveryGroupReportOrderModel,
     DeliveryGroupReportListModel,
-    DGReportOrderPaymentsModel
+    DGReportOrderPaymentsModel,
+    EmployeeAttendanceModel,
+    EmployeeLoansModel
 };

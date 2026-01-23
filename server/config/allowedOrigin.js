@@ -5,7 +5,8 @@ const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:5050',
     'http://192.168.100.8:5173',
-    'http://192.168.36.83:5173',
+    'http://192.168.36.83:5173', 
+    'http://192.168.100.20:5173', //bagan batu home
 ];
 
 export default allowedOrigins;

@@ -19,6 +19,13 @@ const addDeliveryGroupLog = async(req, res) => {
 
         const newLogItems = await AllModel.DeliveryGroupLogItemsModel.bulkCreate(dg_log_items, {transaction: t});
 
+        const updateStatusDG = await AllModel.DeliveryGroupsModel.update({status: 2}, {
+            where: {
+                delivery_group_id: dg_logs.delivery_group_id
+            },
+            transaction: t
+        })
+
         await t.commit();
         res.status(201).json({dg_logs: newLog, dg_log_items: newLogItems, message: "new log created"});
     }
@@ -52,6 +59,46 @@ const UpdateDeliveryGroupLog = async(req, res) => {
             returning: true,
             transaction: t
         })
+
+        const getDG = await AllModel.DeliveryGroupsModel.findByPk(dg_logs.delivery_group_id, {
+            include: [{
+                model: AllModel.DeliveryGroupReportModel
+            }]
+        });
+        if(!getDG) return res.status(404).json({err: "delivery group is not found!"});
+
+        if(getDG.delivery_group_report){
+            let systemValueCalculated = 0;
+            let systemQtyCalculated = 0;
+            let courierValueCalculated = 0;
+            let courierQtyCalculated = 0;
+            systemQtyCalculated = Number(getDG.total_item) - Number(updateLog[1].total_item_return);
+            systemValueCalculated = Number(getDG.total_value) - Number(updateLog[1].total_value_return);
+            courierQtyCalculated = Number(getDG.delivery_group_report.total_item);
+            courierValueCalculated = Number(getDG.delivery_group_report.total_value);
+    
+            if(systemQtyCalculated !== courierQtyCalculated && systemValueCalculated !== courierValueCalculated) {
+                getDG.status = 3; //status => bermasalah
+                await getDG.save({transaction: t});
+
+                await AllModel.DeliveryGroupReportModel.update({report_status: 2}, { //report_status => laporan bermasalah
+                    where: {
+                        delivery_group_id: dg_logs.delivery_group_id
+                    },
+                    transaction: t
+                }); 
+            } else {
+                getDG.status = 4; //status => bermasalah
+                await getDG.save({transaction: t});
+
+                await AllModel.DeliveryGroupReportModel.update({report_status: 1}, { //report_status => laporan bermasalah
+                    where: {
+                        delivery_group_id: dg_logs.delivery_group_id
+                    },
+                    transaction: t
+                }); 
+            }
+        }
 
         await t.commit();
         res.status(201).json({dg_logs: updateLog, dg_log_items: updateLogItem, message: "log was updated successfully"});

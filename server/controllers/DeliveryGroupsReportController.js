@@ -17,7 +17,7 @@ const createDeliveryGroupReport = async(req, res) => {
         if(findDuplicateReport) return res.status(403).json({status: 403, message: "duplicate report"});
 
         // insert delivery group report
-        const newDGR = await AllModel.DeliveryGroupReportModel.create(delivery_group_report, {transaction: t});
+        const newDGR = await AllModel.DeliveryGroupReportModel.create(delivery_group_report, {returning: true, transaction: t});
         
         // add deliv group report id to delivery group report orders
         delivery_group_report_orders.map(ro => ro.deliv_group_report_id = newDGR.deliv_group_report_id);
@@ -51,6 +51,50 @@ const createDeliveryGroupReport = async(req, res) => {
 
         // insert payment
         await AllModel.DGReportOrderPaymentsModel.bulkCreate(onlyDGReportOrderPayment, {transaction: t});
+
+        // calculate difference between system and employee report delivery
+        const DGandLog = await AllModel.DeliveryGroupsModel.findByPk(delivery_group_report.delivery_group_id, {
+            include: [
+                {
+                    model: AllModel.DeliveryGroupLogs,
+                    include: [
+                        {
+                            model: AllModel.EmployeesModel
+                        },
+                        {
+                            model: AllModel.DeliveryGroupLogItemsModel,
+                            include: [
+                                {
+                                    model: AllModel.ProductsCatalogModel,
+                                },
+                            ]
+                        }
+                    ]
+                },
+            ]
+        });
+        if(!DGandLog) return res.status(404).json({message: "cant find dg and log to calculate report"});
+
+        let systemValueCalculated = 0;
+        let systemQtyCalculated = 0;
+        let courierValueCalculated = 0;
+        let courierQtyCalculated = 0;
+        systemQtyCalculated = Number(DGandLog.total_item) - Number(DGandLog.delivery_group_log.total_item_return);
+        systemValueCalculated = Number(DGandLog.total_value) - Number(DGandLog.delivery_group_log.total_value_return);
+        courierQtyCalculated = Number(newDGR.total_item);
+        courierValueCalculated = Number(newDGR.total_value);
+
+        if(systemQtyCalculated !== courierQtyCalculated && systemValueCalculated !== courierValueCalculated) {
+            DGandLog.status = 3; //status => bermasalah
+            await DGandLog.save({transaction:t});
+            newDGR.report_status = 2 //report_status => laporan bermasalah
+            await newDGR.save({transaction:t});
+        } else {
+            DGandLog.status = 4; //status => selesai
+            await DGandLog.save({transaction: t});
+            newDGR.report_status = 1 //report_status => laporan dikonfirmasi
+            await newDGR.save({transaction:t});
+        }
 
         await t.commit();
         res.status(201).json({status: 201, message: "Delivery group report created successfuly"});

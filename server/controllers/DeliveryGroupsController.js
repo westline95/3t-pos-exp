@@ -101,7 +101,6 @@ const getAllDeliveryGroup = async(req, res) => {
                 },
                 {
                     model: AllModel.DeliveryGroupLogs,
-                    
                     include: [
                         {
                             model: AllModel.EmployeesModel
@@ -318,6 +317,110 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
             where: {
                 employee_id: req.query.emp_id,
                 status: {
+                    [Op.ne]: 1
+                }
+            },
+            order: [["delivery_group_date", "DESC"]],
+            include: [
+                {
+                    model: AllModel.EmployeesModel
+                },
+                {
+                    model: AllModel.DeliveryGroupItemsModel,
+                    include: [
+                        {
+                            model: AllModel.ProductsCatalogModel
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.DeliveryGroupLogs,
+                    // limit: 1,
+                    include: [
+                        {
+                            model: AllModel.EmployeesModel
+                        },
+                        {
+                            model: AllModel.DeliveryGroupLogItemsModel
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.DeliveryGroupReportModel,
+                    include: [
+                        {
+                            model: AllModel.EmployeesModel
+                        },
+                        {
+                            model: AllModel.DeliveryGroupReportOrderModel,
+                            include: [
+                                {
+                                    model: AllModel.CustomersModel,
+                                }, 
+                                {
+                                    model: AllModel.DeliveryGroupReportListModel,
+                                    include: [
+                                        {
+                                            model: AllModel.ProductsCatalogModel,
+                                        },
+                                    ]
+                                },
+                                {
+                                    model: AllModel.DGReportOrderPaymentsModel,
+                                }
+                            ]
+                        },
+                       
+                    ]
+                }
+            ]
+        });
+
+        const formatted = allDG.map((group) => {
+            const items = group.delivery_group_items || [];
+
+            // Group items by session
+            const groupedItemsBySession = Object.values(
+                items.reduce((acc, item) => {
+                    const session = item.session || null;
+                    const qty = Number(item.quantity);
+                    const value = (Number(item.quantity)*Number(item.sell_price))-(Number(item.quantity)*Number(item.disc_prod_rec));
+                    if (!acc[session]) acc[session] = { session, items: [], total_item: 0, total_value: 0};
+                    acc[session].items.push(item);
+                    acc[session].total_item += qty;
+                    acc[session].total_value += value;
+                    return acc;
+                }, {})
+            );
+
+            // Sort berdasarkan session (ascending)
+            groupedItemsBySession.sort((a, b) => {
+                // Pastikan session valid, Unknown di akhir
+                if (a.session === null) return 1;
+                if (b.session === null) return -1;
+                return a.session - b.session;
+            });
+
+            return {
+                ...group.toJSON(),
+                DeliveryGroupItemsGrouped: groupedItemsBySession,
+            };
+        });
+
+        res.status(201).json(formatted);
+    }
+    catch(err){
+        res.status(500).json({err: err});
+    }
+}
+
+
+const getDeliveryLogActiveByEmployee = async(req, res) => {
+    try{
+        const allDGLog = await AllModel.DeliveryGroupLogs.findAll({
+            where: {
+                employee_id: req.query.emp_id,
+                status: {
                     [Op.eq]: 2
                 }
             },
@@ -341,7 +444,7 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
                 },
                 {
                     model: AllModel.DeliveryGroupLogs,
-                    
+                    // limit: 1,
                     include: [
                         {
                             model: AllModel.EmployeesModel
@@ -491,8 +594,9 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
         });
 
         const items = allDG.delivery_group_items || [];
-        const reportItems = allDG.delivery_group_report?.delivery_group_report_orders || null;
-
+        // const itemsOut = allDG.delivery_group_log ? allDG.delivery_group_log.delivery_group_log_items : null;
+        const itemsReturn = allDG.delivery_group_log ? allDG.delivery_group_log.delivery_group_log_items : null;
+        const reportOut = allDG.delivery_group_report ? allDG.delivery_group_report.delivery_group_report_orders : null;
         // Group items by log time
         const groupedItems = Object.values(
             items.reduce((acc, item) => {
@@ -522,16 +626,42 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
             }, {})
         );
 
-        let groupedItemsByProductReportList;
-        if(reportItems) {
-            let joinAll = [];
-            reportItems.map(e => {
-                e.delivery_group_report_lists.map(list => {
-                    joinAll.push(list)
-                })
-            });
+        // Sort berdasarkan session (ascending)
+        groupedItems.sort((a, b) => {
+            // Pastikan session valid date, Unknown di akhir
+            if (a.session === null) return 1;
+            if (b.session === null) return -1;
+            return a.session - b.session;
+        });
 
-            groupedItemsByProductReportList = Object.values(
+        let groupedItemsByProductReturn = null;
+        if(itemsReturn) {
+            groupedItemsByProductReturn = Object.values(
+                itemsReturn.reduce((acc, item) => {
+                    const product_id = item.product_id || null;
+                    const qty = Number(item.quantity);
+                    const value = (Number(item.quantity)*Number(item.sell_price));
+                    const product = item.product;
+                    if (!acc[product_id]) acc[product_id] = { product_id, items: [], product, total_item: 0, total_value: 0};
+                    acc[product_id].items.push(item);
+                    acc[product_id].total_item += qty;
+                    acc[product_id].total_value += value;
+                    return acc;
+                }, {})
+            );
+        }
+
+        let groupedReportItemOut = null;
+        if(reportOut){
+            let joinAll = [];
+            reportOut.map(list => {
+                list.delivery_group_report_lists.map(item => {
+                    joinAll.push(item);
+
+                })
+            })
+
+            groupedReportItemOut = Object.values(
                 joinAll.reduce((acc, item) => {
                     const product_id = item.product_id || null;
                     const qty = Number(item.quantity);
@@ -543,22 +673,43 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
                     acc[product_id].total_value += value;
                     return acc;
                 }, {})
-            )
+            );
         }
 
-        // Sort berdasarkan session (ascending)
-        groupedItems.sort((a, b) => {
-            // Pastikan session valid date, Unknown di akhir
-            if (a.session === null) return 1;
-            if (b.session === null) return -1;
-            return a.session - b.session;
-        });
+            // calculate summaryofdeliveryflow
+            let total_qty_confirmed = 0;
+            let total_value_confirmed = 0;
+            let admin_total_qty_return = 0;
+            let admin_total_value_return = 0;
+            let emp_total_qty_out = 0;
+            let emp_total_value_out = 0;
+            groupedItemsByProduct?.reduce((acc, item) => {
+                total_qty_confirmed += Number(item.total_item);
+                total_value_confirmed += Number(item.total_value);
+            },{});
+            groupedItemsByProductReturn?.reduce((acc, item) => {
+                admin_total_qty_return += Number(item.total_item);
+                admin_total_value_return += Number(item.total_value);
+            },{});
+            groupedReportItemOut?.reduce((acc, item) => {
+                emp_total_qty_out += Number(item.total_item);
+                emp_total_value_out += Number(item.total_value);
+            },{});
             
         const formatted = {
             ...allDG.toJSON(),
             DeliveryGroupItemsGrouped: groupedItems,
             DeliveryGroupItemsProduct: groupedItemsByProduct,
-            DeliveryGroupItemsProductOut: groupedItemsByProductReportList
+            DeliveryGroupItemsProductReturn: groupedItemsByProductReturn,
+            DeliveryGroupReportOut: groupedReportItemOut,
+            SummaryOfDeliveryFlow: {
+                total_qty_confirmed, 
+                total_value_confirmed, 
+                admin_total_qty_return, 
+                admin_total_value_return, 
+                emp_total_qty_out, 
+                emp_total_value_out
+            }
         }
 
         res.status(201).json(formatted);
@@ -569,7 +720,7 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
 }
 
 const getDeliveryGroupByID4Admin = async(req, res) => {
-    try{
+    try {
         const allDG = await AllModel.DeliveryGroupsModel.findByPk(req.query.id,
             {
             order: [["delivery_group_date", "DESC"]],
@@ -579,6 +730,7 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
                 },
                 {
                     model: AllModel.DeliveryGroupItemsModel,
+                    order: [["delivery_group_date", "DESC"]],
                     include: [
                         {
                             model: AllModel.ProductsCatalogModel
@@ -633,7 +785,8 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
         });
 
         const items = allDG.delivery_group_items || [];
-        const reportItems = allDG.delivery_group_report?.delivery_group_report_orders || null;
+        const itemsReturn = allDG.delivery_group_log ? allDG.delivery_group_log.delivery_group_log_items : null;
+        const reportOut = allDG.delivery_group_report ? allDG.delivery_group_report.delivery_group_report_orders : null;
 
         // Group items by log time
         const groupedItems = Object.values(
@@ -663,21 +816,40 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
                     acc[product_id].items.push(item);
                     acc[product_id].total_item += qty;
                     acc[product_id].total_value += value;
+
                     return acc;
                 // }
             }, {})
         );
 
-        let groupedItemsByProductReportList;
-        if(reportItems) {
-            let joinAll = [];
-            reportItems.map(e => {
-                e.delivery_group_report_lists.map(list => {
-                    joinAll.push(list)
-                })
-            });
+        let groupedItemsByProductReturn = null;
+        if(itemsReturn) {
+            groupedItemsByProductReturn = Object.values(
+                itemsReturn.reduce((acc, item) => {
+                    const product_id = item.product_id || null;
+                    const qty = Number(item.quantity);
+                    const value = (Number(item.quantity)*Number(item.sell_price));
+                    const product = item.product;
+                    if (!acc[product_id]) acc[product_id] = { product_id, items: [], product, total_item: 0, total_value: 0};
+                    acc[product_id].items.push(item);
+                    acc[product_id].total_item += qty;
+                    acc[product_id].total_value += value;
+                    return acc;
+                }, {})
+            );
+        }
 
-            groupedItemsByProductReportList = Object.values(
+        let groupedReportItemOut = null;
+        if(reportOut){
+            let joinAll = [];
+            reportOut.map(list => {
+                list.delivery_group_report_lists.map(item => {
+                    joinAll.push(item);
+
+                })
+            })
+
+            groupedReportItemOut = Object.values(
                 joinAll.reduce((acc, item) => {
                     const product_id = item.product_id || null;
                     const qty = Number(item.quantity);
@@ -689,8 +861,30 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
                     acc[product_id].total_value += value;
                     return acc;
                 }, {})
-            )
+            );
         }
+
+        // calculate summaryofdeliveryflow
+        let total_qty_confirmed = 0;
+        let total_value_confirmed = 0;
+        let admin_total_qty_return = 0;
+        let admin_total_value_return = 0;
+        let emp_total_qty_out = 0;
+        let emp_total_value_out = 0;
+        groupedItemsByProduct?.reduce((acc, item) => {
+            total_qty_confirmed += Number(item.total_item);
+            total_value_confirmed += Number(item.total_value);
+        },{});
+        groupedItemsByProductReturn?.reduce((acc, item) => {
+            admin_total_qty_return += Number(item.total_item);
+            admin_total_value_return += Number(item.total_value);
+        },{});
+        groupedReportItemOut?.reduce((acc, item) => {
+            emp_total_qty_out += Number(item.total_item);
+            emp_total_value_out += Number(item.total_value);
+        },{});
+        // let admin_total_qty_return = groupedItemsByProduct.reduce((curr, prev) => {return Number(curr.total_item) + Number(prev.total_item)})
+        // let admin_total_value_return = groupedItemsByProduct.reduce((curr, prev) => {return Number(curr.total_item) + Number(prev.total_item)})
 
         // Sort berdasarkan session (ascending)
         groupedItems.sort((a, b) => {
@@ -704,7 +898,16 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
             ...allDG.toJSON(),
             DeliveryGroupItemsGrouped: groupedItems,
             DeliveryGroupItemsProduct: groupedItemsByProduct,
-            DeliveryGroupItemsProductOut: groupedItemsByProductReportList
+            DeliveryGroupItemsProductReturn: groupedItemsByProductReturn,
+            DeliveryGroupReportOut: groupedReportItemOut,
+            SummaryOfDeliveryFlow: {
+                total_qty_confirmed, 
+                total_value_confirmed, 
+                admin_total_qty_return, 
+                admin_total_value_return, 
+                emp_total_qty_out, 
+                emp_total_value_out
+            }
         }
 
         res.status(201).json(formatted);
@@ -881,8 +1084,87 @@ const deleteDeliveryGroup = async(req, res) => {
 
     try{
         const checkPK = await AllModel.DeliveryGroupsModel.findByPk(delivery_group_id);
-
         if(!checkPK) return res.status(404).json({message: "delivery group is not found!"});
+        
+        
+        // delete if there is dg item
+        await AllModel.DeliveryGroupItemsModel.destroy({
+            where:{
+                delivery_group_id: delivery_group_id
+            }, 
+            transaction: t
+        })
+        
+        // delete if there is log item
+        const checkLog = await AllModel.DeliveryGroupLogs.findOne({
+            where:{
+                delivery_group_id: delivery_group_id
+            },
+        });
+        if(checkLog){
+            await AllModel.DeliveryGroupLogItemsModel.destroy({
+                where:{
+                    dg_log_id: checkLog.dg_log_id
+                }, 
+                transaction: t
+            })
+    
+            // delete if there is log
+            await AllModel.DeliveryGroupLogs.destroy({
+                where:{
+                    delivery_group_id: delivery_group_id
+                }, 
+                transaction: t
+            })
+        }
+
+        // delete report too if available
+        const checkReportEmployee = await AllModel.DeliveryGroupReportModel.findOne({
+            where:{
+                delivery_group_id: delivery_group_id
+            },
+        })
+        if(checkReportEmployee){
+            await AllModel.DeliveryGroupReportListModel.destroy({
+                where:{
+                    dg_report_order_id: checkReportEmployee.deliv_group_report_id
+                }, 
+                transaction: t
+            })
+
+            // delete report order if available
+            const checkReportOrder = await AllModel.DeliveryGroupReportOrderModel.findOne({
+                where:{
+                    deliv_group_report_id: checkReportEmployee.deliv_group_report_id
+                }, 
+            });
+            if(checkReportOrder){
+                await AllModel.DGReportOrderPaymentsModel.destroy({
+                    where:{
+                        dg_report_order_id: checkReportOrder.dg_report_order_id
+                    }, 
+                    transaction: t
+                })
+
+                await AllModel.DeliveryGroupReportOrderModel.destroy({
+                    where:{
+                        deliv_group_report_id: checkReportEmployee.deliv_group_report_id
+                    }, 
+                    transaction: t
+                })
+                
+            }
+    
+            // delete if there is log
+            await AllModel.DeliveryGroupReportModel.destroy({
+                where:{
+                    delivery_group_id: delivery_group_id
+                }, 
+                transaction: t
+            })
+        }
+
+        // delete payment if available
 
         await AllModel.DeliveryGroupsModel.destroy({
             where:{
@@ -890,13 +1172,6 @@ const deleteDeliveryGroup = async(req, res) => {
             },
             transaction: t
         });
-
-        await AllModel.DeliveryGroupItemsModel.destroy({
-            where:{
-                delivery_group_id: delivery_group_id
-            }, 
-            transaction: t
-        })
 
         await t.commit();
         return res.status(201).json({message: "delete success"});
