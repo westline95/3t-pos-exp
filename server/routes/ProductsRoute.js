@@ -6,6 +6,7 @@ const ProductsRoute = express.Router();
 ProductsRoute.get("/products", ProductController.getProducts);
 ProductsRoute.post("/product", ProductController.getProductID);
 ProductsRoute.get("/products/group", ProductController.countProductByName);
+ProductsRoute.get("/products/grouped-pos", ProductController.groupProductforPOS);
 ProductsRoute.get("/products/category", ProductController.getProductsByCategory);
 ProductsRoute.post("/add/product", ProductController.insertProducts);
 ProductsRoute.post("/products", ProductController.insertMultipleProducts);

@@ -1,5 +1,6 @@
 import AllModel from "../models/AllModel.js";
 import { Sequelize } from "sequelize";
+import _ from "lodash";
 
 const getProducts = async (req, res) => {
     try{
@@ -168,6 +169,56 @@ const countProductByName = async (req, res) => {
         res.status(500).json({err: "internal server error"});
     }
 }
+const groupProductforPOS = async (req, res) => {
+    // try{
+    //     const products = await AllModel.ProductsCatalogModel.findAll({
+    //         include: [
+    //             {
+    //                 model: AllModel.CategoriesModel,
+    //                 as: 'category'
+    //             },
+    //         ]
+    //     });
+
+    //     if(products){
+    //         // const grouped = _.groupBy(products, "category_id");
+
+    //         res.json(products);
+    //     } 
+    // } 
+    // catch(err) {
+    //     res.status(500).json({err: err});
+    // }
+
+    try{
+        const allProduct = await AllModel.ProductsCatalogModel.findAll({
+            include: [
+                {
+                    model: AllModel.CategoriesModel,
+                    as: 'category'
+                },
+            ]
+        });
+        if(allProduct){
+            const grouped = _.groupBy(allProduct, "category.category_name");
+            const result = _.map(grouped, (products, category_name) => ({
+                category_id: _.get(products, "[0].category.category_id", null),
+                category_name,
+                category_img: _.get(products, "[0].category.img", null),
+                products
+            }));
+
+            res.json(result);
+        } else {
+            res.status(404).json({error: `get all product not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: err});
+    }
+}
+
+
 
 
 
@@ -179,5 +230,6 @@ export default {
     deleteProduct,
     countProductByName,
     getProductsByCategory,
-    getProductID
+    getProductID,
+    groupProductforPOS
 };
