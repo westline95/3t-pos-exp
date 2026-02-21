@@ -33,7 +33,7 @@ export default function ProdListCard({ data, addToCart }){
      // get all product api
     const getAllProduct = async() => {
         // await axiosPrivate.get("http://localhost:5056/products")s
-        await axiosPrivate.get("http://localhost:5056/products/grouped-pos")
+        await axiosPrivate.get("/products/grouped-pos")
         .then(resp => {
             setProducts(resp.data);
             console.log(resp)
