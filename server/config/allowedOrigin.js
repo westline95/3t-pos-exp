@@ -1,7 +1,7 @@
 const allowedOrigins = [
     'https://threet-pos-exp.onrender.com',
     'https://3t-main-app.netlify.app',
-    'https://3t-pos-exp.netlify.app/',
+    'https://3t-pos-exp.netlify.app',
     'https://graph.facebook.com',
     'http://localhost:5173',
     'http://localhost:5174',

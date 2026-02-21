@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const BASE_URL = 'https://threet-pos-exp.onrender.com';
-const BASE_URL = 'http://localhost:5056';
+const BASE_URL = 'https://threet-pos-exp.onrender.com';
+// const BASE_URL = 'http://localhost:5056';
 
 export default axios.create({
     baseURL: BASE_URL
