@@ -10,6 +10,7 @@ export default function VariantModal({show, onHide, data}) {
 
     const handleCloseModal = () => {
         showAddCartModal(false);
+        onHide();
     }
 
     return(
@@ -31,24 +32,23 @@ export default function VariantModal({show, onHide, data}) {
                     data.map((e, idx) => {
 
                         const handleVariantModal = () => {                            
-                            showClickVariant({id: e.id, img: e.img, product: e.product, variant: e.variant, price: e.price});
+                            showClickVariant(e);
                             showAddCartModal(true);
                         }
                         return (
                             <div key={`variant-${idx}`} className="list-item" onClick={handleVariantModal}>
-                                <p className="item-name">{e.variant}</p>
+                                <p className="item-name" style={{textTransform: "capitalize"}}>{e.product_name + " " + e.variant}</p>
                                 <p className="item-price">
-                                    {/* <span className='currency'>Rp</span>
-                                    {e.price} */}
                                     <NumberFormat intlConfig={{
-                                        value: e.price, 
+                                        value: e.sell_price, 
                                         locale: "id-ID",
                                         style: "currency", 
                                         currency: "IDR",
-                                    }}
-                                    /> 
+                                        }} 
+                                    />
                                 </p>
                             </div>
+                
                         );
                         
                     })
@@ -61,7 +61,7 @@ export default function VariantModal({show, onHide, data}) {
         </Modal.Footer>
         </Modal>
 
-        <AddToCart show={isShow} onHide={handleCloseModal} data={clickedData} />
+        <AddToCart show={isShow} onHide={handleCloseModal} data={clickedData} multiple={true} stack={2} />
         </>
    
     )

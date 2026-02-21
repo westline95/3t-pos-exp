@@ -28,7 +28,7 @@ const AddToLocalStorage = product => {
     const cart = localStorage.getItem("cart") 
         ? JSON.parse(localStorage.getItem("cart")) 
         : [];
-    const duplicates = cart.filter(cartItem => parseInt(cartItem.id) === parseInt(product.id));
+    const duplicates = cart.filter(cartItem => cartItem.product_id === product.product_id);
     if(duplicates.length === 0){
         const addProduct = {
             ...product
@@ -42,8 +42,9 @@ const AddToLocalStorage = product => {
             ...cart
         ];
         updateProduct.map(item => {
-            if(parseInt(item.id) === parseInt(product.id)){
-                return item.qty += product.qty;
+            if(item.product_id == product.product_id){
+                item.qty += product.qty; 
+                item.totalPrice = item.qty*item.sell_price;
             }
             return item;
         })
@@ -61,9 +62,9 @@ const Increment = plusData => {
         ...cart
     ];
     updateProduct.map(item => {
-        if(parseInt(item.id) === parseInt(plusData.data.id)){
+        if(item.product_id == plusData.data.product_id){
             item.qty = plusData.stateValue + 1;
-            item.totalPrice = item.price * (plusData.stateValue + 1);
+            item.totalPrice = item.sell_price * (plusData.stateValue + 1);
         }
         return item;
     })
@@ -80,15 +81,14 @@ const Decrement = minusData => {
         ...cart
     ];
     updateProduct.map(item => {
-        if(parseInt(item.id) === parseInt(minusData.data.id)){
+        if(item.product_id == minusData.data.product_id){
             item.qty = minusData.stateValue - 1;
-            item.totalPrice = item.price * (minusData.stateValue - 1);
+            item.totalPrice = item.sell_price * (minusData.stateValue - 1);
         }
         return item;
     })
     localStorage.setItem("cart", JSON.stringify(updateProduct));
     return updateProduct;
-
 }
 
 const WriteInput = writeData => {
@@ -101,9 +101,9 @@ const WriteInput = writeData => {
     ];
 
     updateProduct.map(item => {
-        if(parseInt(item.id) === parseInt(writeData.data.id)){
+        if(item.product_id == writeData.data.product_id){
             item.qty = writeData.stateValue;
-            item.totalPrice = item.price * writeData.stateValue;
+            item.totalPrice = item.sell_price * writeData.stateValue;
         }
         return item;
     })
@@ -120,7 +120,7 @@ const DeleteCartItem = itemID => {
         ...cart
     ];
 
-    const filteredData = updateProduct.filter(e => e.id != itemID);
+    const filteredData = updateProduct.filter(e => e.product_id != itemID);
     localStorage.setItem("cart", JSON.stringify(filteredData));
 
     return filteredData;

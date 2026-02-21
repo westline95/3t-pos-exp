@@ -26,6 +26,7 @@
   --sa-color-light-purple: #da89ff;
   --sa-color-purple: #da89ff;
   --sa-color-black: #252525;
+  --sa-color-pure-black: #000;
   --sa-color-light-blue: #e8f6fd;
 
   --sa-color-primary-hover: #14b4ff;
@@ -75,6 +76,8 @@
   --sa-black-blue: #233b46;
 
   --sa-form-wizard-line-width: 0%;
+
+  --modal-custom-backdrop: color-mix(#{'oklab(0.5 0.2 0.1)'}, var(--sa-color-pure-black) 30%, transparent);
 }
 
 body {
@@ -3199,6 +3202,12 @@ td .btn-group button i {
       background-color: var(--sa-color-success);
     }
   }
+}
+
+.modal-backdrop {
+  background-color: --modal-custom-backdrop;
+  backdrop-filter: blur(4px);
+  opacity: 0.5 !important;
 }
 
 /* responsive */

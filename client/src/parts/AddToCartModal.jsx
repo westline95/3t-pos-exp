@@ -6,21 +6,39 @@ import Button from '../elements/Button';
 import { Modal } from 'react-bootstrap';
 import cartSlice from '../store/reducers/cart';
 
-export default function AddToCart({show, onHide, data}) {
+export default function AddToCart({show, onHide, data, multiple, stack}) {
     // const [ qtyBtn, getQtyBtn ] = useState("");
     // const [ itemQty, setQty ] = useState(0);
     // const [ carasdwtDatas, asd ] = useState(null);
+    const [qtyVal, setQtyVal] = useState(0);
     const dispatch = useDispatch();
   
     const handleClick = () => {
-        const getQty = parseInt(document.getElementById("qtyItem").value);
+        // const getQty = parseInt(document.getElementById("qtyItem").value);
+        const getQty = Number(qtyVal);
         const addProduct = {...data};
         addProduct.qty = getQty;
-        addProduct.totalPrice = data.price;
+        addProduct.totalPrice = data.sell_price*addProduct.qty;
         addProduct.update = false;
         dispatch(cartSlice.actions.addData(addProduct));
+
+        // close all modal
+        // document.querySelectorAll(".modal.show").forEach((e,idx) => {
+        //     e.modal('hide')
+        // })
         onHide();
-    }
+    };
+
+    useEffect(() => {
+        if(multiple === true){
+            document.querySelectorAll(".modal-backdrop").forEach((e,idx) => {
+                e.style.zIndex = 1055 + (idx * stack);
+            })
+            document.querySelectorAll(".modal").forEach((e,idx) => {
+                e.style.zIndex = 1056 + (idx * stack);
+            })
+        }
+    },[show]);
 
     return (
         <Modal 
@@ -28,9 +46,10 @@ export default function AddToCart({show, onHide, data}) {
         id="productDetailModal" 
         show={show} 
         onHide={onHide} 
+        centered
         >
         <Modal.Header closeButton>
-            <Modal.Title>Add product</Modal.Title>
+            <Modal.Title>Tambah produk</Modal.Title>
         </Modal.Header>
         {
             data === "" ? "" :
@@ -41,7 +60,7 @@ export default function AddToCart({show, onHide, data}) {
                     </div>
                     <p className="add-cart-price">
                         <NumberFormat intlConfig={{
-                            value: data.price, 
+                            value: data.sell_price, 
                             locale: "id-ID",
                             style: "currency", 
                             currency: "IDR",
@@ -60,7 +79,7 @@ export default function AddToCart({show, onHide, data}) {
                         </div>
                         <div className="product-qty-wrap">
                             <label htmlFor="qty-product" className="mb-1">Qty</label>
-                            <QtyButton min={0} max={999} name={`qty-${data.product}`} id="qtyItem" />
+                            <QtyButton min={0} max={999} name={`qty-${data.product}`} id="qtyItem" returnValue={(e) => setQtyVal(e)} />
                         </div>
                     </div>
                 </Modal.Body>

@@ -19,7 +19,7 @@ export default function OrderListItem(props){
     };
 
     const handleDelete = () => {
-        dispatch(cartSlice.actions.deleteItem(data.id));
+        dispatch(cartSlice.actions.deleteItem(data.product_id));
     }
 
     return(
@@ -35,7 +35,7 @@ export default function OrderListItem(props){
                         <div className="product-img" style={imgStyle}></div>
                     </div>
                     <div className="order-detail">
-                        <p className="product-name">{data.product}</p>
+                        <p className="product-name">{data.product_name}</p>
                         <p className="order-notes">
                             {data.variant ? "Variant: " : ""}
                             <span className='order-notes-hightlight'>{data.variant ? data.variant : ""}</span>

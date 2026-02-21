@@ -462,7 +462,7 @@ export default function OrderCard(props) {
                             cartItem.map((item, idx) => {
                                 return(
                                     <OrderListItem 
-                                    key={item.id}
+                                    key={item.product_id}
                                     data={item}
                                     inputName={"order-qty"}
                                     min={1}

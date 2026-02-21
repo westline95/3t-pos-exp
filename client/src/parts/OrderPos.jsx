@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useRef, useEffect } from "react";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { Form, Modal, Card } from "react-bootstrap";
 import ProductData from "../json/prodCategory.json";
 import Header from "./Header";
@@ -15,6 +16,9 @@ import TempeDaun from "../assets/images/tempe daun.png";
 import TempeBalok from "../assets/images/tempe balok.png";
 
 export default function OrderPos(props){
+    const axiosPrivate = useAxiosPrivate();
+    const [allProduct, setProducts] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [isHover, setIsHover] = useState(null);
     const [ isClose, setClose ] = useState(false);
     const [ subCategoryData , subCategory ] = useState([]);
@@ -32,41 +36,68 @@ export default function OrderPos(props){
         }         
     };
 
-    const subCategoryEndpoint = `https://threet-pos-exp.onrender.com/subcategory`;
-    // const subCategoryEndpoint = `http://localhost:5050/subcategory`;
-    const fetchSubCategory = async () => {
-        const resp = await fetch(subCategoryEndpoint);
-        const data = await resp.json();
-        subCategory(data);
-    }
+    // const subCategoryEndpoint = `https://threet-pos-exp.onrender.com/subcategory`;
+    // // const subCategoryEndpoint = `http://localhost:5050/subcategory`;
+    // const fetchSubCategory = async () => {
+    //     const resp = await fetch(subCategoryEndpoint);
+    //     const data = await resp.json();
+    //     subCategory(data);
+    // }
     
-    const categoryEndpoint = `https://threet-pos-exp.onrender.com/categories`;
-    // const categoryEndpoint = `http://localhost:5050/categories`;
-    const fetchCategory = async () => {
-        const resp = await fetch(categoryEndpoint);
-        const data = await resp.json();
-        setCategory(data);
-    }
+    // const categoryEndpoint = `https://threet-pos-exp.onrender.com/categories`;
+    // // const categoryEndpoint = `http://localhost:5050/categories`;
+    // const fetchCategory = async () => {
+    //     const resp = await fetch(categoryEndpoint);
+    //     const data = await resp.json();
+    //     setCategory(data);
+    // }
 
-    const handleCategory = (categoryItem) => {
-        const filteredSubCategory = subCategoryData.filter(item => item.category === categoryItem.category);
-        if(categoryItem.category.toLowerCase() !== "all"){
-            subCategoryBy(filteredSubCategory)
-        } else {
-            subCategoryBy(subCategoryData);
+    // const handleCategory = (categoryItem) => {
+    //     const filteredSubCategory = subCategoryData.filter(item => item.category === categoryItem.category);
+    //     if(categoryItem.category.toLowerCase() !== "all"){
+    //         subCategoryBy(filteredSubCategory)
+    //     } else {
+    //         subCategoryBy(subCategoryData);
+    //     }
+    // }
+
+     // get all product api
+    const getAllProduct = async() => {
+        // await axiosPrivate.get("http://localhost:5056/products")s
+        await axiosPrivate.get("/products/grouped-pos")
+        .then(resp => {
+            setProducts(resp.data);
+            console.log(resp)
+        })
+        .catch(err =>{
+            console.error("failed to get all product");
+        })
+    } 
+
+    useEffect(() => {
+        getAllProduct();
+    },[]);
+
+    useEffect(() => {
+        if(allProduct) {
+            setIsLoading(false);
         }
+    },[allProduct]);
+
+    if(isLoading){
+        return;
     }
     
-    useEffect(() => {
-        fetchSubCategory();
-        fetchCategory();
-    },[]);
+    // useEffect(() => {
+    //     fetchSubCategory();
+    //     fetchCategory();
+    // },[]);
 
     return (
         <>
         <Sidebar show={isClose} />
         <main className={`pos-content ${isClose ? "active" : ""}`}>
-            <Header onClick={() => isClose ? setClose(false) : setClose(true)} cart={true} />
+            {/* <Header onClick={() => isClose ? setClose(false) : setClose(true)} cart={true} /> */}
             <section>
                 <div className="search-mobile mb-4">
                     <div className="input-group-right">
@@ -79,7 +110,7 @@ export default function OrderPos(props){
                 <div className="content-wrapper mt-4">
                     <h6 className="section-title">Categories</h6>
                     <div className="categories-list">
-                        <Categories data={categoryData} onClick={handleCategory} />                      
+                        {/* <Categories data={categoryData} onClick={handleCategory} />                       */}
                         {/* get data from database */}
                     </div>
                     <div className="categories-btn-control">
@@ -110,7 +141,8 @@ export default function OrderPos(props){
                     </div>
                 </div>
 
-                <ProdListCard data={subCategoryFiltered.length > 0 ? subCategoryFiltered : subCategoryData} />
+                {/* <ProdListCard data={subCategoryFiltered.length > 0 ? subCategoryFiltered : subCategoryData} /> */}
+                <ProdListCard data={allProduct} />
                 <OrderCard />
             </section>
         </main>

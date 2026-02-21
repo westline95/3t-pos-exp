@@ -237,7 +237,7 @@ export default function OrderPaymentModal({show, onHide, data }) {
                                             <div className="product-wrap">
                                                 <p className="order-qty" style={{marginRight: "1rem"}}>{item.qty}</p>
                                                 <div className="order-prod-detail">
-                                                    <p className="order-product">{item.product}</p>
+                                                    <p className="order-product">{item.product_name}</p>
                                                     {item.variant != "" ?
                                                         (
                                                             <p className="order-desc">Variant: {item.variant}</p>

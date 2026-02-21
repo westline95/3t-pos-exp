@@ -6,10 +6,13 @@ import Button from "../Button";
 import cartSlice from "../../store/reducers/cart";
 
 export default function QtyButton(props) {
-    const { data, value, placeholder, name, min, max } = props;
+    const { data, value, placeholder, name, min, max, returnValue } = props;
     const [ inputValue, setInputValue ] = useState(value ? value : 0);
+    const [ maxAlert, setMaxAlert ] = useState(false);
     const [ delBtn, setDelBtn ] = useState(false);
     const dispatch = useDispatch();
+
+
 
     const minus = () => {
         if(inputValue > min) {
@@ -42,13 +45,17 @@ export default function QtyButton(props) {
                 }
             })
 
+            setMaxAlert(false);
+
             if(data) {
                 dispatch(cartSlice.actions.increment({
                     data: data,
                     stateValue: inputValue
                 }));
             } 
-        }    
+        } else {
+            setMaxAlert(true);
+        }
     };
 
     const onChangeInput = (e) => {
@@ -58,14 +65,17 @@ export default function QtyButton(props) {
         let newVal;
         
         if(isNumeric && +val <= max && +val >= min) {
+            setMaxAlert(false);
             e.target.name = name;
             e.target.value = +val;
             setInputValue(parseInt(+val));
             newVal = parseInt(+val);
         } else if (isNumeric && +val < min) {
+            setMaxAlert(false);
             newVal = min;
             setInputValue(min);
         } else {
+            setMaxAlert(true);
             newVal = min;
             setInputValue(min);
         }
@@ -97,6 +107,12 @@ export default function QtyButton(props) {
             },
         });
     },[value])
+
+    useEffect(() => {
+        if(returnValue){
+            return returnValue(Number(inputValue), maxAlert);
+        }
+    },[inputValue]);
 
     return(
         <div className="order-qty-btn">

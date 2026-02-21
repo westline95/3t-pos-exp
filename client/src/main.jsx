@@ -1,11 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App';
+import "./assets/css/login.css";
 import store from './store';
 import { Provider } from "react-redux";
 import { PrimeReactProvider } from 'primereact/api';
 import FemaleAvatar from "../../client/src/assets/images/Avatar 1.jpg"
 import MaleAvatar from "../../client/src/assets/images/Avatar 2.jpg"
+import { AuthProvider } from './context/AuthProvider';
 
 const value = {
   zIndex: {
@@ -22,11 +24,13 @@ const value = {
 ReactDOM.createRoot(document.getElementById('root')).render(
 
   
-  <React.StrictMode>
+  // <React.StrictMode>
+   <AuthProvider>
     <Provider store={store}>
       <PrimeReactProvider value={value}>
         <App />
       </PrimeReactProvider>
     </Provider>
-  </React.StrictMode>,
+   </AuthProvider>
+  // </React.StrictMode>,
 )
