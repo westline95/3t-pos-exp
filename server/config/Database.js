@@ -38,7 +38,7 @@ dotenv.config();
 const sequelize = new Sequelize({
     dialect: "postgres",
     username: "3t-pos",
-    password: "UuwrJ8TxhvN-_qJxLvRDqg",
+    password: "VrHjvpmP1x8ZOSUZxrgKPQ",
     host: "3t-pos-9761.8nk.gcp-asia-southeast1.cockroachlabs.cloud",
     port: 26257,
     database: "3t",
