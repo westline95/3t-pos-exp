@@ -5,7 +5,7 @@ import { Op, Sequelize } from "sequelize";
 const getAllSales = async (req, res) => {
     try{
         const allSales = await AllModel.OrdersModel.findAll({
-            order:  [['createdAt', 'ASC']],
+            order:  [['createdAt', 'DESC']],
             include: [
                 {
                     model: AllModel.CustomersModel,
@@ -53,6 +53,78 @@ const getAllSales = async (req, res) => {
         });
         if(allSales){
             res.json(allSales);
+        } else {
+            res.status(404).json({error: `get all sales not found!`});
+        }
+    } 
+    catch(err) {
+        res.status(500).json({err: err});
+    }
+}
+
+// controlling for lazy load and pagination
+const getAllSalesLazy = async (req, res) => {
+    const { offset, rowsPerPage } = req.query;
+    try{
+        const allSales = await AllModel.OrdersModel.findAndCountAll({
+            offset: offset,
+            limit: rowsPerPage,
+            order:  [['createdAt', 'DESC']],
+            include: [
+                {
+                    model: AllModel.CustomersModel,
+                    as: 'customer'
+                },
+                {
+                    model: AllModel.OrderItemsModel,
+                    as: 'order_items',
+                    required: true
+                },
+                {
+                    model: AllModel.InvoicesModel,
+                    as: 'invoice',
+                    include: [
+                       {
+                            model: AllModel.PaymentsModel,
+                            as: 'payments',
+                        }
+                    ]
+                },
+                {
+                    model: AllModel.DeliveryModel,
+                    as: 'delivery',
+                },
+                {
+                    model: AllModel.ROModel,
+                    as: 'return_order',
+                    include: [
+                        {
+                            model: AllModel.ROItemsModel,
+                            as: 'return_order_item',
+                        },
+                    ]
+                },
+                {
+                    model: AllModel.OrdersCreditModel,
+                    as: 'orders_credit',
+                    include: [
+                        {
+                            model: AllModel.ROModel,
+                        }
+                    ]
+                },
+            ],
+            distinct: true,
+        });
+        if(allSales){
+            // get count and rows
+            const count = allSales.count;
+            const rows = allSales.rows;
+            res.json({
+                totalData: count,
+                totalPage: Math.ceil(count / rowsPerPage),
+                rows: rows  
+            });
         } else {
             res.status(404).json({error: `get all sales not found!`});
         }
@@ -1374,6 +1446,7 @@ const getSalesAndSum = async(req, res) => {
 
 export default {
     getAllSales,
+    getAllSalesLazy,
     insertSales, 
     updateSales,
     insertMultipleSales, 

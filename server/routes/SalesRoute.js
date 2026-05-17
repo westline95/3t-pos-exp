@@ -4,6 +4,7 @@ import SalesController from "../controllers/SalesController.js";
 const SalesRoute = express.Router();
 
 SalesRoute.get("/sales", SalesController.getAllSales);
+SalesRoute.get("/sales/lazy-data", SalesController.getAllSalesLazy);
 SalesRoute.get("/sales/by", SalesController.getSalesByID);
 SalesRoute.get("/sales/member", SalesController.getSalesCust);
 SalesRoute.get("/sales/group", SalesController.countSalesByCust);
