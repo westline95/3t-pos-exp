@@ -65,7 +65,7 @@ const getAllSales = async (req, res) => {
 // controlling for lazy load and pagination
 const getAllSalesLazy = async (req, res) => {
     const { offset, rowsPerPage } = req.query;
-    try{
+    try {
         const allSales = await AllModel.OrdersModel.findAndCountAll({
             offset: offset,
             limit: rowsPerPage,
@@ -1147,11 +1147,24 @@ const forFilteredRO = async(req, res) => {
         res.status(500).json({err: "internal server error"});
     }
 }
-
+// lazy load sales by order status
 const getSalesByStatus = async(req, res) => {
+    const { offset, rowsPerPage, order_status } = req.query;
+    const orderStatusState = ['complete', 'canceled', 'pending'];
+
+    if(!orderStatusState.includes(order_status)){
+        res.status(500).json({err: "type of param must be one of these => complete, canceled or pending!"});
+    }
     try{
-        const getData = await AllModel.OrdersModel.findAll({
-            where: {is_complete: req.query.iscomplete},
+        const getData = await AllModel.OrdersModel.findAndCountAll({
+            offset: offset,
+            limit: rowsPerPage,
+              where: {
+                order_status:{
+                    [Op.eq]: order_status
+                }
+            },
+            order: [["createdAt", "DESC"]],
             include: [
                 {
                     model: AllModel.CustomersModel,
@@ -1160,18 +1173,25 @@ const getSalesByStatus = async(req, res) => {
                 {
                     model: AllModel.OrderItemsModel,
                     as: 'order_items',
-                    required: true
                 },
                 {
                     model: AllModel.DeliveryModel,
                     as: 'delivery',
-                    required: false
                 },
-            ]
+            ],
+            distinct: true,
         })
 
         if(getData){
-            res.json(getData);
+            // res.json(getData);
+            // get count and rows
+            const count = getData.count;
+            const rows = getData.rows;
+            res.json({
+                totalData: count,
+                totalPage: Math.ceil(count / rowsPerPage),
+                rows: rows  
+            });
         } else {
             res.status(404).json({error: `get customer data with ID not found!`});
         }

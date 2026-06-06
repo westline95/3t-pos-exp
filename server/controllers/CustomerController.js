@@ -42,6 +42,7 @@ const getCustomers = async (req, res) => {
     }
 }
 
+
 const getPureCustomers = async (req, res) => {
     try{
         const allCust = await AllModel.CustomersModel.findAll();
