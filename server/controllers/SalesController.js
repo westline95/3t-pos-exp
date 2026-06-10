@@ -67,8 +67,8 @@ const getAllSalesLazy = async (req, res) => {
     const clientTimezone = req.headers['x-client-timezone'] || 'Asia/Jakarta';
     const { first, rows, sortField, sortOrder, globalFilter } = req.query;
 
-    const offset = first;
-    const rowsPerPage = first + rows;
+    const offset = parseInt(first);
+    const rowsPerPage = offset + parseInt(rows);
 
     try {
         if(!globalFilter || globalFilter == '' || globalFilter == null || globalFilter == undefined){
@@ -148,10 +148,10 @@ const getAllSalesLazy = async (req, res) => {
                     ]
             }
             const allSales = await AllModel.OrdersModel.findAll({
-                subQuery:false,
-                distinct: true,
                 offset: offset,
                 limit: rowsPerPage,
+                subQuery:false,
+                distinct: true,
                 order:  [['createdAt', 'DESC']],
                 where: whereClause,
                 include: [
@@ -162,7 +162,8 @@ const getAllSalesLazy = async (req, res) => {
                     {
                         model: AllModel.OrderItemsModel,
                         as: 'order_items',
-                        required: true
+                        required: true,
+                        separate: true
                     },
                     {
                         model: AllModel.InvoicesModel,
@@ -172,7 +173,7 @@ const getAllSalesLazy = async (req, res) => {
                             model: AllModel.PaymentsModel,
                             as: 'payments',
                         }
-                        ]
+                        ],
                     },
                     {
                         model: AllModel.DeliveryModel,
@@ -186,7 +187,7 @@ const getAllSalesLazy = async (req, res) => {
                                 model: AllModel.ROItemsModel,
                                 as: 'return_order_item',
                             },
-                        ]
+                        ],
                     },
                     {
                         model: AllModel.OrdersCreditModel,
@@ -195,7 +196,7 @@ const getAllSalesLazy = async (req, res) => {
                             {
                                 model: AllModel.ROModel,
                             }
-                        ]
+                        ],
                     },
                 ],
             });
