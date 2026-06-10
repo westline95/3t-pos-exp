@@ -64,69 +64,164 @@ const getAllSales = async (req, res) => {
 
 // controlling for lazy load and pagination
 const getAllSalesLazy = async (req, res) => {
-    const { offset, rowsPerPage } = req.query;
+    const clientTimezone = req.headers['x-client-timezone'] || 'Asia/Jakarta';
+    const { first, rows, sortField, sortOrder, globalFilter } = req.query;
+
+    const offset = first;
+    const rowsPerPage = first + rows;
+
     try {
-        const allSales = await AllModel.OrdersModel.findAndCountAll({
-            offset: offset,
-            limit: rowsPerPage,
-            order:  [['createdAt', 'DESC']],
-            include: [
-                {
-                    model: AllModel.CustomersModel,
-                    as: 'customer'
-                },
-                {
-                    model: AllModel.OrderItemsModel,
-                    as: 'order_items',
-                    required: true
-                },
-                {
-                    model: AllModel.InvoicesModel,
-                    as: 'invoice',
-                    include: [
-                       {
+        if(!globalFilter || globalFilter == '' || globalFilter == null || globalFilter == undefined){
+            const allSales = await AllModel.OrdersModel.findAndCountAll({
+                offset: offset,
+                limit: rowsPerPage,
+                order:  [['createdAt', 'DESC']],
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                    {
+                        model: AllModel.OrderItemsModel,
+                        as: 'order_items',
+                        required: true
+                    },
+                    {
+                        model: AllModel.InvoicesModel,
+                        as: 'invoice',
+                        include: [
+                           {
+                                model: AllModel.PaymentsModel,
+                                as: 'payments',
+                            }
+                        ]
+                    },
+                    {
+                        model: AllModel.DeliveryModel,
+                        as: 'delivery',
+                    },
+                    {
+                        model: AllModel.ROModel,
+                        as: 'return_order',
+                        include: [
+                            {
+                                model: AllModel.ROItemsModel,
+                                as: 'return_order_item',
+                            },
+                        ]
+                    },
+                    {
+                        model: AllModel.OrdersCreditModel,
+                        as: 'orders_credit',
+                        include: [
+                            {
+                                model: AllModel.ROModel,
+                            }
+                        ]
+                    },
+                ],
+                distinct: true,
+            });
+            if(allSales){
+                // get count and rows
+                const count = allSales.count;
+                const rows = allSales.rows;
+                res.json({
+                    totalData: count,
+                    totalPage: Math.ceil(count / rowsPerPage),
+                    rows: rows  
+                });
+            } else {
+                res.status(404).json({error: `get all sales not found!`});
+            }
+
+        } else {
+            const whereClause = {
+                [Op.or]: [
+                        Sequelize.literal(`"customer"."name" ILIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`CAST("orders"."order_id" AS VARCHAR) LIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`TO_CHAR("orders"."order_date" AT TIME ZONE '${clientTimezone}', 'DD/MM/YYYY') LIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`"orders"."order_type" ILIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`"orders"."source" ILIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`"orders"."order_status" ILIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`"orders"."payment_type" ILIKE '%${globalFilter}%}'`)
+                    ]
+            }
+            const allSales = await AllModel.OrdersModel.findAll({
+                subQuery:false,
+                distinct: true,
+                offset: offset,
+                limit: rowsPerPage,
+                order:  [['createdAt', 'DESC']],
+                where: whereClause,
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer',
+                    },
+                    {
+                        model: AllModel.OrderItemsModel,
+                        as: 'order_items',
+                        required: true
+                    },
+                    {
+                        model: AllModel.InvoicesModel,
+                        as: 'invoice',
+                        include: [
+                        {
                             model: AllModel.PaymentsModel,
                             as: 'payments',
                         }
-                    ]
-                },
-                {
-                    model: AllModel.DeliveryModel,
-                    as: 'delivery',
-                },
-                {
-                    model: AllModel.ROModel,
-                    as: 'return_order',
-                    include: [
-                        {
-                            model: AllModel.ROItemsModel,
-                            as: 'return_order_item',
-                        },
-                    ]
-                },
-                {
-                    model: AllModel.OrdersCreditModel,
-                    as: 'orders_credit',
-                    include: [
-                        {
-                            model: AllModel.ROModel,
-                        }
-                    ]
-                },
-            ],
-            distinct: true,
-        });
-        if(allSales){
-            // get count and rows
-            const count = allSales.count;
-            const rows = allSales.rows;
-            res.json({
-                totalData: count,
-                totalPage: Math.ceil(count / rowsPerPage),
-                rows: rows  
+                        ]
+                    },
+                    {
+                        model: AllModel.DeliveryModel,
+                        as: 'delivery',
+                    },
+                    {
+                        model: AllModel.ROModel,
+                        as: 'return_order',
+                        include: [
+                            {
+                                model: AllModel.ROItemsModel,
+                                as: 'return_order_item',
+                            },
+                        ]
+                    },
+                    {
+                        model: AllModel.OrdersCreditModel,
+                        as: 'orders_credit',
+                        include: [
+                            {
+                                model: AllModel.ROModel,
+                            }
+                        ]
+                    },
+                ],
             });
-        } else {
-            res.status(404).json({error: `get all sales not found!`});
+
+            const countRows = await AllModel.OrdersModel.count({
+                distinct: true,
+                where: whereClause,
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                ],
+            })
+            if(allSales){
+                // get count and rows
+                const count = countRows;
+                const rows = allSales;
+                res.json({
+                    totalData: count,
+                    totalPage: Math.ceil(count / rowsPerPage),
+                    rows: rows  
+                });
+            } else {
+                res.status(404).json({error: `get all sales not found!`});
+            }
         }
     } 
     catch(err) {
