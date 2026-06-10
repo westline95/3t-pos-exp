@@ -1,6 +1,6 @@
 import sequelize from "../config/Database.js";
 import AllModel from "../models/AllModel.js";
-import { Sequelize } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 
 const getAllRO = async (req, res) => {
     try{
@@ -67,8 +67,191 @@ const getAllRO = async (req, res) => {
             res.status(404).json({error: `get all return order is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: err});
+    catch(error) {
+        res.status(500).json({err: error.message});
+    }
+}
+
+const getAllROLazyLoad = async (req, res) => {
+    const clientTimezone = req.headers['x-client-timezone'] || 'Asia/Jakarta';
+    const { first, rows, sortField, sortOrder, globalFilter } = req.query;
+
+    const offset = parseInt(first);
+    const rowsPerPage = offset + parseInt(rows);
+
+    try{
+        if(!globalFilter || globalFilter == '' || globalFilter == null || globalFilter == undefined){
+            const allRO = await AllModel.ROModel.findAndCountAll({
+                offset: offset,
+                limit: rowsPerPage,
+                distinct: true,
+                order:  [['return_date', 'DESC']],
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                    {
+                        model: AllModel.ROItemsModel,
+                        as: 'return_order_items',
+                        include: [
+                            {
+                                model: AllModel.OrderItemsModel,
+                                as: 'order_item',
+                                include: [
+                                    {
+                                        model: AllModel.ProductsCatalogModel,
+                                        as: 'product',
+                                    },
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        model: AllModel.OrdersModel,
+                        as: 'order',
+                        include: [
+                            {
+                                model: AllModel.OrderItemsModel,
+                                as: 'order_items',
+                                include: [
+                                    {
+                                        model: AllModel.ProductsCatalogModel,
+                                        as: 'product',
+                                    },
+                                    {
+                                        model: AllModel.ROItemsModel,
+                                        as: 'return_order_item',
+                                    }
+                                    
+                                ]
+                            },
+                            {
+                                model: AllModel.InvoicesModel,
+                                as: 'invoice',
+                                include: [
+                                    {
+                                        model: AllModel.PaymentsModel,
+                                        as: 'payments',
+                                    },
+                                ]
+                            }
+                        ]
+                    },
+                ],
+            });
+            
+            if(allRO){
+                const count = allRO.count;
+                const rows = allRO.rows;
+                res.json({
+                    totalData: count,
+                    totalPage: Math.ceil(count / rowsPerPage),
+                    rows: rows  
+                });
+            } else {
+                res.status(404).json({error: `get all return order is not found!`});
+            }
+        } else {
+            const whereClause = {
+                [Op.or]: [
+                        Sequelize.literal(`"customer"."name" ILIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`CAST("return_orders"."order_id" AS VARCHAR) LIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`CAST("return_orders"."return_order_id" AS VARCHAR) LIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`TO_CHAR("return_orders"."return_date" AT TIME ZONE '${clientTimezone}', 'DD/MM/YYYY') LIKE '%${globalFilter}%'`),
+                    ]
+            };
+
+            const allRO = await AllModel.ROModel.findAll({
+                offset: offset,
+                limit: rowsPerPage,
+                subQuery: false,
+                distinct: true,
+                order:  [['return_date', 'DESC']],
+                where: whereClause,
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                    {
+                        model: AllModel.ROItemsModel,
+                        as: 'return_order_items',
+                        separate: true,
+                        include: [
+                            {
+                                model: AllModel.OrderItemsModel,
+                                as: 'order_item',
+                                include: [
+                                    {
+                                        model: AllModel.ProductsCatalogModel,
+                                        as: 'product',
+                                    },
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        model: AllModel.OrdersModel,
+                        as: 'order',
+                        include: [
+                            {
+                                model: AllModel.OrderItemsModel,
+                                as: 'order_items',
+                                separate: true,
+                                include: [
+                                    {
+                                        model: AllModel.ProductsCatalogModel,
+                                        as: 'product',
+                                    },
+                                    {
+                                        model: AllModel.ROItemsModel,
+                                        as: 'return_order_item',
+                                    }
+                                    
+                                ]
+                            },
+                            {
+                                model: AllModel.InvoicesModel,
+                                as: 'invoice',
+                                include: [
+                                    {
+                                        model: AllModel.PaymentsModel,
+                                        as: 'payments',
+                                    },
+                                ]
+                            }
+                        ]
+                    },
+                ],
+            });
+
+            const countRows = await AllModel.ROModel.count({
+                distinct: true,
+                where: whereClause,
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                ],
+            })
+            if(allRO){
+                // get count and rows
+                const count = countRows;
+                const rows = allRO;
+                res.json({
+                    totalData: count,
+                    totalPage: Math.ceil(count / rowsPerPage),
+                    rows: rows  
+                });
+            } else {
+                res.status(404).json({error: `get all RO not found!`});
+            }
+        }
+    } 
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -108,9 +291,9 @@ const insertRO = async (req, res) => {
         await t.commit();
         res.status(201).json(newRO);
     } 
-    catch(err) {
+    catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -130,8 +313,8 @@ const updateRO = async (req, res) => {
 
         res.status(201).json(RO);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -210,8 +393,8 @@ const updateROStatus = async (req, res) => {
 
         res.status(201).json(RO);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -224,8 +407,8 @@ const deleteRO = async (req, res) => {
         }
         res.status(201).json(delRO);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -459,8 +642,8 @@ const getROByOrderID = async(req, res) => {
             res.status(404).json({error: `get return order data by order ID is not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -536,6 +719,7 @@ const getROByOrderID = async(req, res) => {
 
 export default {
     getAllRO,
+    getAllROLazyLoad,
     insertRO, 
     updateRO,
     updateROStatus, 

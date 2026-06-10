@@ -90,7 +90,7 @@ const getAllSalesLazy = async (req, res) => {
                         model: AllModel.InvoicesModel,
                         as: 'invoice',
                         include: [
-                           {
+                            {
                                 model: AllModel.PaymentsModel,
                                 as: 'payments',
                             }
@@ -1245,55 +1245,127 @@ const forFilteredRO = async(req, res) => {
 }
 // lazy load sales by order status
 const getSalesByStatus = async(req, res) => {
-    const { offset, rowsPerPage, order_status } = req.query;
-    const orderStatusState = ['complete', 'canceled', 'pending'];
+    const clientTimezone = req.headers['x-client-timezone'] || 'Asia/Jakarta';
+    const { first, rows, sortField, sortOrder, globalFilter, order_status } = req.query;
 
-    if(!orderStatusState.includes(order_status)){
-        res.status(500).json({err: "type of param must be one of these => complete, canceled or pending!"});
-    }
+    const offset = parseInt(first);
+    const rowsPerPage = offset + parseInt(rows);
+    const orderStatusState = ['complete', 'canceled', 'pending'];
+    
     try{
-        const getData = await AllModel.OrdersModel.findAndCountAll({
-            offset: offset,
-            limit: rowsPerPage,
-              where: {
+        if(!orderStatusState.includes(order_status)){
+            return res.status(500).json({err: "type of param must be one of these => complete, canceled or pending!"});
+        }
+
+        if(!globalFilter || globalFilter == '' || globalFilter == null || globalFilter == undefined){
+            const getData = await AllModel.OrdersModel.findAndCountAll({
+                offset: offset,
+                limit: rowsPerPage,
+                where: {
+                    order_status:{
+                        [Op.eq]: order_status
+                    }
+                },
+                order: [["createdAt", "DESC"]],
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                    {
+                        model: AllModel.OrderItemsModel,
+                        as: 'order_items',
+                    },
+                    {
+                        model: AllModel.DeliveryModel,
+                        as: 'delivery',
+                    },
+                ],
+                distinct: true,
+            })
+    
+            if(getData){
+                // res.json(getData);
+                // get count and rows
+                const count = getData.count;
+                const rows = getData.rows;
+                return res.json({
+                    totalData: count,
+                    totalPage: Math.ceil(count / rowsPerPage),
+                    rows: rows  
+                });
+            } else {
+                return res.status(404).json({error: `get customer data with ID not found!`});
+            }
+        } else {
+            const whereClause = {
                 order_status:{
                     [Op.eq]: order_status
-                }
-            },
-            order: [["createdAt", "DESC"]],
-            include: [
-                {
-                    model: AllModel.CustomersModel,
-                    as: 'customer'
                 },
-                {
-                    model: AllModel.OrderItemsModel,
-                    as: 'order_items',
-                },
-                {
-                    model: AllModel.DeliveryModel,
-                    as: 'delivery',
-                },
-            ],
-            distinct: true,
-        })
+                [Op.or]: [
+                    Sequelize.literal(`"customer"."name" ILIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`CAST("orders"."order_id" AS VARCHAR) LIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`TO_CHAR("orders"."order_date" AT TIME ZONE '${clientTimezone}', 'DD/MM/YYYY') LIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`"orders"."order_type" ILIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`"orders"."source" ILIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`"orders"."order_status" ILIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`"orders"."payment_type" ILIKE '%${globalFilter}%}'`)
+                ]
+            };
 
-        if(getData){
-            // res.json(getData);
-            // get count and rows
-            const count = getData.count;
-            const rows = getData.rows;
-            res.json({
-                totalData: count,
-                totalPage: Math.ceil(count / rowsPerPage),
-                rows: rows  
+            const getData = await AllModel.OrdersModel.findAll({
+                offset: offset,
+                limit: rowsPerPage,
+                subQuery:false,
+                distinct: true,
+                order:  [['createdAt', 'DESC']],
+                where: whereClause,
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer',
+                    },
+                    {
+                        model: AllModel.OrderItemsModel,
+                        as: 'order_items',
+                        required: true,
+                        separate: true
+                    },
+                    {
+                        model: AllModel.DeliveryModel,
+                        as: 'delivery',
+                    },
+                ],
             });
-        } else {
-            res.status(404).json({error: `get customer data with ID not found!`});
+
+            const countRows = await AllModel.OrdersModel.count({
+                distinct: true,
+                where: whereClause,
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                ],
+            });
+
+            if(getData){
+                // get count and rows
+                const count = countRows;
+                const rows = getData;
+                return res.json({
+                    totalData: count,
+                    totalPage: Math.ceil(count / rowsPerPage),
+                    rows: rows  
+                });
+            } else {
+                return res.status(404).json({error: `get all canceled sales not found!`});
+            }
         }
     }
+
     catch(err) {
-        res.status(500).json({err: "internal server error"});
+        res.status(500).json({err: err});
     }
 }
 
