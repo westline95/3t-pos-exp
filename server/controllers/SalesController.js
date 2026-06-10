@@ -57,7 +57,7 @@ const getAllSales = async (req, res) => {
             res.status(404).json({error: `get all sales not found!`});
         }
     } 
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 }
@@ -225,7 +225,7 @@ const getAllSalesLazy = async (req, res) => {
             }
         }
     } 
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 }
@@ -243,7 +243,7 @@ const validationDateSales = async (req, res) => {
 
         res.json(allSales);
     } 
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 }
@@ -284,10 +284,10 @@ const validationDateSales = async (req, res) => {
         
 //         res.status(201).json(newSales);
 //     } 
-//     catch(err) {
+//     catch(error) {
 //         console.log(err)
 
-//         res.status(500).json({err: "internal server error"});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -492,7 +492,7 @@ const insertSales = async (req, res) => {
             checkInv: checkInvBB
         });
     } 
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -510,8 +510,8 @@ const insertMultipleSales = async (req, res) => {
         });
         res.status(201).json(newSales);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -532,8 +532,8 @@ const updateSalesAddInv= async (req, res) => {
 
          res.json({ message: 'Update sales => invoice id column.', sales });
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -552,8 +552,8 @@ const updateSalesReceipt = async (req, res) => {
 
         res.status(201).json(sales);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -572,8 +572,8 @@ const updateSalesAddInvoices = async (req, res) => {
 
         res.json({ message: 'Update sales => invoice id column.', sales });
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -624,8 +624,8 @@ const updateSales= async (req, res) => {
             res.status(201).json(sales);
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -676,8 +676,8 @@ const updateSalesMayor= async (req, res) => {
             res.status(201).json(sales);
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -706,8 +706,8 @@ const updateOrderStatus = async (req, res) => {
 
         res.status(201).json(sales);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -729,8 +729,8 @@ const updateRO = async (req, res) => {
         await order.save();
 
         res.status(201).json(order);
-    } catch(err) {
-        res.status(500).json({err: "internal server error"});
+    } catch(error) {
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -898,7 +898,7 @@ const deleteSales = async (req, res) => {
         await t.commit();
         res.status(201).json(getSales);
     } 
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -925,8 +925,8 @@ const countSalesByCust = async (req, res) => {
             res.status(404).json({error: `sales data by custID is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -949,8 +949,8 @@ const salesByCustUnpaid = async (req, res) => {
             res.status(404).json({error: `sales data by cust unpaid is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -996,8 +996,8 @@ const salesByOneCustPayType = async (req, res) => {
             });
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1029,8 +1029,8 @@ const salesByOneCustPayType2 = async (req, res) => {
             });
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1073,8 +1073,8 @@ const getSalesCust = async(req, res) => {
             res.status(404).json({error: `get customer data with ID not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1123,8 +1123,8 @@ const checkNextCustSales = async(req, res) => {
             res.status(404).json({error: `get customer data with ID not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1186,8 +1186,8 @@ const getSalesCustNotCanceled = async(req, res) => {
             res.status(404).json({error: `get customer data with ID and order status not canceled not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1239,8 +1239,8 @@ const forFilteredRO = async(req, res) => {
             res.status(404).json({error: `get customer data with ID and order status not canceled not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 // lazy load sales by order status
@@ -1364,7 +1364,7 @@ const getSalesByStatus = async(req, res) => {
         }
     }
 
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 }
@@ -1398,8 +1398,8 @@ const getSalesByID = async(req, res) => {
             res.status(404).json({error: `get sales data with ID not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1500,8 +1500,8 @@ const salesWOrderItems = async (req, res) => {
             res.status(404).json({error: `sales data with order items is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1599,8 +1599,8 @@ const salesByReceipt = async (req, res) => {
             res.status(404).json({error: `sales data with order items is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1626,8 +1626,8 @@ const getSalesAndSum = async(req, res) => {
             res.status(404).json({error: `get sales data with sum not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 

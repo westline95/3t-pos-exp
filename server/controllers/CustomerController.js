@@ -37,8 +37,8 @@ const getCustomers = async (req, res) => {
             res.status(404).json({error: `get all customer not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -53,8 +53,8 @@ const getPureCustomers = async (req, res) => {
             res.status(404).json({error: `get all customer not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: err});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -105,8 +105,8 @@ const getCustomersUnpaidInv = async (req, res) => {
             res.status(404).json({error: `get all customer not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -123,8 +123,8 @@ const insertCustomers = async (req, res) => {
             res.status(404).json({error: `failed to insert customer`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -138,8 +138,8 @@ const insertMultipleCustomer = async (req, res) => {
             res.status(404).json({error: `failed to multiple insert customer`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -156,8 +156,8 @@ const updateCust= async (req, res) => {
             res.status(404).json({error: `failed to update customer`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -176,8 +176,8 @@ const updateCreditCust= async (req, res) => {
 
         res.json({ message: 'credit added.', cust });
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -199,8 +199,8 @@ const updateOrderValue= async (req, res) => {
 
         res.json(cust);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -218,8 +218,8 @@ const updateDebt = async (req, res) => {
 
         res.json(cust);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -238,8 +238,8 @@ const updateSalesDebt = async (req, res) => {
 
         res.json(cust);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -255,8 +255,8 @@ const deleteCust = async (req, res) => {
             res.status(404).json({error: `failed to delete customer`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -279,8 +279,8 @@ const countCustByName = async (req, res) => {
             res.status(404).json({error: `cust with ? not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -300,8 +300,8 @@ const getDebtData = async(req, res) => {
             res.status(404).json({error: `get customer debt data not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -317,8 +317,8 @@ const getCustomerByID = async(req, res) => {
             res.status(404).json({error: `get customer data with ID not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -360,7 +360,7 @@ const getDetailedSales = async(req, res) => {
             res.status(404).json({error: `get all total customer not found!`});
         }
     }
-     catch(err) {
+     catch(error) {
         res.status(500).json({err: err});
     }
 }
@@ -620,7 +620,7 @@ const getDetailedCust = async(req, res) => {
 
         res.json({sales: sales, debt: debt});
     }
-     catch(err) {
+     catch(error) {
         res.status(500).json({err: err});
     }
 }

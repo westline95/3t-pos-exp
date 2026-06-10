@@ -63,8 +63,8 @@ const handleLogin = async (req, res) => {
             })
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 };
 

@@ -23,7 +23,7 @@ const insertSalarySett = async(req, res) => {
         await t.commit();
         res.status(201).json(newSalarySett);
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -38,7 +38,7 @@ const getCurrentSalarySettByEmployee = async(req, res) => {
 
         res.status(201).json(checkEmployeeBaseSalary);
     }
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 };
@@ -63,7 +63,7 @@ const updateSalarySett = async(req, res) => {
         await t.commit();
         res.status(201).json(updateSalarySett);
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -88,7 +88,7 @@ const updateMinorSalarySett = async(req, res) => {
         await t.commit();
         res.status(201).json(updateSalarySett);
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -112,7 +112,7 @@ const deleteSalarySetting = async(req, res) => {
         await t.commit();
         res.status(201).json({message: "success"});
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }

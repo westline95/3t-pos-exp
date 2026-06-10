@@ -28,8 +28,8 @@ const getAllInv = async (req, res) => {
             res.status(404).json({error: `get all invoices not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -52,8 +52,8 @@ const getAllInv = async (req, res) => {
 //             res.status(404).json({error: `failed to insert invoice!`});
 //         }
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 const insertInv = async (req, res) => {
@@ -115,7 +115,7 @@ const insertInv = async (req, res) => {
         await t.commit();
         res.status(201).json(newInv);
     } 
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -131,8 +131,8 @@ const insertMultipleInv = async (req, res) => {
             res.status(404).json({error: `failed to insert multiple invoice`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -155,8 +155,8 @@ const updateInv = async (req, res) => {
             res.status(404).json({error: `failed to update invoice`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -172,8 +172,8 @@ const deleteInv = async (req, res) => {
             res.status(404).json({error: `failed to delete invoice`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -196,8 +196,8 @@ const countInvByCust = async (req, res) => {
             res.status(404).json({error: `invoice with cust id not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -220,8 +220,8 @@ const getInvByStatus = async(req, res) => {
             res.status(404).json({error: `get invoice data by paid status!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -249,8 +249,8 @@ const getInvByID = async(req, res) => {
             res.status(404).json({error: `get invoice data with ID not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -290,7 +290,7 @@ const getInvByStatusCustId = async(req, res) => {
             res.status(404).json({error: `get invoice data with status and cust id is not found!`});
         }
     }
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 };

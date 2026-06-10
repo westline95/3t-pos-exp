@@ -9,8 +9,8 @@ const getCategories = async (req, res) => {
             res.status(404).json({error: `get all category not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -26,8 +26,8 @@ const insertCategory = async (req, res) => {
             res.status(404).json({error: `failed to insert category`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -41,8 +41,8 @@ const insertMultipleCategory = async (req, res) => {
             res.status(404).json({error: `failed to multiple insert category!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -59,8 +59,8 @@ const updateCategory = async (req, res) => {
             res.status(404).json({error: `failed to update category`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -76,8 +76,8 @@ const deleteCategory = async (req, res) => {
             res.status(404).json({error: `failed to delete category`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 

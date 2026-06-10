@@ -10,7 +10,7 @@ const getCustType = async (req, res) => {
             res.status(404).json({error: `get all customer type not found!`});
         }
     } catch (err) {
-        res.status(500).json({err: "internal server error"})
+        res.status(500).json({err: error.message})
     }
 }
 
@@ -26,7 +26,7 @@ const getCustTypeByID = async(req, res) => {
             res.status(404).json({error: `get customer type with ID not found!`});
         }
     } catch (err) {
-        res.status(500).json({err: "internal server error"});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -41,7 +41,7 @@ const insertCustType = async(req, res) => {
         }
         
     } catch (err) {
-        res.status(500).json({err: "internal server error"});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -59,7 +59,7 @@ const updateCustType = async(req, res) => {
         }
         
     } catch (err) {
-        res.status(500).json({err: "internal server error"});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -73,7 +73,7 @@ const deleteCustType = async(req, res) => {
             res.status(404).json({error: `failed to delete cust type`});
         }
     } catch (err) {
-        res.status(500).json({err: "internal server error"});
+        res.status(500).json({err: error.message});
     }
 }
 

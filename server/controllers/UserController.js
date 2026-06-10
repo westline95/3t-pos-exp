@@ -9,8 +9,8 @@ const getUsers = async (req, res) => {
             res.status(404).json({error: `get all user not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -26,8 +26,8 @@ const getUserCourierRole = async (req, res) => {
             res.status(404).json({error: `get all user:courier not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -49,7 +49,7 @@ const insertUser = async (req, res) => {
             res.status(404).json({error: `failed to register user`});
         }
     } 
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 }
@@ -67,8 +67,8 @@ const updateUser = async (req, res) => {
             res.status(404).json({error: `failed to update user`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -84,8 +84,8 @@ const deleteUser = async (req, res) => {
             res.status(404).json({error: `failed to delete user`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 

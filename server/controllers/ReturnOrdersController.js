@@ -359,7 +359,7 @@ const updateRO = async (req, res) => {
 //         res.status(201).json({ message: 'Successfully update full return order', RO});
 
 //     } 
-//     catch(err) {
+//     catch(error) {
 //         res.status(500).json({err: err});
 //     }
 // };
@@ -433,8 +433,8 @@ const deleteRO = async (req, res) => {
 //             res.status(404).json({error: `sales data by custID is not found!`});
 //         }
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -457,8 +457,8 @@ const deleteRO = async (req, res) => {
 //             res.status(404).json({error: `sales data by cust unpaid is not found!`});
 //         }
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -488,8 +488,8 @@ const deleteRO = async (req, res) => {
 //             });
 //         }
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -521,8 +521,8 @@ const deleteRO = async (req, res) => {
 //             });
 //         }
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -555,8 +555,8 @@ const deleteRO = async (req, res) => {
 //             res.status(404).json({error: `get customer data with ID not found!`});
 //         }
 //     }
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -588,8 +588,8 @@ const deleteRO = async (req, res) => {
 //             res.status(404).json({error: `get customer data with ID not found!`});
 //         }
 //     }
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -684,8 +684,8 @@ const getROByOrderID = async(req, res) => {
 //             res.status(404).json({error: `sales data with order items is not found!`});
 //         }
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -711,8 +711,8 @@ const getROByOrderID = async(req, res) => {
 //             res.status(404).json({error: `get sales data with sum not found!`});
 //         }
 //     }
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 

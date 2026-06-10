@@ -13,7 +13,7 @@ const insertDepartment = async(req, res) => {
         await t.commit();
         res.status(201).json(newDepartment);
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -25,7 +25,7 @@ const getAllDepartment = async(req, res) => {
 
         res.status(201).json(allDepartment);
     }
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 };
@@ -51,7 +51,7 @@ const updateDepartment = async(req, res) => {
         await t.commit();
         res.status(201).json(updatedDepartment)
     }
-    catch(err){
+    catch(error){
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -77,7 +77,7 @@ const updateMinorDepartment = async(req, res) => {
         await t.commit();
         res.status(201).json(updatedDepartment)
     }
-    catch(err){
+    catch(error){
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -100,7 +100,7 @@ const deleteDepartment = async(req, res) => {
         await t.commit();
         res.status(201).json(deletedDepartment);
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -131,7 +131,7 @@ const insertDepartmentHistory = async(req, res) => {
         await t.commit();
         res.status(201).json(newDH);
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -143,7 +143,7 @@ const getAllDepartmentHistory = async(req, res) => {
 
         res.status(201).json(allDH);
     }
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 };
@@ -159,7 +159,7 @@ const getDHByEmployee = async(req, res) => {
 
         res.status(201).json(allDH);
     }
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 };
@@ -185,7 +185,7 @@ const updateDepartmentHistory = async(req, res) => {
         await t.commit();
         res.status(201).json(updatedDH)
     }
-    catch(err){
+    catch(error){
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -213,7 +213,7 @@ const updateMinorDH = async(req, res) => {
         await t.commit();
         res.status(201).json(insertNewOneDH)
     }
-    catch(err){
+    catch(error){
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -236,7 +236,7 @@ const deleteDepartmentHistory = async(req, res) => {
         await t.commit();
         res.status(201).json(deletedDH);
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }

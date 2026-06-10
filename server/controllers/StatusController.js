@@ -10,8 +10,8 @@ const getAllStatus = async (req, res) => {
         }
         // console.log(res.status)
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -27,8 +27,8 @@ const getStatusByID = async(req, res) => {
             res.status(404).json({error: `get status data with ID not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 

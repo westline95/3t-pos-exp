@@ -29,8 +29,8 @@ const getAllPayment = async (req, res) => {
             res.status(404).json({error: `get all payment is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -112,7 +112,7 @@ const insertPayment = async (req, res) => {
             res.status(201).json({data: {payment, invoice}});
         }
     } 
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err.message});
     }
@@ -123,8 +123,8 @@ const insertPayment = async (req, res) => {
 //         const newSales = await SalesModel.bulkCreate(req.body);
 //         res.status(201).json(newSales);
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -151,8 +151,8 @@ const insertPayment = async (req, res) => {
 //             res.status(404).json({error: `failed  to update payment!`});
 //         }
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -254,7 +254,7 @@ const updatePayment = async (req, res) => {
             res.status(201).json({data: {payment, invoice}});
         }
     } 
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err.message});
     }
@@ -283,8 +283,8 @@ const minorUpdatePayment= async (req, res) => {
             res.status(404).json({error: `failed  to update payment!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -298,8 +298,8 @@ const minorUpdatePayment= async (req, res) => {
 //             res.status(404).json({error: `failed to delete payment!`});
 //         }
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -370,7 +370,7 @@ const deletePayment = async (req, res) => {
         await t.commit();
         res.status(201).json({data: {invoice}});
     } 
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err.message});
     }
@@ -403,8 +403,8 @@ const deletePayment = async (req, res) => {
 //             res.status(404).json({error: `sales data by custID is not found!`});
 //         }
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -424,8 +424,8 @@ const deletePayment = async (req, res) => {
 //             res.status(404).json({error: `get customer debt data not found!`});
 //         }
 //     }
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -451,8 +451,8 @@ const getPaymentByInvId = async(req, res) => {
             res.status(404).json({error: `get payment by invoice id is not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -473,8 +473,8 @@ const getPaymentByCustId = async(req, res) => {
 
         res.json(getData);
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -490,8 +490,8 @@ const getPaymentByCustId = async(req, res) => {
 //             res.status(404).json({error: `get customer data with ID not found!`});
 //         }
 //     }
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -517,8 +517,8 @@ const getPaymentByID = async(req, res) => {
             res.status(404).json({error: `get payment data with ID is not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 

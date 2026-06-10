@@ -22,7 +22,7 @@ const insertEmployee = async(req, res) => {
         await t.commit();
         res.status(201).json({employee: employeeData, department_history: dh});
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -64,7 +64,7 @@ const insertEmployeeAcc = async(req, res) => {
         await t.commit();
         res.status(201).json({message: 'user created'});
     } 
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -102,7 +102,7 @@ const getAllEmployees = async(req, res) => {
        });
        res.status(201).json(employees);
     }
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 };
@@ -140,7 +140,7 @@ const getAllEmployeesByActive = async(req, res) => {
        });
        res.status(201).json(employees);
     }
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 };
@@ -175,7 +175,7 @@ const getEmployee = async(req, res) => {
         });
        res.status(201).json(employees);
     }
-    catch(err) {
+    catch(error) {
         res.status(500).json({err: err});
     }
 };
@@ -227,7 +227,7 @@ const updateEmployee = async(req, res) => {
         await t.commit();
         res.status(201).json({employee: employeeData, department_history: dh});
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -273,7 +273,7 @@ const updateMinorEmployee = async(req, res) => {
         await t.commit();
         res.status(201).json(employeeData);
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -298,7 +298,7 @@ const deleteEmployee = async(req, res) => {
         await t.commit();
         res.status(201).json(deletedEmployee);
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
         res.status(500).json({err: err});
     }

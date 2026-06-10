@@ -77,7 +77,7 @@ const setDeliveryGroup = async(req, res) => {
         await t.commit();
         res.status(201).json({delivery_group: newDG, delivery_group_items: newDGItems, message: "delivery group created"});
     }
-    catch(err){
+    catch(error){
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -196,7 +196,7 @@ const getAllDeliveryGroup = async(req, res) => {
 
         res.status(201).json(formatted);
     }
-    catch(err){
+    catch(error){
         res.status(500).json({err: err});
     }
 }
@@ -306,7 +306,7 @@ const getDeliveryGroupByID = async(req, res) => {
 
         res.status(201).json(formatted);
     }
-    catch(err){
+    catch(error){
         res.status(500).json({err: err});
     }
 }
@@ -409,7 +409,7 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
 
         res.status(201).json(formatted);
     }
-    catch(err){
+    catch(error){
         res.status(500).json({err: err});
     }
 }
@@ -518,7 +518,7 @@ const getDeliveryLogActiveByEmployee = async(req, res) => {
 
         res.status(201).json(formatted);
     }
-    catch(err){
+    catch(error){
         res.status(500).json({err: err});
     }
 }
@@ -714,7 +714,7 @@ const getDeliveryGroupByID4Employee = async(req, res) => {
 
         res.status(201).json(formatted);
     }
-    catch(err){
+    catch(error){
         res.status(500).json({err: err});
     }
 }
@@ -912,7 +912,7 @@ const getDeliveryGroupByID4Admin = async(req, res) => {
 
         res.status(201).json(formatted);
     }
-    catch(err){
+    catch(error){
         res.status(500).json({err: err});
     }
 }
@@ -972,7 +972,7 @@ const editDeliveryGroup = async(req, res) => {
         await t.commit();
         res.status(201).json({ message: "update success", delivery_group: dg});
     }
-    catch(err){
+    catch(error){
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -1026,7 +1026,7 @@ const editDeliveryGroupList = async(req, res) => {
         await t.commit();
         res.status(201).json({ message: "update success", delivery_group: dg, delivery_group_items: getDGItems});
     }
-    catch(err){
+    catch(error){
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -1072,7 +1072,7 @@ const addMoreItemDeliveryGroup = async(req, res) => {
         await t.commit();
         return res.status(201).json({ message: "update success", delivery_group: dg[1], delivery_group_items: dGItems});
     }
-    catch(err){
+    catch(error){
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -1176,7 +1176,7 @@ const deleteDeliveryGroup = async(req, res) => {
         await t.commit();
         return res.status(201).json({message: "delete success"});
     }
-    catch(err){
+    catch(error){
         await t.rollback();
         res.status(500).json({err: err});
     }
@@ -1198,7 +1198,7 @@ const updateStatusDeliveryGroup = async(req, res) => {
         await t.commit();
         return res.status(201).json({message: "cancel success"});
     }
-    catch(err){
+    catch(error){
         await t.rollback();
         res.status(500).json({err: err});
     }

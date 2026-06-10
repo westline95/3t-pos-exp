@@ -63,8 +63,8 @@ const assignCourier = async (req, res) => {
 
         res.json({ message: 'courir assigned, tracking number created.', delivery });
 
-    } catch(err) {
-        res.status(500).json({err: "internal server error"});
+    } catch(error) {
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -87,8 +87,8 @@ const updateStatusDelivery = async (req, res) => {
         await delivery.save();
 
         res.json({ message: 'delivery status updated.', delivery });
-    } catch(err) {
-        res.status(500).json({err: "internal server error"});
+    } catch(error) {
+        res.status(500).json({err: error.message});
     }
 };
 
