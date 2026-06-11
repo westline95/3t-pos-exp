@@ -38,7 +38,7 @@ const getCustomers = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -54,7 +54,7 @@ const getPureCustomers = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -106,7 +106,7 @@ const getCustomersUnpaidInv = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -124,7 +124,7 @@ const insertCustomers = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -139,7 +139,7 @@ const insertMultipleCustomer = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -157,7 +157,7 @@ const updateCust= async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -177,7 +177,7 @@ const updateCreditCust= async (req, res) => {
         res.json({ message: 'credit added.', cust });
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -200,7 +200,7 @@ const updateOrderValue= async (req, res) => {
         res.json(cust);
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -219,7 +219,7 @@ const updateDebt = async (req, res) => {
         res.json(cust);
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -239,7 +239,7 @@ const updateSalesDebt = async (req, res) => {
         res.json(cust);
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -256,7 +256,7 @@ const deleteCust = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -280,7 +280,7 @@ const countCustByName = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -301,7 +301,7 @@ const getDebtData = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -318,7 +318,7 @@ const getCustomerByID = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -361,7 +361,7 @@ const getDetailedSales = async(req, res) => {
         }
     }
      catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -621,7 +621,7 @@ const getDetailedCust = async(req, res) => {
         res.json({sales: sales, debt: debt});
     }
      catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 

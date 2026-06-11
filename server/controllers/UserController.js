@@ -10,7 +10,7 @@ const getUsers = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -27,7 +27,7 @@ const getUserCourierRole = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -50,7 +50,7 @@ const insertUser = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -68,7 +68,7 @@ const updateUser = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -85,7 +85,7 @@ const deleteUser = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 

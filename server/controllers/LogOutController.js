@@ -25,7 +25,7 @@ const handleLogout = async (req, res) => {
         res.sendStatus(204);
     }
     catch(error){
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
  

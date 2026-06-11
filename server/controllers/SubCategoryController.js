@@ -10,7 +10,7 @@ const getSubCategory = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -24,7 +24,7 @@ const getSubCategorybyCategory = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -42,7 +42,7 @@ const insertSubCategory = async (req, res) => {
         
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -56,7 +56,7 @@ const insertMultipleSubCategory = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -74,7 +74,7 @@ const updateSubCategory = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -89,7 +89,7 @@ const deleteSubCategory = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 

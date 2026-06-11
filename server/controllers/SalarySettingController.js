@@ -25,7 +25,7 @@ const insertSalarySett = async(req, res) => {
     }
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -39,7 +39,7 @@ const getCurrentSalarySettByEmployee = async(req, res) => {
         res.status(201).json(checkEmployeeBaseSalary);
     }
     catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -65,7 +65,7 @@ const updateSalarySett = async(req, res) => {
     }
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -90,7 +90,7 @@ const updateMinorSalarySett = async(req, res) => {
     }
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -114,7 +114,7 @@ const deleteSalarySetting = async(req, res) => {
     }
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 

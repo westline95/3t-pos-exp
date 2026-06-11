@@ -34,7 +34,7 @@ const insertSalaryAdj = async(req, res) => {
     }
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -67,7 +67,7 @@ const getSalaryByPeriod = async(req, res) => {
         res.status(201).json(currSalary);
     }
     catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -93,7 +93,7 @@ const getSalaryByPeriod = async(req, res) => {
 //     }
 //     catch(error) {
 //         await t.rollback();
-//         res.status(500).json({err: err});
+//         res.status(500).json({err: error.message});
 //     }
 // };
 
@@ -118,7 +118,7 @@ const getSalaryByPeriod = async(req, res) => {
 //     }
 //     catch(error) {
 //         await t.rollback();
-//         res.status(500).json({err: err});
+//         res.status(500).json({err: error.message});
 //     }
 // };
 
@@ -142,7 +142,7 @@ const getSalaryByPeriod = async(req, res) => {
 //     }
 //     catch(error) {
 //         await t.rollback();
-//         res.status(500).json({err: err});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 

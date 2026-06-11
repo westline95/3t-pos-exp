@@ -19,7 +19,7 @@ const getProducts = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -41,7 +41,7 @@ const getProductsByCategory = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -79,7 +79,7 @@ const insertMultipleProducts = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -104,7 +104,7 @@ const updateProduct = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -127,7 +127,7 @@ const getProductID = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -142,7 +142,7 @@ const deleteProduct = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -166,7 +166,7 @@ const countProductByName = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 const groupProductforPOS = async (req, res) => {
@@ -187,7 +187,7 @@ const groupProductforPOS = async (req, res) => {
     //     } 
     // } 
     // catch(error) {
-    //     res.status(500).json({err: err});
+    //     res.status(500).json({err: error.message});
     // }
 
     try{
@@ -214,7 +214,7 @@ const groupProductforPOS = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 

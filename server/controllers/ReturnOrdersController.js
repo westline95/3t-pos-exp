@@ -68,7 +68,7 @@ const getAllRO = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -251,7 +251,7 @@ const getAllROLazyLoad = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -293,7 +293,7 @@ const insertRO = async (req, res) => {
     } 
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -314,7 +314,7 @@ const updateRO = async (req, res) => {
         res.status(201).json(RO);
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -360,7 +360,7 @@ const updateRO = async (req, res) => {
 
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: err});
+//         res.status(500).json({err: error.message});
 //     }
 // };
 
@@ -394,7 +394,7 @@ const updateROStatus = async (req, res) => {
         res.status(201).json(RO);
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -408,7 +408,7 @@ const deleteRO = async (req, res) => {
         res.status(201).json(delRO);
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -434,7 +434,7 @@ const deleteRO = async (req, res) => {
 //         }
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.message});
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -458,7 +458,7 @@ const deleteRO = async (req, res) => {
 //         }
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.message});
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -489,7 +489,7 @@ const deleteRO = async (req, res) => {
 //         }
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.message});
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -522,7 +522,7 @@ const deleteRO = async (req, res) => {
 //         }
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.message});
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -556,7 +556,7 @@ const deleteRO = async (req, res) => {
 //         }
 //     }
 //     catch(error) {
-//         res.status(500).json({err: error.message});
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -589,7 +589,7 @@ const deleteRO = async (req, res) => {
 //         }
 //     }
 //     catch(error) {
-//         res.status(500).json({err: error.message});
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -643,7 +643,7 @@ const getROByOrderID = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -685,7 +685,7 @@ const getROByOrderID = async(req, res) => {
 //         }
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.message});
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -712,7 +712,7 @@ const getROByOrderID = async(req, res) => {
 //         }
 //     }
 //     catch(error) {
-//         res.status(500).json({err: error.message});
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 

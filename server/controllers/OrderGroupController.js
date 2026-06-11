@@ -25,7 +25,7 @@ const getAllOrdersGroup = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -57,7 +57,7 @@ const insertSales = async (req, res) => {
     catch(error) {
         console.log(err)
 
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -74,7 +74,7 @@ const insertMultipleSales = async (req, res) => {
         res.status(201).json(newSales);
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -96,7 +96,7 @@ const updateSalesAddInv= async (req, res) => {
          res.json({ message: 'Update sales => invoice id column.', sales });
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -116,7 +116,7 @@ const updateSalesAddInvoices = async (req, res) => {
         res.json({ message: 'Update sales => invoice id column.', sales });
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -168,7 +168,7 @@ const updateSales= async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -194,7 +194,7 @@ const updateOrderStatus = async (req, res) => {
         res.status(201).json(sales);
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -205,7 +205,7 @@ const deleteSales = async (req, res) => {
         res.status(201).json(delSales);
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -231,7 +231,7 @@ const countSalesByCust = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -255,7 +255,7 @@ const salesByCustUnpaid = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -286,7 +286,7 @@ const salesByOneCustPayType = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -319,7 +319,7 @@ const salesByOneCustPayType2 = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -353,7 +353,7 @@ const getSalesCust = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -386,7 +386,7 @@ const getSalesByStatus = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -420,7 +420,7 @@ const getSalesByID = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -461,7 +461,7 @@ const salesWOrderItems = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -488,7 +488,7 @@ const getSalesAndSum = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 

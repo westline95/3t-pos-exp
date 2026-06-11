@@ -29,7 +29,7 @@ const getAllInv = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -53,7 +53,7 @@ const getAllInv = async (req, res) => {
 //         }
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.message});
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 const insertInv = async (req, res) => {
@@ -117,7 +117,7 @@ const insertInv = async (req, res) => {
     } 
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -132,7 +132,7 @@ const insertMultipleInv = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -156,7 +156,7 @@ const updateInv = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -173,7 +173,7 @@ const deleteInv = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -197,7 +197,7 @@ const countInvByCust = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -221,7 +221,7 @@ const getInvByStatus = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -250,7 +250,7 @@ const getInvByID = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -291,7 +291,7 @@ const getInvByStatusCustId = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 

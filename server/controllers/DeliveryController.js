@@ -37,7 +37,7 @@ const createDelivery = async (req, res) => {
             res.status(404).json({error: `failed to create delivery`});
         }
     } catch (err) {
-        res.status(500).json({err: err})
+        res.status(500).json({err: error.message})
     }
 };
 
@@ -64,7 +64,7 @@ const assignCourier = async (req, res) => {
         res.json({ message: 'courir assigned, tracking number created.', delivery });
 
     } catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -88,7 +88,7 @@ const updateStatusDelivery = async (req, res) => {
 
         res.json({ message: 'delivery status updated.', delivery });
     } catch(error) {
-        res.status(500).json({err: error.message});
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -115,7 +115,7 @@ const getAllDelivery = async (req, res) => {
             res.status(404).json({error: `failed to get all delivery`});
         }
     } catch (err) {
-        res.status(500).json({err: err})
+        res.status(500).json({err: error.message})
     }
 };
 

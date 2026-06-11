@@ -24,7 +24,7 @@ const insertEmployee = async(req, res) => {
     }
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -66,7 +66,7 @@ const insertEmployeeAcc = async(req, res) => {
     } 
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -103,7 +103,7 @@ const getAllEmployees = async(req, res) => {
        res.status(201).json(employees);
     }
     catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -141,7 +141,7 @@ const getAllEmployeesByActive = async(req, res) => {
        res.status(201).json(employees);
     }
     catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -176,7 +176,7 @@ const getEmployee = async(req, res) => {
        res.status(201).json(employees);
     }
     catch(error) {
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -229,7 +229,7 @@ const updateEmployee = async(req, res) => {
     }
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -275,7 +275,7 @@ const updateMinorEmployee = async(req, res) => {
     }
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -300,7 +300,7 @@ const deleteEmployee = async(req, res) => {
     }
     catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 

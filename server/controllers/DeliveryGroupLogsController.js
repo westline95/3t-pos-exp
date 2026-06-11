@@ -31,7 +31,7 @@ const addDeliveryGroupLog = async(req, res) => {
     }
     catch(error){
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -104,7 +104,7 @@ const UpdateDeliveryGroupLog = async(req, res) => {
         res.status(201).json({dg_logs: updateLog, dg_log_items: updateLogItem, message: "log was updated successfully"});
     } catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -148,7 +148,7 @@ const getAllDeliveryGroup = async(req, res) => {
         res.status(201).json(allDG);
     }
     catch(error){
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -192,7 +192,7 @@ const getDeliveryGroupByID = async(req, res) => {
         res.status(201).json(allDG);
     }
     catch(error){
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -242,7 +242,7 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
         res.status(201).json(allDG);
     }
     catch(error){
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -280,7 +280,7 @@ const editDeliveryGroup = async(req, res) => {
     }
     catch(error){
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -312,7 +312,7 @@ const deleteDeliveryGroup = async(req, res) => {
     }
     catch(error){
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -333,7 +333,7 @@ const cancelDeliveryGroup = async(req, res) => {
     }
     catch(error){
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
