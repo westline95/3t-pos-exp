@@ -32,8 +32,8 @@ const getAllReceipt = async (req, res) => {
             res.status(404).json({error: `get all receipt is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -58,8 +58,8 @@ const insertReceipt = async (req, res) => {
             res.status(404).json({error: `failed to insert receipt!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -68,8 +68,8 @@ const insertReceipt = async (req, res) => {
 //         const newSales = await SalesModel.bulkCreate(req.body);
 //         res.status(201).json(newSales);
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -96,8 +96,8 @@ const updateReceipt= async (req, res) => {
             res.status(404).json({error: `failed to update receipt!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -111,8 +111,8 @@ const deleteReceipt = async (req, res) => {
             res.status(404).json({error: `failed to delete receipt!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -143,8 +143,8 @@ const deleteReceipt = async (req, res) => {
 //             res.status(404).json({error: `sales data by custID is not found!`});
 //         }
 //     } 
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -164,8 +164,8 @@ const deleteReceipt = async (req, res) => {
 //             res.status(404).json({error: `get customer debt data not found!`});
 //         }
 //     }
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -181,8 +181,8 @@ const deleteReceipt = async (req, res) => {
 //             res.status(404).json({error: `get payment by invoice id is not found!`});
 //         }
 //     }
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -198,8 +198,8 @@ const deleteReceipt = async (req, res) => {
 //             res.status(404).json({error: `get customer data with ID not found!`});
 //         }
 //     }
-//     catch(err) {
-//         res.status(500).json({err: "internal server error"});
+//     catch(error) {
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -225,8 +225,8 @@ const getReceiptByID = async(req, res) => {
             res.status(404).json({error: `get receipt data with ID is not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 

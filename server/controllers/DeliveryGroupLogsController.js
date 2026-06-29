@@ -29,9 +29,9 @@ const addDeliveryGroupLog = async(req, res) => {
         await t.commit();
         res.status(201).json({dg_logs: newLog, dg_log_items: newLogItems, message: "new log created"});
     }
-    catch(err){
+    catch(error){
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -102,9 +102,9 @@ const UpdateDeliveryGroupLog = async(req, res) => {
 
         await t.commit();
         res.status(201).json({dg_logs: updateLog, dg_log_items: updateLogItem, message: "log was updated successfully"});
-    } catch(err) {
+    } catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -147,8 +147,8 @@ const getAllDeliveryGroup = async(req, res) => {
 
         res.status(201).json(allDG);
     }
-    catch(err){
-        res.status(500).json({err: err});
+    catch(error){
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -191,8 +191,8 @@ const getDeliveryGroupByID = async(req, res) => {
 
         res.status(201).json(allDG);
     }
-    catch(err){
-        res.status(500).json({err: err});
+    catch(error){
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -241,8 +241,8 @@ const getDeliveryGroupActiveByEmployee = async(req, res) => {
 
         res.status(201).json(allDG);
     }
-    catch(err){
-        res.status(500).json({err: err});
+    catch(error){
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -278,9 +278,9 @@ const editDeliveryGroup = async(req, res) => {
         await t.commit();
         return res.status(201).json({ message: "update success", delivery_group: dg[1], delivery_group_items: dGItems});
     }
-    catch(err){
+    catch(error){
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -310,9 +310,9 @@ const deleteDeliveryGroup = async(req, res) => {
         await t.commit();
         return res.status(201).json({message: "delete success"});
     }
-    catch(err){
+    catch(error){
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -331,9 +331,9 @@ const cancelDeliveryGroup = async(req, res) => {
         await t.commit();
         return res.status(201).json({message: "cancel success"});
     }
-    catch(err){
+    catch(error){
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 

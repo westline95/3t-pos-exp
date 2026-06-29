@@ -4,6 +4,7 @@ import SalesController from "../controllers/SalesController.js";
 const SalesRoute = express.Router();
 
 SalesRoute.get("/sales", SalesController.getAllSales);
+SalesRoute.get("/sales/lazy-data", SalesController.getAllSalesLazy);
 SalesRoute.get("/sales/by", SalesController.getSalesByID);
 SalesRoute.get("/sales/member", SalesController.getSalesCust);
 SalesRoute.get("/sales/group", SalesController.countSalesByCust);
@@ -23,7 +24,7 @@ SalesRoute.patch("/sales/:order_id", SalesController.updateSalesAddInv);
 SalesRoute.patch("/sales/update/status", SalesController.updateOrderStatus);
 SalesRoute.patch("/sales/update/ro/:order_id", SalesController.updateRO);
 SalesRoute.delete("/cancel-sales/:order_id", SalesController.deleteSales);
-SalesRoute.get("/sales/status", SalesController.getSalesByStatus);
+SalesRoute.get("/sales/lazy/order-status", SalesController.getSalesByStatus);
 SalesRoute.get("/sales/order-items", SalesController.salesWOrderItems);
 SalesRoute.get("/sales/by/receipt", SalesController.salesByReceipt);
 SalesRoute.get("/sales/summary", SalesController.getSalesAndSum);

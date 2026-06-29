@@ -5,7 +5,7 @@ import { Op, Sequelize } from "sequelize";
 const getAllSales = async (req, res) => {
     try{
         const allSales = await AllModel.OrdersModel.findAll({
-            order:  [['createdAt', 'ASC']],
+            order:  [['createdAt', 'DESC']],
             include: [
                 {
                     model: AllModel.CustomersModel,
@@ -57,8 +57,176 @@ const getAllSales = async (req, res) => {
             res.status(404).json({error: `get all sales not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: err});
+    catch(error) {
+        res.status(500).json({err: error.message});
+    }
+}
+
+// controlling for lazy load and pagination
+const getAllSalesLazy = async (req, res) => {
+    const clientTimezone = req.headers['x-client-timezone'] || 'Asia/Jakarta';
+    const { first, rows, sortField, sortOrder, globalFilter } = req.query;
+
+    const offset = parseInt(first);
+    const rowsPerPage = offset + parseInt(rows);
+
+    try {
+        if(!globalFilter || globalFilter == '' || globalFilter == null || globalFilter == undefined){
+            const allSales = await AllModel.OrdersModel.findAndCountAll({
+                offset: offset,
+                limit: rowsPerPage,
+                order:  [['createdAt', 'DESC']],
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                    {
+                        model: AllModel.OrderItemsModel,
+                        as: 'order_items',
+                        required: true
+                    },
+                    {
+                        model: AllModel.InvoicesModel,
+                        as: 'invoice',
+                        include: [
+                            {
+                                model: AllModel.PaymentsModel,
+                                as: 'payments',
+                            }
+                        ]
+                    },
+                    {
+                        model: AllModel.DeliveryModel,
+                        as: 'delivery',
+                    },
+                    {
+                        model: AllModel.ROModel,
+                        as: 'return_order',
+                        include: [
+                            {
+                                model: AllModel.ROItemsModel,
+                                as: 'return_order_item',
+                            },
+                        ]
+                    },
+                    {
+                        model: AllModel.OrdersCreditModel,
+                        as: 'orders_credit',
+                        include: [
+                            {
+                                model: AllModel.ROModel,
+                            }
+                        ]
+                    },
+                ],
+                distinct: true,
+            });
+            if(allSales){
+                // get count and rows
+                const count = allSales.count;
+                const rows = allSales.rows;
+                res.json({
+                    totalData: count,
+                    totalPage: Math.ceil(count / rowsPerPage),
+                    rows: rows  
+                });
+            } else {
+                res.status(404).json({error: `get all sales not found!`});
+            }
+
+        } else {
+            const whereClause = {
+                [Op.or]: [
+                        Sequelize.literal(`"customer"."name" ILIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`CAST("orders"."order_id" AS VARCHAR) LIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`TO_CHAR("orders"."order_date" AT TIME ZONE '${clientTimezone}', 'DD/MM/YYYY') LIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`"orders"."order_type" ILIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`"orders"."source" ILIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`"orders"."order_status" ILIKE '%${globalFilter}%'`),
+                        Sequelize.literal(`"orders"."payment_type" ILIKE '%${globalFilter}%}'`)
+                    ]
+            }
+            const allSales = await AllModel.OrdersModel.findAll({
+                offset: offset,
+                limit: rowsPerPage,
+                subQuery:false,
+                distinct: true,
+                order:  [['createdAt', 'DESC']],
+                where: whereClause,
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer',
+                    },
+                    {
+                        model: AllModel.OrderItemsModel,
+                        as: 'order_items',
+                        required: true,
+                        separate: true
+                    },
+                    {
+                        model: AllModel.InvoicesModel,
+                        as: 'invoice',
+                        include: [
+                        {
+                            model: AllModel.PaymentsModel,
+                            as: 'payments',
+                        }
+                        ],
+                    },
+                    {
+                        model: AllModel.DeliveryModel,
+                        as: 'delivery',
+                    },
+                    {
+                        model: AllModel.ROModel,
+                        as: 'return_order',
+                        include: [
+                            {
+                                model: AllModel.ROItemsModel,
+                                as: 'return_order_item',
+                            },
+                        ],
+                    },
+                    {
+                        model: AllModel.OrdersCreditModel,
+                        as: 'orders_credit',
+                        include: [
+                            {
+                                model: AllModel.ROModel,
+                            }
+                        ],
+                    },
+                ],
+            });
+
+            const countRows = await AllModel.OrdersModel.count({
+                distinct: true,
+                where: whereClause,
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                ],
+            })
+            if(allSales){
+                // get count and rows
+                const count = countRows;
+                const rows = allSales;
+                res.json({
+                    totalData: count,
+                    totalPage: Math.ceil(count / rowsPerPage),
+                    rows: rows  
+                });
+            } else {
+                res.status(404).json({error: `get all sales not found!`});
+            }
+        }
+    } 
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -75,8 +243,8 @@ const validationDateSales = async (req, res) => {
 
         res.json(allSales);
     } 
-    catch(err) {
-        res.status(500).json({err: err});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -116,10 +284,10 @@ const validationDateSales = async (req, res) => {
         
 //         res.status(201).json(newSales);
 //     } 
-//     catch(err) {
+//     catch(error) {
 //         console.log(err)
 
-//         res.status(500).json({err: "internal server error"});
+//         res.status(500).json({err: error.messageor.message});
 //     }
 // }
 
@@ -324,9 +492,9 @@ const insertSales = async (req, res) => {
             checkInv: checkInvBB
         });
     } 
-    catch(err) {
+    catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -342,8 +510,8 @@ const insertMultipleSales = async (req, res) => {
         });
         res.status(201).json(newSales);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -364,8 +532,8 @@ const updateSalesAddInv= async (req, res) => {
 
          res.json({ message: 'Update sales => invoice id column.', sales });
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -384,8 +552,8 @@ const updateSalesReceipt = async (req, res) => {
 
         res.status(201).json(sales);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -404,8 +572,8 @@ const updateSalesAddInvoices = async (req, res) => {
 
         res.json({ message: 'Update sales => invoice id column.', sales });
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -456,8 +624,8 @@ const updateSales= async (req, res) => {
             res.status(201).json(sales);
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -508,8 +676,8 @@ const updateSalesMayor= async (req, res) => {
             res.status(201).json(sales);
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -538,8 +706,8 @@ const updateOrderStatus = async (req, res) => {
 
         res.status(201).json(sales);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -561,8 +729,8 @@ const updateRO = async (req, res) => {
         await order.save();
 
         res.status(201).json(order);
-    } catch(err) {
-        res.status(500).json({err: "internal server error"});
+    } catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -730,9 +898,9 @@ const deleteSales = async (req, res) => {
         await t.commit();
         res.status(201).json(getSales);
     } 
-    catch(err) {
+    catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -757,8 +925,8 @@ const countSalesByCust = async (req, res) => {
             res.status(404).json({error: `sales data by custID is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -781,8 +949,8 @@ const salesByCustUnpaid = async (req, res) => {
             res.status(404).json({error: `sales data by cust unpaid is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -828,8 +996,8 @@ const salesByOneCustPayType = async (req, res) => {
             });
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -861,8 +1029,8 @@ const salesByOneCustPayType2 = async (req, res) => {
             });
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -905,8 +1073,8 @@ const getSalesCust = async(req, res) => {
             res.status(404).json({error: `get customer data with ID not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -955,8 +1123,8 @@ const checkNextCustSales = async(req, res) => {
             res.status(404).json({error: `get customer data with ID not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -1018,8 +1186,8 @@ const getSalesCustNotCanceled = async(req, res) => {
             res.status(404).json({error: `get customer data with ID and order status not canceled not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -1071,41 +1239,133 @@ const forFilteredRO = async(req, res) => {
             res.status(404).json({error: `get customer data with ID and order status not canceled not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
-
+// lazy load sales by order status
 const getSalesByStatus = async(req, res) => {
-    try{
-        const getData = await AllModel.OrdersModel.findAll({
-            where: {is_complete: req.query.iscomplete},
-            include: [
-                {
-                    model: AllModel.CustomersModel,
-                    as: 'customer'
-                },
-                {
-                    model: AllModel.OrderItemsModel,
-                    as: 'order_items',
-                    required: true
-                },
-                {
-                    model: AllModel.DeliveryModel,
-                    as: 'delivery',
-                    required: false
-                },
-            ]
-        })
+    const clientTimezone = req.headers['x-client-timezone'] || 'Asia/Jakarta';
+    const { first, rows, sortField, sortOrder, globalFilter, order_status } = req.query;
 
-        if(getData){
-            res.json(getData);
+    const offset = parseInt(first);
+    const rowsPerPage = offset + parseInt(rows);
+    const orderStatusState = ['complete', 'canceled', 'pending'];
+    
+    try{
+        if(!orderStatusState.includes(order_status)){
+            return res.status(500).json({err: "type of param must be one of these => complete, canceled or pending!"});
+        }
+
+        if(!globalFilter || globalFilter == '' || globalFilter == null || globalFilter == undefined){
+            const getData = await AllModel.OrdersModel.findAndCountAll({
+                offset: offset,
+                limit: rowsPerPage,
+                where: {
+                    order_status:{
+                        [Op.eq]: order_status
+                    }
+                },
+                order: [["createdAt", "DESC"]],
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                    {
+                        model: AllModel.OrderItemsModel,
+                        as: 'order_items',
+                    },
+                    {
+                        model: AllModel.DeliveryModel,
+                        as: 'delivery',
+                    },
+                ],
+                distinct: true,
+            })
+    
+            if(getData){
+                // res.json(getData);
+                // get count and rows
+                const count = getData.count;
+                const rows = getData.rows;
+                return res.json({
+                    totalData: count,
+                    totalPage: Math.ceil(count / rowsPerPage),
+                    rows: rows  
+                });
+            } else {
+                return res.status(404).json({error: `get customer data with ID not found!`});
+            }
         } else {
-            res.status(404).json({error: `get customer data with ID not found!`});
+            const whereClause = {
+                order_status:{
+                    [Op.eq]: order_status
+                },
+                [Op.or]: [
+                    Sequelize.literal(`"customer"."name" ILIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`CAST("orders"."order_id" AS VARCHAR) LIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`TO_CHAR("orders"."order_date" AT TIME ZONE '${clientTimezone}', 'DD/MM/YYYY') LIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`"orders"."order_type" ILIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`"orders"."source" ILIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`"orders"."order_status" ILIKE '%${globalFilter}%'`),
+                    Sequelize.literal(`"orders"."payment_type" ILIKE '%${globalFilter}%}'`)
+                ]
+            };
+
+            const getData = await AllModel.OrdersModel.findAll({
+                offset: offset,
+                limit: rowsPerPage,
+                subQuery:false,
+                distinct: true,
+                order:  [['createdAt', 'DESC']],
+                where: whereClause,
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer',
+                    },
+                    {
+                        model: AllModel.OrderItemsModel,
+                        as: 'order_items',
+                        required: true,
+                        separate: true
+                    },
+                    {
+                        model: AllModel.DeliveryModel,
+                        as: 'delivery',
+                    },
+                ],
+            });
+
+            const countRows = await AllModel.OrdersModel.count({
+                distinct: true,
+                where: whereClause,
+                include: [
+                    {
+                        model: AllModel.CustomersModel,
+                        as: 'customer'
+                    },
+                ],
+            });
+
+            if(getData){
+                // get count and rows
+                const count = countRows;
+                const rows = getData;
+                return res.json({
+                    totalData: count,
+                    totalPage: Math.ceil(count / rowsPerPage),
+                    rows: rows  
+                });
+            } else {
+                return res.status(404).json({error: `get all canceled sales not found!`});
+            }
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1138,8 +1398,8 @@ const getSalesByID = async(req, res) => {
             res.status(404).json({error: `get sales data with ID not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -1240,8 +1500,8 @@ const salesWOrderItems = async (req, res) => {
             res.status(404).json({error: `sales data with order items is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -1339,8 +1599,8 @@ const salesByReceipt = async (req, res) => {
             res.status(404).json({error: `sales data with order items is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -1366,14 +1626,15 @@ const getSalesAndSum = async(req, res) => {
             res.status(404).json({error: `get sales data with sum not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
 
 export default {
     getAllSales,
+    getAllSalesLazy,
     insertSales, 
     updateSales,
     insertMultipleSales, 

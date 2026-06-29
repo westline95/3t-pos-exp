@@ -21,8 +21,8 @@ const getAllOrderItem = async (req, res) => {
             res.status(404).json({error: `get all order items not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -52,8 +52,8 @@ const insertOrderItems = async (req, res) => {
             res.status(404).json({error: `failed to insert order item!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -78,8 +78,8 @@ const insertMultipleOrderItem = async (req, res) => {
             res.status(404).json({error: `failed to insert multiples order item!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -107,8 +107,8 @@ const updateOrderItem= async (req, res) => {
             res.status(404).json({error: `failed to update order item!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -122,8 +122,8 @@ const deleteOrderItem = async (req, res) => {
             res.status(404).json({error: `failed to delete order item!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -137,8 +137,8 @@ const deleteOrderItemByOrderID = async (req, res) => {
             res.status(404).json({error: `failed to delete order item by order id!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -164,8 +164,8 @@ const getOrderItemByID = async(req, res) => {
             res.status(404).json({error: `get order item with ID not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -191,8 +191,8 @@ const orderItemsByOrder = async (req, res) => {
             res.status(404).json({error: `order item group by order id is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 

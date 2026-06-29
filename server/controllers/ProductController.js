@@ -18,8 +18,8 @@ const getProducts = async (req, res) => {
             res.status(404).json({error: `get all product not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -40,8 +40,8 @@ const getProductsByCategory = async (req, res) => {
             res.status(404).json({error: `get product by category not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -56,7 +56,7 @@ const insertProducts = async (req, res) => {
             res.status(404).json({error: `failed to insert product!`});
         }
     } 
-    catch(err) {
+    catch(error) {
         res.status(500).json({err});
     }
 }
@@ -78,8 +78,8 @@ const insertMultipleProducts = async (req, res) => {
             res.status(404).json({error: `failed to insert multiple product!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -103,8 +103,8 @@ const updateProduct = async (req, res) => {
             res.status(404).json({error: `failed to update product!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: err});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -126,8 +126,8 @@ const getProductID = async (req, res) => {
             res.status(404).json({error: `failed to get product by id!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -141,8 +141,8 @@ const deleteProduct = async (req, res) => {
             res.status(404).json({error: `failed to delete product!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -165,8 +165,8 @@ const countProductByName = async (req, res) => {
             res.status(404).json({error: `product with ? not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 const groupProductforPOS = async (req, res) => {
@@ -186,8 +186,8 @@ const groupProductforPOS = async (req, res) => {
     //         res.json(products);
     //     } 
     // } 
-    // catch(err) {
-    //     res.status(500).json({err: err});
+    // catch(error) {
+    //     res.status(500).json({err: error.message});
     // }
 
     try{
@@ -213,8 +213,8 @@ const groupProductforPOS = async (req, res) => {
             res.status(404).json({error: `get all product not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: err});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 }
 

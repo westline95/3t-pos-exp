@@ -27,8 +27,8 @@ const getAllROItem = async (req, res) => {
             res.status(404).json({error: `get all return order items is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -47,8 +47,8 @@ const insertROItems = async (req, res) => {
             res.status(404).json({error: `failed to insert return order item!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -76,8 +76,8 @@ const updateROItem= async (req, res) => {
             res.status(404).json({error: `failed to update order item!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -91,8 +91,8 @@ const deleteROItem = async (req, res) => {
             res.status(404).json({error: `failed to delete order item!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -110,8 +110,8 @@ const deleteROItemByRO = async (req, res) => {
             res.status(404).json({error: `failed to delete order item by ro id!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -139,8 +139,8 @@ const getROItemByID = async(req, res) => {
             res.status(404).json({error: `get return order item by return order ID is not found!`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 

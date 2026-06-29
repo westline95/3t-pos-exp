@@ -39,13 +39,13 @@ const handleLogin = async (req, res) => {
             const access_token = jwt.sign(
                 payload, 
                 secret, 
-                {expiresIn: '15m'}
+                {expiresIn: '72h'}
             );
 
             const refreshToken = jwt.sign(
                 { "user_mail": user.user_mail },
                 refresh_secret,
-                { expiresIn: '7d' }
+            { expiresIn: '10d' }
             );
 
             // saving refresh token with current user
@@ -63,8 +63,8 @@ const handleLogin = async (req, res) => {
             })
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 

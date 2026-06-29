@@ -47,8 +47,8 @@ const getAllOrdersCredit = async(req, res) => {
             res.status(404).json({error: `get all orders credit`});
         }
     }
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -99,8 +99,8 @@ const getOrderCreditByCust = async (req, res) => {
             res.status(404).json({error: `get all order credits by customer is not found!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -136,8 +136,8 @@ const getAvailableOrderCreditByCust = async (req, res) => {
         
         res.json(allCreditByCust);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -179,8 +179,8 @@ const getOrderCreditByRO = async (req, res) => {
         //     res.status(404).json({error: `get all order credits by RO is not found!`});
         // }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -222,8 +222,8 @@ const getOrderCreditByOrderID = async (req, res) => {
         //     res.status(404).json({error: `get all order credits by RO is not found!`});
         // }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -237,8 +237,8 @@ const insertOrderCredit = async (req, res) => {
             res.status(404).json({error: `failed to insert order credit!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -291,8 +291,8 @@ const updateMayorOrderCredit = async (req, res) => {
             res.status(404).json({error: `failed to update order credit!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -312,8 +312,8 @@ const updateOrderIdOrderCredit = async (req, res) => {
 
          res.json({ message: 'Update order credit => order id column.', orderCredit });
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 }
 
@@ -327,8 +327,8 @@ const deleteOrderCredit = async (req, res) => {
             res.status(404).json({error: `failed to delete order credit!`});
         }
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 
@@ -350,8 +350,8 @@ const deleteOrderCreditByROId = async (req, res) => {
 
         res.status(201).json(orderCredit);
     } 
-    catch(err) {
-        res.status(500).json({err: "internal server error"});
+    catch(error) {
+        res.status(500).json({err: error.messageor.message});
     }
 };
 

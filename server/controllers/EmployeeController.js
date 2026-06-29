@@ -22,9 +22,9 @@ const insertEmployee = async(req, res) => {
         await t.commit();
         res.status(201).json({employee: employeeData, department_history: dh});
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -64,9 +64,9 @@ const insertEmployeeAcc = async(req, res) => {
         await t.commit();
         res.status(201).json({message: 'user created'});
     } 
-    catch(err) {
+    catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -102,8 +102,8 @@ const getAllEmployees = async(req, res) => {
        });
        res.status(201).json(employees);
     }
-    catch(err) {
-        res.status(500).json({err: err});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -140,8 +140,8 @@ const getAllEmployeesByActive = async(req, res) => {
        });
        res.status(201).json(employees);
     }
-    catch(err) {
-        res.status(500).json({err: err});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -175,8 +175,8 @@ const getEmployee = async(req, res) => {
         });
        res.status(201).json(employees);
     }
-    catch(err) {
-        res.status(500).json({err: err});
+    catch(error) {
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -227,9 +227,9 @@ const updateEmployee = async(req, res) => {
         await t.commit();
         res.status(201).json({employee: employeeData, department_history: dh});
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -273,9 +273,9 @@ const updateMinorEmployee = async(req, res) => {
         await t.commit();
         res.status(201).json(employeeData);
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -298,9 +298,9 @@ const deleteEmployee = async(req, res) => {
         await t.commit();
         res.status(201).json(deletedEmployee);
     }
-    catch(err) {
+    catch(error) {
         await t.rollback();
-        res.status(500).json({err: err});
+        res.status(500).json({err: error.message});
     }
 }
 

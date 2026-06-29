@@ -11,6 +11,7 @@ const allowedOrigins = [
     'http://192.168.36.83:5173', 
     'http://192.168.100.20:5173', //bagan batu home
     'http://192.168.100.20:5174', //bagan batu home
+    'http://10.76.91.198:5173', //my network in samosir
 ];
 
 export default allowedOrigins;
