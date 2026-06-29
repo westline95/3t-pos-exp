@@ -30,7 +30,7 @@ const getAllPayment = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -124,7 +124,7 @@ const insertPayment = async (req, res) => {
 //         res.status(201).json(newSales);
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -152,7 +152,7 @@ const insertPayment = async (req, res) => {
 //         }
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -284,7 +284,7 @@ const minorUpdatePayment= async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -299,7 +299,7 @@ const minorUpdatePayment= async (req, res) => {
 //         }
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -404,7 +404,7 @@ const deletePayment = async (req, res) => {
 //         }
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -425,7 +425,7 @@ const deletePayment = async (req, res) => {
 //         }
 //     }
 //     catch(error) {
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -452,7 +452,7 @@ const getPaymentByInvId = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -474,7 +474,7 @@ const getPaymentByCustId = async(req, res) => {
         res.json(getData);
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -491,7 +491,7 @@ const getPaymentByCustId = async(req, res) => {
 //         }
 //     }
 //     catch(error) {
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -518,7 +518,7 @@ const getPaymentByID = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 

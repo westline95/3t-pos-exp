@@ -33,7 +33,7 @@ const getAllReceipt = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -59,7 +59,7 @@ const insertReceipt = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -69,7 +69,7 @@ const insertReceipt = async (req, res) => {
 //         res.status(201).json(newSales);
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -97,7 +97,7 @@ const updateReceipt= async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -112,7 +112,7 @@ const deleteReceipt = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -144,7 +144,7 @@ const deleteReceipt = async (req, res) => {
 //         }
 //     } 
 //     catch(error) {
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -165,7 +165,7 @@ const deleteReceipt = async (req, res) => {
 //         }
 //     }
 //     catch(error) {
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -182,7 +182,7 @@ const deleteReceipt = async (req, res) => {
 //         }
 //     }
 //     catch(error) {
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -199,7 +199,7 @@ const deleteReceipt = async (req, res) => {
 //         }
 //     }
 //     catch(error) {
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -226,7 +226,7 @@ const getReceiptByID = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 

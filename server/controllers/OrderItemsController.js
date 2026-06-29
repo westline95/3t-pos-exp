@@ -22,7 +22,7 @@ const getAllOrderItem = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -53,7 +53,7 @@ const insertOrderItems = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -79,7 +79,7 @@ const insertMultipleOrderItem = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -108,7 +108,7 @@ const updateOrderItem= async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -123,7 +123,7 @@ const deleteOrderItem = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -138,7 +138,7 @@ const deleteOrderItemByOrderID = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -165,7 +165,7 @@ const getOrderItemByID = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -192,7 +192,7 @@ const orderItemsByOrder = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 

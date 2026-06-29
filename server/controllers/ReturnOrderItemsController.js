@@ -28,7 +28,7 @@ const getAllROItem = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -48,7 +48,7 @@ const insertROItems = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -77,7 +77,7 @@ const updateROItem= async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -92,7 +92,7 @@ const deleteROItem = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -111,7 +111,7 @@ const deleteROItemByRO = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -140,7 +140,7 @@ const getROItemByID = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 

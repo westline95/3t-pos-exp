@@ -287,7 +287,7 @@ const validationDateSales = async (req, res) => {
 //     catch(error) {
 //         console.log(err)
 
-//         res.status(500).json({err: error.messageor.message});
+//         res.status(500).json({err: error.message});
 //     }
 // }
 
@@ -511,7 +511,7 @@ const insertMultipleSales = async (req, res) => {
         res.status(201).json(newSales);
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -533,7 +533,7 @@ const updateSalesAddInv= async (req, res) => {
          res.json({ message: 'Update sales => invoice id column.', sales });
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -553,7 +553,7 @@ const updateSalesReceipt = async (req, res) => {
         res.status(201).json(sales);
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -573,7 +573,7 @@ const updateSalesAddInvoices = async (req, res) => {
         res.json({ message: 'Update sales => invoice id column.', sales });
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -625,7 +625,7 @@ const updateSales= async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -677,7 +677,7 @@ const updateSalesMayor= async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -707,7 +707,7 @@ const updateOrderStatus = async (req, res) => {
         res.status(201).json(sales);
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -730,7 +730,7 @@ const updateRO = async (req, res) => {
 
         res.status(201).json(order);
     } catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -926,7 +926,7 @@ const countSalesByCust = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -950,7 +950,7 @@ const salesByCustUnpaid = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -964,7 +964,9 @@ const salesByOneCustPayType = async (req, res) => {
                     as: 'orders',
                     where: { 
                         payment_type: req.query.paytype,
-                        order_status: {[Sequelize.Op.not]: 'canceled'},
+                        order_status: {
+                            [Op.notIn]: ['canceled', 'completed']
+                        },
                         invoice_id: null 
                     },
                     required: true,
@@ -997,7 +999,7 @@ const salesByOneCustPayType = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1030,7 +1032,7 @@ const salesByOneCustPayType2 = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1074,7 +1076,7 @@ const getSalesCust = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1124,7 +1126,7 @@ const checkNextCustSales = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1187,7 +1189,7 @@ const getSalesCustNotCanceled = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1240,7 +1242,7 @@ const forFilteredRO = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 // lazy load sales by order status
@@ -1399,7 +1401,7 @@ const getSalesByID = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1501,7 +1503,7 @@ const salesWOrderItems = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1600,7 +1602,7 @@ const salesByReceipt = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -1627,7 +1629,7 @@ const getSalesAndSum = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 

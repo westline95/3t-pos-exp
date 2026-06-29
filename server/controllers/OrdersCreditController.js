@@ -48,7 +48,7 @@ const getAllOrdersCredit = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -100,7 +100,7 @@ const getOrderCreditByCust = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -137,7 +137,7 @@ const getAvailableOrderCreditByCust = async (req, res) => {
         res.json(allCreditByCust);
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -180,7 +180,7 @@ const getOrderCreditByRO = async (req, res) => {
         // }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -223,7 +223,7 @@ const getOrderCreditByOrderID = async (req, res) => {
         // }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -238,7 +238,7 @@ const insertOrderCredit = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -292,7 +292,7 @@ const updateMayorOrderCredit = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -313,7 +313,7 @@ const updateOrderIdOrderCredit = async (req, res) => {
          res.json({ message: 'Update order credit => order id column.', orderCredit });
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -328,7 +328,7 @@ const deleteOrderCredit = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -351,7 +351,7 @@ const deleteOrderCreditByROId = async (req, res) => {
         res.status(201).json(orderCredit);
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 

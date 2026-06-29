@@ -11,7 +11,7 @@ const getAllStatus = async (req, res) => {
         // console.log(res.status)
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -28,7 +28,7 @@ const getStatusByID = async(req, res) => {
         }
     }
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 

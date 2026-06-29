@@ -10,7 +10,7 @@ const getInvSett = async (req, res) => {
         }
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 
@@ -24,7 +24,7 @@ const updateInvSett = async (req, res) => {
         res.status(201).json(invSett);
     } 
     catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 }
 

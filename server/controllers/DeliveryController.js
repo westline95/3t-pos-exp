@@ -64,7 +64,7 @@ const assignCourier = async (req, res) => {
         res.json({ message: 'courir assigned, tracking number created.', delivery });
 
     } catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
@@ -88,7 +88,7 @@ const updateStatusDelivery = async (req, res) => {
 
         res.json({ message: 'delivery status updated.', delivery });
     } catch(error) {
-        res.status(500).json({err: error.messageor.message});
+        res.status(500).json({err: error.message});
     }
 };
 
