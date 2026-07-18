@@ -962,6 +962,7 @@ const salesByOneCustPayType = async (req, res) => {
                 {
                     model: AllModel.OrdersModel,
                     as: 'orders',
+                    separate: true,
                     order:  [['order_date', 'ASC']],
                     where: { 
                         payment_type: req.query.paytype,
