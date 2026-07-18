@@ -958,11 +958,11 @@ const salesByOneCustPayType = async (req, res) => {
     try{
          const countSales = await AllModel.CustomersModel.findOne({
             where: {customer_id: req.query.custid},
-            order:  [['order_date', 'ASC']],
             include: [
                 {
                     model: AllModel.OrdersModel,
                     as: 'orders',
+                    order:  [['order_date', 'ASC']],
                     where: { 
                         payment_type: req.query.paytype,
                         order_status: {
